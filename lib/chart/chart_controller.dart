@@ -93,8 +93,18 @@ class GChartController extends ChangeNotifier {
           );
           pointViewPort.animateToRange(_chart, newRange, true, false);
         } else if (_chart.pointerScrollMode == GPointerScrollMode.zoom) {
+          final centerPoint =
+              pointViewPort
+                  .positionToPoint(area, position.dx)
+                  .round()
+                  .toDouble();
           final scaleRatio = 1 + scrollDelta.dy / area.height;
-          pointViewPort.zoomUpdate(pointViewPort.range, area, scaleRatio);
+          pointViewPort.zoomUpdate(
+            pointViewPort.range,
+            area,
+            scaleRatio,
+            centerPoint,
+          );
         }
         _notify();
         break;

@@ -228,7 +228,13 @@ class GPointViewPort extends ChangeNotifier {
     _notify(finished: true);
   }
 
-  void zoomUpdate(GRange startRange, Rect area, double zoomRatio) {
+  void zoomUpdate(
+    GRange startRange,
+    Rect area,
+    double zoomRatio,
+    double centerPoint, {
+    bool finished = true,
+  }) {
     if (startRange.isEmpty) {
       return;
     }
@@ -241,16 +247,29 @@ class GPointViewPort extends ChangeNotifier {
       max(pointWidthStart * zoomRatio, minPointWidth),
       maxPointWidth,
     );
-    double endPointNew = startRange.last!;
-    double startPointNew = startRange.last! - area.width / pointWidthNew;
-    setRange(startPoint: startPointNew, endPoint: endPointNew, finished: false);
+    double centerPosition = pointToPosition(area, centerPoint);
+    double leftSize = centerPosition - area.left;
+    double rightSize = area.right - centerPosition;
+    double startPointNew = centerPoint - leftSize / pointWidthNew;
+    double endPointNew = centerPoint + rightSize / pointWidthNew;
+    setRange(
+      startPoint: startPointNew,
+      endPoint: endPointNew,
+      finished: finished,
+    );
   }
 
   void interactionZoomUpdate(Rect area, double zoomRatio) {
     if (_pointRangeScaling.isEmpty) {
       return;
     }
-    zoomUpdate(_pointRangeScaling, area, zoomRatio);
+    zoomUpdate(
+      _pointRangeScaling,
+      area,
+      zoomRatio,
+      _pointRangeScaling.end!,
+      finished: false,
+    );
   }
 
   void interactionMoveUpdate(Rect area, double movedDistance) {
