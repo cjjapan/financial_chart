@@ -10,7 +10,7 @@ topics:
   - stock
 # publish_to: "none"
 
-version: 0.1.1+1
+version: 0.1.2
 
 environment:
   sdk: ^3.7.2

@@ -19,6 +19,9 @@ class GRange extends GDoublePair {
     super.update(begin, end);
   }
 
+  /// clone the range.
+  GRange clone() => isEmpty ? GRange.empty() : GRange.range(begin!, end!);
+
   /// linear interpolation between two ranges.
   static GRange lerp(GRange a, GRange b, double t) {
     if (a.isEmpty || b.isEmpty) {

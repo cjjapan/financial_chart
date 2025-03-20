@@ -31,6 +31,9 @@ class GPointViewPort extends ChangeNotifier {
   /// The end(right) point of the viewport.
   double get endPoint => _pointRange.end!;
 
+  /// current range of the viewport.
+  GRange get range => _pointRange.clone();
+
   /// The size of the range.
   double get pointRangeSize => endPoint - startPoint;
 
@@ -54,8 +57,9 @@ class GPointViewPort extends ChangeNotifier {
 
   AnimationController? _rangeAnimationController;
   Animation<double>? _rangeAnimation;
-  final GValue<bool> _isAnimating = GValue<bool>(false);
-  bool get isAnimating => _isAnimating.value;
+  final GRange _animationStartRange = GRange.empty();
+  final GRange _animationTargetRange = GRange.empty();
+  bool get isAnimating => _animationStartRange.isNotEmpty;
 
   GPointViewPort({
     double? initialStartPoint,
@@ -89,15 +93,39 @@ class GPointViewPort extends ChangeNotifier {
           curve: Curves.easeOutCubic,
         ),
       );
+      _rangeAnimation!.addListener(rangeAnimationListener);
     }
+  }
+
+  void stopAnimation() {
+    _rangeAnimationController?.stop();
+    _animationStartRange.clear();
+    _animationTargetRange.clear();
+  }
+
+  void rangeAnimationListener() {
+    if (_animationStartRange.isEmpty || _animationTargetRange.isEmpty) {
+      return;
+    }
+    final updatedRange = GRange.lerp(
+      _animationStartRange,
+      _animationTargetRange,
+      _rangeAnimation!.value,
+    );
+    setRange(
+      startPoint: updatedRange.first!,
+      endPoint: updatedRange.last!,
+      finished: false,
+    );
   }
 
   void animateToRange(
     GChart chart,
     GRange targetRange,
     bool finished,
-    bool animation,
-  ) {
+    bool animation, {
+    Simulation? simulation,
+  }) {
     if (!animation ||
         _rangeAnimationController == null ||
         (targetRange == _pointRange)) {
@@ -108,30 +136,22 @@ class GPointViewPort extends ChangeNotifier {
       );
       return;
     }
-    _rangeAnimationController!.stop();
-    _isAnimating.value = true;
-    var currentRange = GRange.range(startPoint, endPoint);
-    void animationListener() {
-      final updatedRange = GRange.lerp(
-        currentRange,
-        targetRange,
-        _rangeAnimationController!.value,
-      );
-      setRange(
-        startPoint: updatedRange.first!,
-        endPoint: updatedRange.last!,
-        finished: finished,
-      );
-    }
-
+    stopAnimation();
+    _animationStartRange.update(startPoint, endPoint);
+    _animationTargetRange.copy(targetRange);
     Future.delayed(const Duration(milliseconds: 10), () {
       _rangeAnimationController!.reset();
-      _rangeAnimation!.addListener(animationListener);
-      _rangeAnimationController!.forward().then((_) {
-        _rangeAnimation!.removeListener(animationListener);
-        _isAnimating.value = false;
-        _notify(finished: true);
-      });
+      if (simulation != null) {
+        _rangeAnimationController!.animateWith(simulation).then((_) {
+          stopAnimation();
+          _notify(finished: true);
+        }, onError: (_, _) => stopAnimation());
+      } else {
+        _rangeAnimationController!.forward().then((_) {
+          stopAnimation();
+          _notify(finished: true);
+        }, onError: (_, _) => stopAnimation());
+      }
     });
   }
 
@@ -208,23 +228,29 @@ class GPointViewPort extends ChangeNotifier {
     _notify(finished: true);
   }
 
-  void interactionZoomUpdate(Rect area, double zoomRatio) {
-    if (_pointRangeScaling.isEmpty) {
+  void zoomUpdate(GRange startRange, Rect area, double zoomRatio) {
+    if (startRange.isEmpty) {
       return;
     }
     double pointWidthStart = _pointSize(
       area.width,
-      _pointRangeScaling.first!,
-      _pointRangeScaling.last!,
+      startRange.first!,
+      startRange.last!,
     );
     double pointWidthNew = min(
       max(pointWidthStart * zoomRatio, minPointWidth),
       maxPointWidth,
     );
-    double endPointNew = _pointRangeScaling.last!;
-    double startPointNew =
-        _pointRangeScaling.last! - area.width / pointWidthNew;
+    double endPointNew = startRange.last!;
+    double startPointNew = startRange.last! - area.width / pointWidthNew;
     setRange(startPoint: startPointNew, endPoint: endPointNew, finished: false);
+  }
+
+  void interactionZoomUpdate(Rect area, double zoomRatio) {
+    if (_pointRangeScaling.isEmpty) {
+      return;
+    }
+    zoomUpdate(_pointRangeScaling, area, zoomRatio);
   }
 
   void interactionMoveUpdate(Rect area, double movedDistance) {

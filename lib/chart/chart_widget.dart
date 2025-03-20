@@ -84,31 +84,45 @@ class GChartWidgetState extends State<GChartWidget>
             GestureDetector(
               excludeFromSemantics: true,
               behavior: HitTestBehavior.deferToChild,
-              child: MouseRegion(
-                child: RepaintBoundary(
-                  child: CustomPaint(
-                    size: chart.size,
-                    painter: GChartPainter(
-                      chart: chart,
-                      repaintListener: chart,
+              child: Listener(
+                onPointerSignal: (PointerSignalEvent event) {
+                  if (event is PointerScrollEvent) {
+                    if (kDebugMode && printEvents) {
+                      print(
+                        "PointerScrollEvent: ${event.position} delta= ${event.scrollDelta} ",
+                      );
+                    }
+                    controller.pointerScroll(
+                      position: event.position,
+                      scrollDelta: event.scrollDelta,
+                    );
+                  }
+                },
+                child: MouseRegion(
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      size: chart.size,
+                      painter: GChartPainter(
+                        chart: chart,
+                        repaintListener: chart,
+                      ),
                     ),
                   ),
+                  onEnter: (PointerEvent details) {
+                    controller.mouseEnter(position: details.localPosition);
+                  },
+                  onExit: (PointerEvent details) {
+                    controller.mouseExit();
+                  },
+                  onHover: (PointerEvent details) {
+                    controller.mouseHover(position: details.localPosition);
+                  },
                 ),
-                onEnter: (PointerEvent details) {
-                  controller.mouseEnter(position: details.localPosition);
-                },
-                onExit: (PointerEvent details) {
-                  controller.mouseExit();
-                },
-                onHover: (PointerEvent details) {
-                  controller.mouseHover(position: details.localPosition);
-                },
               ),
               onScaleStart: (details) {
                 if (kDebugMode && printEvents) {
                   print("onScaleStart offset: ${details.localFocalPoint}");
                 }
-                //print(details.kind);
                 controller.scaleStart(
                   start: details.localFocalPoint,
                   pointerCount: details.pointerCount,
@@ -128,7 +142,7 @@ class GChartWidgetState extends State<GChartWidget>
                 if (kDebugMode && printEvents) {
                   print("onScaleEnd offset: ${details.velocity}");
                 }
-                controller.scaleEnd();
+                controller.scaleEnd(details.velocity);
               },
               onTapDown: (TapDownDetails details) {
                 if (kDebugMode && printEvents) {
@@ -189,7 +203,7 @@ class GChartWidgetState extends State<GChartWidget>
                 );
               },
               onVerticalDragEnd: (DragEndDetails details) {
-                controller.scaleEnd();
+                controller.scaleEnd(details.velocity);
               },
             ),
             ListenableBuilder(

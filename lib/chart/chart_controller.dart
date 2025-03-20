@@ -2,6 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/physics.dart';
 
 import 'chart.dart';
 import 'components/graph/graph.dart';
@@ -9,6 +11,7 @@ import 'components/panel/panel.dart';
 import 'components/viewport_v.dart';
 import 'components/axis/axis.dart';
 import 'components/viewport_h.dart';
+import 'values/range.dart';
 import 'values/value.dart';
 
 /// GChartController for handling user interactions for the attached chart.
@@ -29,7 +32,7 @@ class GChartController extends ChangeNotifier {
     required double verticalScale,
   })?
   _hookScaleUpdate;
-  void Function()? _hookScaleEnd;
+  void Function(Velocity? velocity)? _hookScaleEnd;
 
   void attach(GChart chart) {
     _chart = chart;
@@ -67,6 +70,36 @@ class GChartController extends ChangeNotifier {
       }
     }
     _notify();
+  }
+
+  void pointerScroll({required Offset position, required Offset scrollDelta}) {
+    if (_chart.dataSource.isLoading || _chart.dataSource.isEmpty) {
+      return;
+    }
+    if (_chart.pointerScrollMode == GPointerScrollMode.none) {
+      return;
+    }
+    for (int n = 0; n < _chart.panels.length; n++) {
+      Rect area = _chart.panels[n].graphArea();
+      if (area.contains(position)) {
+        final pointViewPort = _chart.pointViewPort;
+        pointViewPort.stopAnimation();
+        if (_chart.pointerScrollMode == GPointerScrollMode.move) {
+          final pointSize = pointViewPort.pointSize(area.width);
+          final distance = scrollDelta.dy / pointSize;
+          final newRange = GRange.range(
+            pointViewPort.startPoint - distance,
+            pointViewPort.endPoint - distance,
+          );
+          pointViewPort.animateToRange(_chart, newRange, true, false);
+        } else if (_chart.pointerScrollMode == GPointerScrollMode.zoom) {
+          final scaleRatio = 1 + scrollDelta.dy / area.height;
+          pointViewPort.zoomUpdate(pointViewPort.range, area, scaleRatio);
+        }
+        _notify();
+        break;
+      }
+    }
   }
 
   void scaleStart({required Offset start, required int pointerCount}) {
@@ -124,9 +157,9 @@ class GChartController extends ChangeNotifier {
     _notify();
   }
 
-  void scaleEnd() {
+  void scaleEnd(Velocity velocity) {
     if (_hookScaleEnd != null) {
-      _hookScaleEnd!();
+      _hookScaleEnd!(velocity);
       _hookScaleUpdate = null;
       _hookScaleEnd = null;
       _notify();
@@ -261,7 +294,7 @@ class GChartController extends ChangeNotifier {
         panel2.heightWeight = h2New * weightUnit;
         _chart.layout(_chart.area);
       };
-      _hookScaleEnd = () {
+      _hookScaleEnd = (Velocity? velocity) {
         resizingPanelIndex = null;
       };
       return panel1;
@@ -303,7 +336,7 @@ class GChartController extends ChangeNotifier {
             }
             lastX = position.dx;
           };
-          _hookScaleEnd = () {
+          _hookScaleEnd = (Velocity? velocity) {
             if (axis.scaleMode == GAxisScaleMode.select) {
               pointViewPort.interactionSelectUpdate(
                 _chart,
@@ -366,7 +399,7 @@ class GChartController extends ChangeNotifier {
             }
             lastY = position.dy;
           };
-          _hookScaleEnd = () {
+          _hookScaleEnd = (Velocity? velocity) {
             if (axis.scaleMode == GAxisScaleMode.select) {
               viewPort?.interactionSelectUpdate(
                 _chart,
@@ -405,10 +438,11 @@ class GChartController extends ChangeNotifier {
       }) {
         _chart.crosshair.setCrossPosition(position.dx, position.dy);
       };
-      _hookScaleEnd = () {};
+      _hookScaleEnd = (Velocity? velocity) {};
       return graph;
     }
     pointViewPort.interactionStart();
+    pointViewPort.stopAnimation();
     bool scaleValue = !valueViewPort.autoScaleFlg;
     if (scaleValue) {
       valueViewPort.interactionStart();
@@ -436,10 +470,27 @@ class GChartController extends ChangeNotifier {
         valueViewPort.interactionMoveUpdate(graphArea, moveDistanceY);
       }
     };
-    _hookScaleEnd = () {
+    _hookScaleEnd = (Velocity? velocity) {
       pointViewPort.interactionEnd();
       if (scaleValue) {
         valueViewPort.interactionEnd();
+      }
+      if (velocity != null) {
+        // momentum scrolling
+        final pointSize = pointViewPort.pointSize(panel.graphArea().width);
+        final distance = velocity.pixelsPerSecond.dx / pointSize / 2.0;
+        final newRange = GRange.range(
+          pointViewPort.startPoint - distance,
+          pointViewPort.endPoint - distance,
+        );
+        final simulation = FrictionSimulation.through(0, 1, 1, 0.9);
+        pointViewPort.animateToRange(
+          _chart,
+          newRange,
+          true,
+          true,
+          simulation: simulation,
+        );
       }
     };
     return graph;

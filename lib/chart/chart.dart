@@ -29,6 +29,18 @@ class DebounceHelper {
   }
 }
 
+/// Action mode for pointer scroll event (mouse wheel scrolling).
+enum GPointerScrollMode {
+  /// no action
+  none,
+
+  /// zoom the point viewport
+  zoom,
+
+  /// move the point viewport
+  move,
+}
+
 /// Chart model.
 class GChart extends ChangeNotifier {
   /// The data source.
@@ -36,6 +48,15 @@ class GChart extends ChangeNotifier {
 
   /// The only one point viewport of the panel which shared by all the components in the panel.
   final GPointViewPort pointViewPort;
+
+  /// The action mode for pointer scroll event.
+  final GValue<GPointerScrollMode> _pointerScrollMode;
+  set pointerScrollMode(GPointerScrollMode value) {
+    _pointerScrollMode.value = value;
+    _notify();
+  }
+
+  GPointerScrollMode get pointerScrollMode => _pointerScrollMode.value;
 
   /// The background component.
   final GBackground background;
@@ -106,6 +127,7 @@ class GChart extends ChangeNotifier {
     GBackground? background,
     GSplitter? splitter,
     GCrosshair? crosshair,
+    GPointerScrollMode pointerScrollMode = GPointerScrollMode.zoom,
     Rect area = const Rect.fromLTWH(0, 0, 500, 500),
     this.minSize = const Size(200, 200),
     this.preRender,
@@ -114,6 +136,7 @@ class GChart extends ChangeNotifier {
        background = (background ?? GBackground()),
        crosshair = (crosshair ?? GCrosshair()),
        splitter = (splitter ?? GSplitter()),
+       _pointerScrollMode = GValue(pointerScrollMode),
        pointViewPort =
            pointViewPort ??
            GPointViewPort(

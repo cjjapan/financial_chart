@@ -160,6 +160,18 @@ class DemoPanelsPageState extends DemoBasePageState {
           ),
         ),
         AppLabelWidget(
+          label: "Pointer scroll mode",
+          child: AppPopupMenu<GPointerScrollMode>(
+            items: GPointerScrollMode.values,
+            onSelected: (GPointerScrollMode selected) {
+              chart?.pointerScrollMode = selected;
+              repaintChart();
+            },
+            selected: chart!.pointerScrollMode,
+            labelResolver: (item) => item.name,
+          ),
+        ),
+        AppLabelWidget(
           label: "Markers visible",
           child: AppPopupMenu<bool>(
             items: const [true, false],
