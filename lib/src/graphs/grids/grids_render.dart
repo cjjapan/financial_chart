@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../../chart.dart';
+import '../../../financial_chart.dart';
 
 class GGraphGridsRender extends GGraphRender<GGraphGrids, GGraphGridsTheme> {
   const GGraphGridsRender();

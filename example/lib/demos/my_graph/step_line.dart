@@ -1,4 +1,4 @@
-import 'package:financial_chart/chart.dart';
+import 'package:financial_chart/financial_chart.dart';
 
 import 'step_ine_render.dart';
 import 'step_line_theme.dart';

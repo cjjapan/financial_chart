@@ -94,10 +94,7 @@ class GChartController extends ChangeNotifier {
           pointViewPort.animateToRange(_chart, newRange, true, false);
         } else if (_chart.pointerScrollMode == GPointerScrollMode.zoom) {
           final centerPoint =
-              pointViewPort
-                  .positionToPoint(area, position.dx)
-                  .round()
-                  .toDouble();
+              pointViewPort.positionToPoint(area, position.dx).toDouble();
           final scaleRatio = 1 + scrollDelta.dy / area.height;
           pointViewPort.zoomUpdate(
             pointViewPort.range,

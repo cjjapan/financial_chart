@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:financial_chart/chart.dart';
+import 'package:financial_chart/financial_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 

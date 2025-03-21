@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:financial_chart/chart.dart';
+import 'package:financial_chart/financial_chart.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

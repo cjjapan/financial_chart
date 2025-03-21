@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../../chart.dart';
+import '../../../financial_chart.dart';
 
 class GGraphLineRender extends GGraphRender<GGraphLine, GGraphLineTheme> {
   @override

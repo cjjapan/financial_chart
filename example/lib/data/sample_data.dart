@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:deriv_technical_analysis/deriv_technical_analysis.dart';
-import 'package:financial_chart/chart.dart';
+import 'package:financial_chart/financial_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'sample_data_loader.dart';
 

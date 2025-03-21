@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../../chart.dart';
+import '../../../financial_chart.dart';
 
 class GGraphBarRender extends GGraphRender<GGraphBar, GGraphBarTheme> {
   @override

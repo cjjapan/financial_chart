@@ -93,7 +93,7 @@ class GChartWidgetState extends State<GChartWidget>
                       );
                     }
                     controller.pointerScroll(
-                      position: event.position,
+                      position: event.localPosition,
                       scrollDelta: event.scrollDelta,
                     );
                   }

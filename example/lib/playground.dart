@@ -1,6 +1,6 @@
 import 'package:example/data/sample_data.dart';
 import 'package:flutter/material.dart';
-import 'package:financial_chart/chart.dart';
+import 'package:financial_chart/financial_chart.dart';
 
 class ChartPlaygroundDemoPage extends StatefulWidget {
   const ChartPlaygroundDemoPage({super.key});

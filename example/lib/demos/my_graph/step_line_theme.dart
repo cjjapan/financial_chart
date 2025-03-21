@@ -1,4 +1,4 @@
-import 'package:financial_chart/chart.dart';
+import 'package:financial_chart/financial_chart.dart';
 
 /// Theme for step line graph
 class GGraphStepLineTheme extends GGraphTheme {
