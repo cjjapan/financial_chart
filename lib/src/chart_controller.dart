@@ -482,10 +482,13 @@ class GChartController extends ChangeNotifier {
       if (scaleValue) {
         valueViewPort.interactionEnd();
       }
-      if (velocity != null) {
+      if (velocity != null && panel.momentumScrollSensitivity > 0) {
         // momentum scrolling
         final pointSize = pointViewPort.pointSize(panel.graphArea().width);
-        final distance = velocity.pixelsPerSecond.dx / pointSize / 2.0;
+        final distance =
+            velocity.pixelsPerSecond.dx /
+            pointSize *
+            panel.momentumScrollSensitivity;
         final newRange = GRange.range(
           pointViewPort.startPoint - distance,
           pointViewPort.endPoint - distance,

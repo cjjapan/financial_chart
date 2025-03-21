@@ -10,6 +10,7 @@
 
 2025-03-21 
 - [0.1.2+3] Fix for issue #3: fix zoom center point
+- [0.1.2+4] Fix for issue #2: add momentumScrollingSensitivity for GPanel
 
 ## 0.1.1
 2025-03-15

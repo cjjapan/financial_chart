@@ -55,14 +55,16 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
       final labelText = (axis.valueFormatter ??
               chart.dataSource.seriesValueFormater)
           .call(value, valueViewPort.valuePrecision);
-      drawValueAxisLabel(
-        canvas: canvas,
-        text: labelText,
-        axis: axis,
-        position: valuePosition,
-        axisArea: area,
-        labelTheme: theme.labelTheme,
-      );
+      if (labelText.isNotEmpty) {
+        drawValueAxisLabel(
+          canvas: canvas,
+          text: labelText,
+          axis: axis,
+          position: valuePosition,
+          axisArea: area,
+          labelTheme: theme.labelTheme,
+        );
+      }
     }
     drawPath(canvas: canvas, path: tickLinesPath, style: theme.tickerStyle);
 
@@ -150,14 +152,16 @@ class GPointAxisRender extends GAxisRender<GPointAxis> {
       final labelText = (component.pointFormatter ??
               chart.dataSource.pointValueFormater)
           .call(point, pointValue);
-      drawPointAxisLabel(
-        canvas: canvas,
-        text: labelText,
-        axis: axis,
-        position: pointPosition,
-        axisArea: area,
-        labelTheme: theme.labelTheme,
-      );
+      if (labelText.isNotEmpty) {
+        drawPointAxisLabel(
+          canvas: canvas,
+          text: labelText,
+          axis: axis,
+          position: pointPosition,
+          axisArea: area,
+          labelTheme: theme.labelTheme,
+        );
+      }
     }
     drawPath(canvas: canvas, path: tickLinesPath, style: theme.tickerStyle);
 

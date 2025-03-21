@@ -133,14 +133,16 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
         final labelText = (pointAxis.pointFormatter ??
                 chart.dataSource.pointValueFormater)
             .call(point, pointValue);
-        drawPointAxisLabel(
-          canvas: canvas,
-          text: labelText,
-          axis: pointAxis,
-          position: crossPosition.dx,
-          axisArea: axisArea,
-          labelTheme: theme.pointLabelTheme,
-        );
+        if (labelText.isNotEmpty) {
+          drawPointAxisLabel(
+            canvas: canvas,
+            text: labelText,
+            axis: pointAxis,
+            position: crossPosition.dx,
+            axisArea: axisArea,
+            labelTheme: theme.pointLabelTheme,
+          );
+        }
       }
     }
   }
@@ -168,14 +170,16 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
       final labelText = (valueAxis.valueFormatter ??
               chart.dataSource.seriesValueFormater)
           .call(value, valueViewPort.valuePrecision);
-      drawValueAxisLabel(
-        canvas: canvas,
-        text: labelText,
-        axis: valueAxis,
-        position: crossPosition.dy,
-        axisArea: axisArea,
-        labelTheme: theme.valueLabelTheme,
-      );
+      if (labelText.isNotEmpty) {
+        drawValueAxisLabel(
+          canvas: canvas,
+          text: labelText,
+          axis: valueAxis,
+          position: crossPosition.dy,
+          axisArea: axisArea,
+          labelTheme: theme.valueLabelTheme,
+        );
+      }
     }
   }
 }

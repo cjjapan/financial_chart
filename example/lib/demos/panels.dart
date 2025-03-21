@@ -172,6 +172,20 @@ class DemoPanelsPageState extends DemoBasePageState {
           ),
         ),
         AppLabelWidget(
+          label: "Momentum scroll sensitivity",
+          child: AppPopupMenu<double>(
+            items: const [0, 0.1, 0.5, 1.0],
+            onSelected: (double selected) {
+              for (var panel in chart!.panels) {
+                panel.momentumScrollSensitivity = selected;
+              }
+              repaintChart();
+            },
+            selected: chart!.panels[0].momentumScrollSensitivity,
+            labelResolver: (item) => item.toString(),
+          ),
+        ),
+        AppLabelWidget(
           label: "Markers visible",
           child: AppPopupMenu<bool>(
             items: const [true, false],
