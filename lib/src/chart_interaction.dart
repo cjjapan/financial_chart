@@ -267,7 +267,6 @@ class GChartInteractionHandler {
     for (final panel in _chart.panels) {
       if (panel.panelArea().contains(position) &&
           (!panel.resizable || !panel.splitterArea().contains(position))) {
-        _chart.crosshair.setCrossPosition(position.dx, position.dy);
         _isTouchEvent.value = isTouch;
         _notify();
         return;
@@ -276,6 +275,7 @@ class GChartInteractionHandler {
   }
 
   void tapUp() {
+    _isTouchEvent.value = false;
     _clearTouchCross();
   }
 
