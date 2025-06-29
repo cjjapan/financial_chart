@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 
 import '../../components/marker/overlay_marker.dart';
+import '../../components/marker/overlay_marker_render.dart';
 import '../../values/coord.dart';
 import '../../values/size.dart';
 import '../../values/value.dart';
@@ -25,6 +26,7 @@ class GShapeMarker extends GOverlayMarker {
 
   GShapeMarker({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -32,15 +34,15 @@ class GShapeMarker extends GOverlayMarker {
     required GCoordinate anchorCoord,
     required GSize radiusSize,
     double rotation = 0,
-    Alignment alignment =
-        Alignment
-            .center, // where anchor point located on the bound rect of the circle
+    Alignment alignment = Alignment.center,
     required this.pathGenerator,
-    super.render = const GShapeMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _radiusSize = GValue<GSize>(radiusSize),
        _alignment = GValue<Alignment>(alignment),
        _rotation = GValue<double>(rotation),
        super(keyCoordinates: [anchorCoord]) {
     assert(radiusSize.sizeValue > 0, 'radius must be positive value.');
+    super.render = render ?? GShapeMarkerRender();
   }
 }

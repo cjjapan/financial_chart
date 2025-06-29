@@ -151,11 +151,11 @@ class DemoPanelsPageState extends DemoBasePageState {
             onSelected: (bool selected) {
               chart!.panels[0].resizable = selected;
               chart!.panels[1].resizable = selected;
-              for (var marker
+              for (final marker
                   in chart!.panels[1].findGraphById("macd")!.overlayMarkers) {
                 marker.visible = selected;
               }
-              for (var marker
+              for (final marker
                   in chart!.panels[1].findGraphById("macd")!.overlayMarkers) {
                 marker.visible = selected;
               }
@@ -198,7 +198,7 @@ class DemoPanelsPageState extends DemoBasePageState {
           child: AppPopupMenu<GGraphPanMode>(
             items: GGraphPanMode.values,
             onSelected: (GGraphPanMode selected) {
-              for (var panel in chart!.panels) {
+              for (final panel in chart!.panels) {
                 panel.graphPanMode = selected;
               }
               repaintChart();
@@ -215,7 +215,7 @@ class DemoPanelsPageState extends DemoBasePageState {
           child: AppPopupMenu<double>(
             items: const [0, 0.1, 0.5, 1.0],
             onSelected: (double selected) {
-              for (var panel in chart!.panels) {
+              for (final panel in chart!.panels) {
                 panel.momentumScrollSpeed = selected;
               }
               repaintChart();

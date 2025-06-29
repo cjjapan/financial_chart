@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 
 import '../../components/marker/overlay_marker.dart';
+import '../../components/marker/overlay_marker_render.dart';
 import '../../values/coord.dart';
 import '../../values/size.dart';
 import '../../values/value.dart';
@@ -32,6 +33,7 @@ class GRectMarker extends GOverlayMarker {
 
   GRectMarker({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -39,15 +41,19 @@ class GRectMarker extends GOverlayMarker {
     required GCoordinate startCoord,
     required GCoordinate endCoord,
     GSize? cornerRadiusSize,
-    super.render = const GRectMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _pointRadiusSize = GValue<GSize?>(null),
        _valueRadiusSize = GValue<GSize?>(null),
        _alignment = GValue<Alignment>(Alignment.center),
        _cornerRadiusSize = GValue<GSize?>(cornerRadiusSize),
-       super(keyCoordinates: [startCoord, endCoord]);
+       super(keyCoordinates: [startCoord, endCoord]) {
+    super.render = render ?? GRectMarkerRender();
+  }
 
   GRectMarker.anchorAndRadius({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -57,10 +63,13 @@ class GRectMarker extends GOverlayMarker {
     required GSize valueRadiusSize,
     GSize? cornerRadiusSize,
     Alignment alignment = Alignment.center,
-    super.render = const GRectMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _cornerRadiusSize = GValue<GSize?>(cornerRadiusSize),
        _pointRadiusSize = GValue<GSize?>(pointRadiusSize),
        _valueRadiusSize = GValue<GSize?>(valueRadiusSize),
        _alignment = GValue<Alignment>(alignment),
-       super(keyCoordinates: [anchorCoord]);
+       super(keyCoordinates: [anchorCoord]) {
+    super.render = render ?? GRectMarkerRender();
+  }
 }

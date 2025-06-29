@@ -3,16 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import 'panel_render.dart';
-import 'panel_theme.dart';
-import '../component.dart';
+import '../components.dart';
 import '../../values/coord.dart';
 import '../../values/value.dart';
-import '../tooltip/tooltip.dart';
-import '../graph/graph.dart';
-import '../axis/axis.dart';
-import '../viewport_h.dart';
-import '../viewport_v.dart';
 
 /// The action mode when panning the graph area of the panel.
 enum GGraphPanMode {
@@ -113,6 +106,13 @@ class GPanel extends GComponent {
   Function(Offset)? get onTapGraphArea => _onTapGraphArea.value;
   set onTapGraphArea(Function(Offset)? value) => _onTapGraphArea.value = value;
 
+  /// The callback function when secondary tap (up) the graph area.
+  final GValue<Function(Offset)?> _onSecondaryTapGraphArea = GValue(null);
+  Function(Offset)? get onSecondaryTapGraphArea =>
+      _onSecondaryTapGraphArea.value;
+  set onSecondaryTapGraphArea(Function(Offset)? value) =>
+      _onSecondaryTapGraphArea.value = value;
+
   /// The callback function when double tap (down) the graph area.
   ///
   /// NOTICE that when this being set it will cause a delay on [onTapGraphArea] for distinguishing single from double taps
@@ -156,6 +156,7 @@ class GPanel extends GComponent {
     double momentumScrollSpeed = 0.5,
     Function(Offset)? onTapGraphArea,
     Function(Offset)? onDoubleTapGraphArea,
+    Function(Offset)? onSecondaryTapGraphArea,
     Function(Offset)? onLongPressDownGraphArea,
     Function(Offset)? onLongPressUpGraphArea,
     Function(Offset)? onLongPressMoveGraphArea,
@@ -169,6 +170,7 @@ class GPanel extends GComponent {
     _graphPanMode.value = graphPanMode;
     _onTapGraphArea.value = onTapGraphArea;
     _onDoubleTapGraphArea.value = onDoubleTapGraphArea;
+    _onSecondaryTapGraphArea.value = onSecondaryTapGraphArea;
     _onLongPressStartGraphArea.value = onLongPressDownGraphArea;
     _onLongPressEndGraphArea.value = onLongPressUpGraphArea;
     _onLongPressMoveGraphArea.value = onLongPressMoveGraphArea;
@@ -239,8 +241,29 @@ class GPanel extends GComponent {
     return graphs.where((element) => element.id == id).firstOrNull;
   }
 
-  dispose() {
-    for (var valueViewPort in valueViewPorts) {
+  (GGraph?, GOverlayMarker? marker) hitTestGraphs({required Offset position}) {
+    if (!graphArea().contains(position)) {
+      return (null, null);
+    }
+    for (int g = graphs.length - 1; g > 0; g--) {
+      GGraph graph = graphs[g];
+      if (graph.visible) {
+        GOverlayMarker? marker = graph.hitTestOverlayMarkers(
+          position: position,
+        );
+        if (marker != null) {
+          return (graph, marker);
+        }
+        if (graph.getRender().hitTest(position: position)) {
+          return (graph, null);
+        }
+      }
+    }
+    return (null, null);
+  }
+
+  void dispose() {
+    for (final valueViewPort in valueViewPorts) {
       valueViewPort.dispose();
     }
     tooltip?.dispose();

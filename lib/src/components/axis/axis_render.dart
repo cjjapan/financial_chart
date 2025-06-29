@@ -74,7 +74,7 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
     if (axis.axisMarkers.isNotEmpty) {
       final axisMarkers = [...axis.axisMarkers];
       axisMarkers.sort((a, b) => a.layer.compareTo(b.layer));
-      for (var marker in axisMarkers) {
+      for (final marker in axisMarkers) {
         if (marker is GValueAxisMarker) {
           marker.getRender().renderMarker(
             canvas: canvas,
@@ -97,7 +97,7 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
     if (axis.overlayMarkers.isNotEmpty) {
       final overlayMarkers = [...axis.overlayMarkers];
       overlayMarkers.sort((a, b) => a.layer.compareTo(b.layer));
-      for (var marker in overlayMarkers) {
+      for (final marker in overlayMarkers) {
         marker.getRender().renderMarker(
           canvas: canvas,
           chart: chart,
@@ -240,7 +240,7 @@ class GPointAxisRender extends GAxisRender<GPointAxis> {
     if (axis.axisMarkers.isNotEmpty) {
       final axisMarkers = [...axis.axisMarkers];
       axisMarkers.sort((a, b) => a.layer.compareTo(b.layer));
-      for (var marker in axisMarkers) {
+      for (final marker in axisMarkers) {
         if (marker is GPointAxisMarker) {
           marker.getRender().renderMarker(
             canvas: canvas,
@@ -262,7 +262,7 @@ class GPointAxisRender extends GAxisRender<GPointAxis> {
     if (axis.overlayMarkers.isNotEmpty) {
       final overlayMarkers = [...axis.overlayMarkers];
       overlayMarkers.sort((a, b) => a.layer.compareTo(b.layer));
-      for (var marker in overlayMarkers) {
+      for (final marker in overlayMarkers) {
         marker.getRender().renderMarker(
           canvas: canvas,
           chart: chart,

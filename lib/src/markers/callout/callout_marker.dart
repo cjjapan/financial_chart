@@ -27,6 +27,7 @@ class GCalloutMarker extends GOverlayMarker {
 
   GCalloutMarker({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -36,10 +37,13 @@ class GCalloutMarker extends GOverlayMarker {
     Alignment alignment = Alignment.center,
     double pointerSize = 10,
     double pointerMargin = 10,
-    GOverlayMarkerRender render = const GCalloutMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _text = GValue<String>(text),
        _alignment = GValue<Alignment>(alignment),
        _pointerSize = GValue<double>(pointerSize),
        _pointerMargin = GValue<double>(pointerMargin),
-       super(keyCoordinates: [anchorCoord], render: render);
+       super(keyCoordinates: [anchorCoord]) {
+    super.render = render ?? GCalloutMarkerRender();
+  }
 }

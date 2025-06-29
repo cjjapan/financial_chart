@@ -79,7 +79,7 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
       // vertical line
       double dx = crossPosition.dx;
       if (crosshair.snapToPoint) {
-        var viewPortH = chart.pointViewPort;
+        final viewPortH = chart.pointViewPort;
         int point = viewPortH.nearestPoint(graphArea, crossPosition);
         dx = viewPortH.pointToPosition(graphArea, point.toDouble());
       }
@@ -119,10 +119,10 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
     if (!crosshair.pointAxisLabelsVisible) {
       return;
     }
-    var pointViewPort = chart.pointViewPort;
+    final pointViewPort = chart.pointViewPort;
     for (int a = 0; a < panel.pointAxes.length; a++) {
-      var pointAxis = panel.pointAxes[a];
-      var axisArea = panel.pointAxisArea(a);
+      final pointAxis = panel.pointAxes[a];
+      final axisArea = panel.pointAxisArea(a);
       if (axisArea.left > crossPosition.dx ||
           axisArea.right < crossPosition.dx) {
         continue;
@@ -159,9 +159,9 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
       return;
     }
     for (int a = 0; a < panel.valueAxes.length; a++) {
-      var valueAxis = panel.valueAxes[a];
-      var valueViewPort = panel.findValueViewPortById(valueAxis.viewPortId);
-      var axisArea = panel.valueAxisArea(a);
+      final valueAxis = panel.valueAxes[a];
+      final valueViewPort = panel.findValueViewPortById(valueAxis.viewPortId);
+      final axisArea = panel.valueAxisArea(a);
       if (axisArea.top > crossPosition.dy ||
           axisArea.bottom < crossPosition.dy) {
         continue;

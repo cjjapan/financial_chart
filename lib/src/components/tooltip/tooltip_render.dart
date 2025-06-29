@@ -1,14 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 
 import '../../chart.dart';
-import '../../values/pair.dart';
-import '../panel/panel.dart';
-import '../render.dart';
-import '../render_util.dart';
-import 'tooltip.dart';
-import 'tooltip_theme.dart';
+import '../components.dart';
 
 /// [GTooltip] renderer
 class GTooltipRender extends GRender<GTooltip, GTooltipTheme> {
@@ -246,20 +239,30 @@ class GTooltipRender extends GRender<GTooltip, GTooltipTheme> {
     if (dataKeyValues.isEmpty) {
       return;
     }
-    double labelsWidth = 0;
-    double valuesWidth = 0;
-    double labelsHeight = 0;
-    double valuesHeight = 0;
-    TextPainter? pointValuePainter;
+
+    List<List<GTableItemPainter>> texts = [];
+    List<GTableItemSpanPainter> spanTexts = [];
     if (tooltip.showPointValue) {
-      final (pointValueTextPainter, _, _) = GRenderUtil.createTextPainter(
-        text: dataSource.pointValueFormater(point, pointValue),
-        style: theme.pointStyle,
+      texts.add([
+        GTablePlaceHolderItemPainter(),
+        GTablePlaceHolderItemPainter(),
+      ]);
+      spanTexts.add(
+        GTableItemSpanPainter(
+          rowStart: 0,
+          rowEnd: 0,
+          colStart: 0,
+          colEnd: 1,
+          item: GTableTextItemPainter(
+            text: dataSource.pointValueFormater(point, pointValue),
+            style: theme.pointStyle.textStyle!,
+            alignment: theme.pointStyle.align ?? Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(0, 0, 0, theme.pointRowSpacing),
+          ),
+        ),
       );
-      pointValuePainter = pointValueTextPainter;
     }
-    List<GPair<TextPainter>> textPainters = [];
-    for (var key in tooltip.dataKeys) {
+    for (final key in tooltip.dataKeys) {
       final prop = dataSource.getSeriesProperty(key);
       final label = prop.label;
       final value = dataKeyValues[key];
@@ -269,102 +272,79 @@ class GTooltipRender extends GRender<GTooltip, GTooltipTheme> {
                   ? prop.valueFormater!(value)
                   : dataSource.seriesValueFormater(value, prop.precision)
               : '';
-      final (labelPainter, _, _) = GRenderUtil.createTextPainter(
-        text: label,
-        style: theme.labelStyle,
-      );
-      final (valuePainter, _, _) = GRenderUtil.createTextPainter(
-        text: valueText,
-        style: theme.valueStyle,
-      );
-      labelsWidth = max(labelsWidth, labelPainter.size.width);
-      valuesWidth = max(valuesWidth, valuePainter.size.width);
-      labelsHeight = labelsHeight + labelPainter.size.height + theme.rowSpacing;
-      valuesHeight = valuesHeight + valuePainter.size.height + theme.rowSpacing;
-      textPainters.add(GPair<TextPainter>.pair(labelPainter, valuePainter));
+      texts.add([
+        GTableTextItemPainter(
+          text: label,
+          style: theme.labelStyle.textStyle!,
+          alignment: theme.labelStyle.align ?? Alignment.centerLeft,
+          padding: EdgeInsets.fromLTRB(
+            0,
+            tooltip.showPointValue ? theme.rowSpacing : 0,
+            theme.labelValueSpacing,
+            0,
+          ),
+        ),
+        GTableTextItemPainter(
+          text: valueText,
+          style: theme.valueStyle.textStyle!,
+          alignment: theme.valueStyle.align ?? Alignment.centerRight,
+          padding: EdgeInsets.fromLTRB(
+            0,
+            tooltip.showPointValue ? theme.rowSpacing : 0,
+            0,
+            0,
+          ),
+        ),
+      ]);
     }
-    labelsHeight = labelsHeight - theme.rowSpacing;
-    valuesHeight = valuesHeight - theme.rowSpacing;
 
-    double frameWidth =
-        max(labelsWidth + valuesWidth, pointValuePainter?.size.width ?? 0) +
-        theme.labelValueSpacing +
-        theme.framePadding * 2 +
-        theme.frameMargin * 2;
-    double frameHeight =
-        max(labelsHeight, valuesHeight) +
-        (pointValuePainter != null
-            ? (pointValuePainter.size.height + theme.pointRowSpacing)
-            : 0) +
-        theme.framePadding * 2 +
-        theme.frameMargin * 2;
+    GTableLayoutPainter tablePainter = GTableLayoutPainter(
+      items: texts,
+      spanItems: spanTexts,
+      padding: EdgeInsets.all(theme.framePadding),
+      margin: EdgeInsets.all(theme.frameMargin),
+      blockCornerRadius: theme.frameCornerRadius,
+      blockStyle: theme.frameStyle,
+      anchor: anchorPosition,
+      alignment: Alignment.bottomRight,
+    );
+    final size = tablePainter.size;
+    final ttWidth = size.width;
+    final ttHeight = size.height;
 
     Rect tooltipArea = Rect.fromPoints(
       anchorPosition,
-      anchorPosition.translate(frameWidth, frameHeight),
+      anchorPosition.translate(ttWidth, ttHeight),
     );
     if (tooltipArea.right > area.right) {
-      anchorPosition = Offset(area.right - frameWidth, anchorPosition.dy);
+      anchorPosition = Offset(area.right - ttWidth, anchorPosition.dy);
       tooltipArea = Rect.fromPoints(
         anchorPosition,
-        anchorPosition.translate(frameWidth, frameHeight),
+        anchorPosition.translate(ttWidth, ttHeight),
       );
     }
     if (tooltipArea.bottom > area.bottom) {
-      anchorPosition = Offset(anchorPosition.dx, area.bottom - frameHeight);
+      anchorPosition = Offset(anchorPosition.dx, area.bottom - ttHeight);
       tooltipArea = Rect.fromPoints(
         anchorPosition,
-        anchorPosition.translate(frameWidth, frameHeight),
+        anchorPosition.translate(ttWidth, ttHeight),
       );
     }
     if (tooltipArea.top < area.top) {
       anchorPosition = Offset(anchorPosition.dx, area.top);
       tooltipArea = Rect.fromPoints(
         anchorPosition,
-        anchorPosition.translate(frameWidth, frameHeight),
+        anchorPosition.translate(ttWidth, ttHeight),
       );
     }
     if (tooltipArea.left < area.left) {
       anchorPosition = Offset(area.left, anchorPosition.dy);
       tooltipArea = Rect.fromPoints(
         anchorPosition,
-        anchorPosition.translate(frameWidth, frameHeight),
+        anchorPosition.translate(ttWidth, ttHeight),
       );
     }
-    final framePath = addRectPath(
-      rect: tooltipArea.deflate(theme.frameMargin),
-      cornerRadius: theme.frameCornerRadius,
-    );
-    drawPath(canvas: canvas, path: framePath, style: theme.frameStyle);
-
-    Offset anchor = anchorPosition.translate(
-      theme.framePadding + theme.frameMargin,
-      theme.framePadding + theme.frameMargin,
-    );
-    if (pointValuePainter != null) {
-      pointValuePainter.paint(canvas, anchor);
-      anchor = anchor.translate(
-        0,
-        pointValuePainter.size.height + theme.pointRowSpacing,
-      );
-    }
-    for (var labelValuePair in textPainters) {
-      labelValuePair.first!.paint(canvas, anchor);
-      labelValuePair.last!.paint(
-        canvas,
-        anchor.translate(
-          labelsWidth +
-              theme.labelValueSpacing +
-              valuesWidth -
-              labelValuePair.last!.size.width,
-          0,
-        ),
-      );
-      anchor = anchor.translate(
-        0,
-        labelValuePair.first!.size.height + theme.rowSpacing,
-      );
-    }
+    tablePainter.paint(canvas, forceOffset: anchorPosition);
   }
 
   void _removeWidget(GChart chart, [GTooltip? tooltip]) {
@@ -378,7 +358,7 @@ class GTooltipRender extends GRender<GTooltip, GTooltipTheme> {
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((f) {
-      for (var panel in panels) {
+      for (final panel in panels) {
         if (panel.tooltip?.tooltipNotifier != null) {
           panel.tooltip!.tooltipNotifier!.value = null;
         }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../components/graph/graph.dart';
-import '../../components/graph/graph_theme.dart';
+import '../../components/components.dart';
 import '../theme.dart';
 
 import '../../style/label_style.dart';
@@ -16,15 +15,6 @@ import '../../graphs/ohlc/ohlc.dart';
 import '../../graphs/ohlc/ohlc_theme.dart';
 import '../../graphs/area/area.dart';
 import '../../graphs/area/area_theme.dart';
-
-import '../../components/panel/panel_theme.dart';
-import '../../components/axis/axis_theme.dart';
-import '../../components/crosshair/crosshair_theme.dart';
-import '../../components/splitter/splitter_theme.dart';
-import '../../components/tooltip/tooltip_theme.dart';
-import '../../components/background/background_theme.dart';
-import '../../components/marker/overlay_marker_theme.dart';
-import '../../components/marker/axis_marker_theme.dart';
 
 /// Preset dark theme.
 class GThemeDark extends GTheme {
@@ -252,11 +242,13 @@ class GThemeDark extends GTheme {
           strokeColor: Colors.blue,
           strokeWidth: 2,
         ),
-        controlPointsStyle: PaintStyle(
-          fillColor: Colors.white,
-          strokeColor: Colors.blueAccent,
-          strokeWidth: 2,
-        ),
+        controlHandleThemes: {
+          GControlHandleType.view: controlHandleThemeViewDefault,
+          GControlHandleType.move: controlHandleThemeMoveDefault,
+          GControlHandleType.align: controlHandleThemeAlignDefault,
+          GControlHandleType.resize: controlHandleThemeResizeDefault,
+          GControlHandleType.reshape: controlHandleThemeReshapeDefault,
+        },
         labelStyle: LabelStyle(
           textStyle: const TextStyle(color: Colors.black, fontSize: 10.0),
           backgroundStyle: PaintStyle(
@@ -266,6 +258,61 @@ class GThemeDark extends GTheme {
           ),
           backgroundPadding: const EdgeInsets.all(5),
           backgroundCornerRadius: 5,
+        ),
+      );
+
+  static final GControlHandleTheme controlHandleThemeViewDefault =
+      GControlHandleTheme(
+        shape: GControlHandleShape.circle,
+        size: 8.0,
+        style: PaintStyle(
+          fillColor: Colors.white,
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1.0,
+        ),
+      );
+
+  static final GControlHandleTheme controlHandleThemeMoveDefault =
+      GControlHandleTheme(
+        shape: GControlHandleShape.circle,
+        size: 8.0,
+        style: PaintStyle(
+          fillColor: Colors.white,
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1.0,
+        ),
+      );
+
+  static final GControlHandleTheme controlHandleThemeResizeDefault =
+      GControlHandleTheme(
+        shape: GControlHandleShape.square,
+        size: 8.0,
+        style: PaintStyle(
+          fillColor: Colors.white,
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1.0,
+        ),
+      );
+
+  static final GControlHandleTheme controlHandleThemeReshapeDefault =
+      GControlHandleTheme(
+        shape: GControlHandleShape.diamond,
+        size: 8.0,
+        style: PaintStyle(
+          fillColor: Colors.white,
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1.0,
+        ),
+      );
+
+  static final GControlHandleTheme controlHandleThemeAlignDefault =
+      GControlHandleTheme(
+        shape: GControlHandleShape.crossSquare,
+        size: 8.0,
+        style: PaintStyle(
+          fillColor: Colors.white,
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1.0,
         ),
       );
 

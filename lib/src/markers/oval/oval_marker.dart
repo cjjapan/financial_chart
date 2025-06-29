@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 
 import '../../components/marker/overlay_marker.dart';
+import '../../components/marker/overlay_marker_render.dart';
 import '../../values/coord.dart';
 import '../../values/size.dart';
 import '../../values/value.dart';
@@ -28,20 +29,25 @@ class GOvalMarker extends GOverlayMarker {
 
   GOvalMarker.corner({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
     super.theme,
     required GCoordinate startCoord,
     required GCoordinate endCoord,
-    super.render = const GOvalMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _pointRadiusSize = GValue<GSize?>(null),
        _valueRadiusSize = GValue<GSize?>(null),
        _alignment = GValue<Alignment>(Alignment.center),
-       super(keyCoordinates: [startCoord, endCoord]);
+       super(keyCoordinates: [startCoord, endCoord]) {
+    super.render = render ?? GOvalMarkerRender();
+  }
 
   GOvalMarker.anchorAndRadius({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -50,9 +56,12 @@ class GOvalMarker extends GOverlayMarker {
     required GSize pointRadiusSize,
     required GSize valueRadiusSize,
     required Alignment alignment,
-    super.render = const GOvalMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _pointRadiusSize = GValue<GSize?>(pointRadiusSize),
        _valueRadiusSize = GValue<GSize?>(valueRadiusSize),
        _alignment = GValue<Alignment>(alignment),
-       super(keyCoordinates: [anchorCoord]);
+       super(keyCoordinates: [anchorCoord]) {
+    super.render = render ?? GOvalMarkerRender();
+  }
 }

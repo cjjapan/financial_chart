@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:vector_math/vector_math.dart';
 
 import '../../chart.dart';
-import '../../vector/vectors/polygon.dart';
 import '../panel/panel.dart';
 import '../viewport_h.dart';
 import '../viewport_v.dart';
@@ -190,58 +189,21 @@ class GGraphRender<C extends GGraph, T extends GGraphTheme>
     // override this method to render the graph
   }
 
-  bool hitTestLines({
-    required List<List<Vector2>> lines,
-    required Offset position,
-    double? epsilon,
-  }) {
-    for (int i = 0; i < lines.length; i++) {
-      if (PolygonUtil.hitTest(
-        vertices: lines[i],
-        px: position.dx,
-        py: position.dy,
-        epsilon: epsilon ?? hitTestEpsilon,
-      )) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   /// Draw the highlight marks (when hit test result is true).
-  void drawHighlightMarks({
+  void drawGraphHighlightMarks({
     required Canvas canvas,
     required GGraph graph,
     required Rect area,
     required T theme,
     required List<Vector2> highlightMarks,
   }) {
-    if (graph.visible &&
-        highlightMarks.isNotEmpty &&
-        graph.highlight &&
-        theme.highlightMarkerTheme != null &&
-        theme.highlightMarkerTheme!.size > 0) {
-      renderClipped(
-        canvas: canvas,
-        clipRect: area,
-        render: () {
-          for (int i = 0; i < highlightMarks.length; i++) {
-            final point = highlightMarks[i];
-            final p = addOvalPath(
-              rect: Rect.fromCircle(
-                center: Offset(point.x, point.y),
-                radius: theme.highlightMarkerTheme!.size,
-              ),
-            );
-            drawPath(
-              canvas: canvas,
-              path: p,
-              style: theme.highlightMarkerTheme!.style,
-            );
-          }
-        },
-      );
-    }
+    drawHighlightMarks(
+      canvas: canvas,
+      component: graph,
+      area: area,
+      highlightMarkerTheme: theme.highlightMarkerTheme,
+      highlightMarks: highlightMarks,
+    );
   }
 
   /// Draw the crosshair highlight marks (when the pointer moves).

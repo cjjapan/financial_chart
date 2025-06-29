@@ -21,18 +21,24 @@ class GGraphOhlc<T extends GGraphTheme> extends GGraph<T> {
 
   GGraphOhlc({
     super.id,
+    super.label,
     super.valueViewPortId,
     required this.ohlcValueKeys,
     bool drawAsCandle = true,
     super.layer,
     super.visible,
+    super.highlighted,
+    super.selected,
     super.hitTestMode,
     super.crosshairHighlightValueKeys,
     super.overlayMarkers,
     T? theme,
     super.render,
   }) : _drawAsCandle = GValue(drawAsCandle) {
-    assert(ohlcValueKeys.length == 4, "The length of ohlcValueKeys must be 4.");
+    assert(
+      ohlcValueKeys.toSet().length == 4,
+      "The length of ohlcValueKeys must be 4.",
+    );
     super.theme = theme;
     super.render = render ?? GGraphOhlcRender();
   }

@@ -28,7 +28,7 @@ class SplineUtil {
       min = Vector2(double.infinity, double.infinity);
       max = Vector2(double.negativeInfinity, double.negativeInfinity);
 
-      for (var vector in vectors) {
+      for (final vector in vectors) {
         Vector2.min(min, vector, min);
         Vector2.max(max, vector, max);
       }
@@ -43,7 +43,7 @@ class SplineUtil {
     }
 
     final len = vectors.length;
-    for (var i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
       final vector = vectors[i];
       if (isLoop) {
         prevVector = vectors[i >= 1 ? i - 1 : len - 1];
@@ -59,8 +59,8 @@ class SplineUtil {
       }
 
       final v = (nextVector - prevVector) * ratio;
-      var d0 = vector.distanceTo(prevVector);
-      var d1 = vector.distanceTo(nextVector);
+      double d0 = vector.distanceTo(prevVector);
+      double d1 = vector.distanceTo(nextVector);
 
       final sum = d0 + d1;
       if (sum != 0) {
@@ -115,7 +115,7 @@ class SplineUtil {
     Vector2 cp2;
     Vector2 p;
 
-    for (var i = 0; i < len - 1; i++) {
+    for (int i = 0; i < len - 1; i++) {
       cp1 = controlPointList[i * 2];
       cp2 = controlPointList[i * 2 + 1];
       p = points[i + 1];

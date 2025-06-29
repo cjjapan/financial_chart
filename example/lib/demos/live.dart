@@ -22,7 +22,7 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
   GDataSource? dataSource;
   GPointAxisMarker? pointAxisMarker;
   GValueAxisMarker? valueAxisMarker;
-  GLineMarker? lineMarker;
+  GPolyLineMarker? lineMarker;
 
   DemoLiveUpdatePageState();
 
@@ -49,7 +49,7 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
     if (dataSource.length == 0) {
       return;
     }
-    var lastData = dataSource.dataList.last;
+    GData<int> lastData = dataSource.dataList.last;
     final latestPrice =
         lastData.seriesValues[3] +
         (Random().nextInt(100) - 50) * 0.02; // random price change
@@ -114,7 +114,7 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
       point: dataSource.lastPoint,
     );
     if (dataSource.isNotEmpty) {
-      lineMarker = GLineMarker(
+      lineMarker = GPolyLineMarker(
         id: "line-marker-latest",
         coordinates: [
           GCustomCoord(
@@ -125,6 +125,8 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
                   key: keyClose,
                 )!,
             coordinateConvertor: kCoordinateConvertorXPositionYValue,
+            coordinateConvertorReverse:
+                kCoordinateConvertorXPositionYValueReverse,
           ),
           GCustomCoord(
             x: 1.0,
@@ -134,10 +136,14 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
                   key: keyClose,
                 )!,
             coordinateConvertor: kCoordinateConvertorXPositionYValue,
+            coordinateConvertorReverse:
+                kCoordinateConvertorXPositionYValueReverse,
           ),
         ],
         theme: GOverlayMarkerTheme(
           markerStyle: PaintStyle(strokeColor: Colors.orange),
+          controlHandleThemes:
+              chartTheme.overlayMarkerTheme.controlHandleThemes,
         ),
       );
     }
@@ -230,7 +236,7 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
           child: AppPopupMenu<bool>(
             items: const [true, false],
             onSelected: (bool selected) {
-              for (var marker
+              for (final marker
                   in chart!.panels[0].findGraphById("ohlc")!.overlayMarkers) {
                 marker.visible = selected;
               }

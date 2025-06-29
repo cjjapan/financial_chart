@@ -56,7 +56,6 @@ class DemoGraphGroupPageState extends DemoBasePageState {
           GGraphGrids(id: "grids", valueViewPortId: 'price'),
           GGraphGroup(
             id: "ichimoku",
-            valueViewPortId: "price",
             graphs: [
               GGraphLine(
                 id: "ichi-base",

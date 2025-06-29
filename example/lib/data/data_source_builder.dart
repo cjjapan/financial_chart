@@ -195,7 +195,7 @@ Future<GDataSource<int, GData<int>>> createDataSource({
               ),
             )
             .toList();
-    for (var s = 5; s < seriesList.length; s++) {
+    for (int s = 5; s < seriesList.length; s++) {
       seriesList[s].$2.rebuild();
       for (int i = 0; i < dataList.length; i++) {
         final value = seriesList[s].$2.sourceIndicator.getValue(i);
@@ -290,7 +290,7 @@ Future<GDataSource<int, GData<int>>> createDataSource({
     dataLoaded: (dataSource) async {
       // update indicator values.
       // this could be optimized to copy only the updated values.
-      for (var s = 5; s < seriesList.length; s++) {
+      for (int s = 5; s < seriesList.length; s++) {
         seriesList[s].$2.rebuild();
         for (int i = 0; i < dataSource.dataList.length; i++) {
           final value = seriesList[s].$2.sourceIndicator.getValue(i);

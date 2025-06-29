@@ -83,7 +83,7 @@ class GPanelRender extends GRender<GPanel, GPanelTheme> {
   }) {
     panel.graphs.sort((a, b) => a.layer.compareTo(b.layer));
     for (int g = 0; g < panel.graphs.length; g++) {
-      var graph = panel.graphs[g];
+      final graph = panel.graphs[g];
       if (graph.visible) {
         graph.getRender().render(
           canvas: canvas,

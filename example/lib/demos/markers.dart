@@ -124,6 +124,8 @@ class DemoMarkersPageState extends DemoBasePageState {
                     fillColor: Colors.yellow.withAlpha(100),
                     strokeColor: Colors.yellow,
                   ),
+                  controlHandleThemes:
+                      chartTheme.overlayMarkerTheme.controlHandleThemes,
                 ),
               ),
               GArrowMarker(
@@ -139,7 +141,7 @@ class DemoMarkersPageState extends DemoBasePageState {
                 alignment: Alignment.centerRight,
               ),
               if (dataSource.length > 0)
-                GLineMarker(
+                GPolyLineMarker(
                   coordinates: [
                     GCustomCoord(
                       x: 0,
@@ -149,6 +151,8 @@ class DemoMarkersPageState extends DemoBasePageState {
                             key: keySMA,
                           )!,
                       coordinateConvertor: kCoordinateConvertorXPositionYValue,
+                      coordinateConvertorReverse:
+                          kCoordinateConvertorXPositionYValueReverse,
                     ),
                     GViewPortCoord(
                       point: dataSource.lastPoint.toDouble(),
@@ -161,23 +165,31 @@ class DemoMarkersPageState extends DemoBasePageState {
                   ],
                   theme: GOverlayMarkerTheme(
                     markerStyle: PaintStyle(strokeColor: Colors.orange),
+                    controlHandleThemes:
+                        chartTheme.overlayMarkerTheme.controlHandleThemes,
                   ),
                 ),
-              GLineMarker(
+              GPolyLineMarker(
                 coordinates: [
                   GCustomCoord(
                     x: dataSource.lastPoint.toDouble(),
                     y: 0,
                     coordinateConvertor: kCoordinateConvertorXPointYPosition,
+                    coordinateConvertorReverse:
+                        kCoordinateConvertorXPositionYValueReverse,
                   ),
                   GCustomCoord(
                     x: dataSource.lastPoint.toDouble(),
                     y: 1,
                     coordinateConvertor: kCoordinateConvertorXPointYPosition,
+                    coordinateConvertorReverse:
+                        kCoordinateConvertorXPositionYValueReverse,
                   ),
                 ],
                 theme: GOverlayMarkerTheme(
                   markerStyle: PaintStyle(strokeColor: Colors.orange),
+                  controlHandleThemes:
+                      chartTheme.overlayMarkerTheme.controlHandleThemes,
                 ),
               ),
               GOvalMarker.anchorAndRadius(
@@ -197,10 +209,12 @@ class DemoMarkersPageState extends DemoBasePageState {
                     fillColor: Colors.red.withAlpha(100),
                     strokeColor: Colors.red,
                   ),
+                  controlHandleThemes:
+                      chartTheme.overlayMarkerTheme.controlHandleThemes,
                 ),
               ),
               GArcMarker.anchorAndRadius(
-                anchorCoord: GViewPortCoord(
+                centerOCoord: GViewPortCoord(
                   point: dataSource.lastPoint.toDouble(),
                   value:
                       dataSource.getSeriesValue(
@@ -212,7 +226,7 @@ class DemoMarkersPageState extends DemoBasePageState {
                 alignment: Alignment.center,
                 startTheta: pi * 1 / 8,
                 endTheta: pi * 15 / 8,
-                close: true,
+                closeType: GArcCloseType.center,
               ),
               GShapeMarker(
                 anchorCoord: GViewPortCoord(
@@ -281,11 +295,15 @@ class DemoMarkersPageState extends DemoBasePageState {
                   x: dataSource.lastPoint.toDouble() - 50,
                   y: 0,
                   coordinateConvertor: kCoordinateConvertorXPointYPosition,
+                  coordinateConvertorReverse:
+                      kCoordinateConvertorXPointYPositionReverse,
                 ),
                 endCoord: GCustomCoord(
                   x: dataSource.lastPoint.toDouble() - 60,
                   y: 1,
                   coordinateConvertor: kCoordinateConvertorXPointYPosition,
+                  coordinateConvertorReverse:
+                      kCoordinateConvertorXPointYPositionReverse,
                 ),
               ),
             ],
@@ -407,11 +425,11 @@ class DemoMarkersPageState extends DemoBasePageState {
           child: AppPopupMenu<bool>(
             items: const [true, false],
             onSelected: (bool selected) {
-              for (var marker
+              for (final marker
                   in chart!.panels[0].findGraphById("line")!.overlayMarkers) {
                 marker.visible = selected;
               }
-              for (var marker
+              for (final marker
                   in chart!.panels[0].findGraphById("line")!.overlayMarkers) {
                 marker.visible = selected;
               }

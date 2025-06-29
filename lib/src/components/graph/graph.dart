@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 
 import '../marker/overlay_marker.dart';
@@ -30,9 +32,12 @@ class GGraph<T extends GGraphTheme> extends GComponent {
 
   GGraph({
     super.id,
+    super.label,
     this.valueViewPortId = "", // empty means the default view port id
     super.layer,
     super.visible,
+    super.highlighted,
+    super.selected,
     super.hitTestMode,
     T? super.theme,
     GGraphRender? super.render,
@@ -66,6 +71,19 @@ class GGraph<T extends GGraphTheme> extends GComponent {
 
   void addMarker(GOverlayMarker marker) {
     _overlayMarkers.add(marker);
+  }
+
+  void clearMarkers() {
+    _overlayMarkers.clear();
+  }
+
+  GOverlayMarker? hitTestOverlayMarkers({required Offset position}) {
+    for (final marker in _overlayMarkers) {
+      if (marker.visible && marker.hitTest(position: position)) {
+        return marker;
+      }
+    }
+    return null;
   }
 
   @override

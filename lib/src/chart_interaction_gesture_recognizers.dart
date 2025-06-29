@@ -107,14 +107,14 @@ class GChartVerticalDragGestureRecognizer
     for (final panel in (chart?.panels ?? <GPanel>[])) {
       if (panel.graphArea().contains(event.localPosition) &&
           panel.graphPanMode != GGraphPanMode.none) {
-        GGraph? graph =
-            chart?.hitTestPanelGraphs(
-              panel: panel,
-              position: event.localPosition,
-            ) ??
-            panel.graphs.lastOrNull;
-        if (graph != null &&
-            !panel.findValueViewPortById(graph.valueViewPortId).autoScaleFlg) {
+        final (graph, marker) = panel.hitTestGraphs(
+          position: event.localPosition,
+        );
+        final graphHit = graph ?? panel.graphs.lastOrNull;
+        if (graphHit != null &&
+            !panel
+                .findValueViewPortById(graphHit.valueViewPortId)
+                .autoScaleFlg) {
           super.addAllowedPointer(event);
           return;
         }
