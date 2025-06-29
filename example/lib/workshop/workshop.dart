@@ -14,7 +14,7 @@ class WorkshopApp extends StatelessWidget {
     return ChangeNotifierProvider<WorkshopState>(
       create: (_) => WorkshopState(themeMode: themeMode),
       child: Consumer<WorkshopState>(
-        builder: (_, state, __) {
+        builder: (_, state, _) {
           return SafeArea(child: ChartWorkshopPage(key: state.workshopViewKey));
         },
       ),
