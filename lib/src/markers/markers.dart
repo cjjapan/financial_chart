@@ -4,8 +4,8 @@ export 'arc/arc_marker_render.dart';
 export 'arrow/arrow_marker.dart';
 export 'arrow/arrow_marker_render.dart';
 
-export 'line/line_marker.dart';
-export 'line/line_marker_render.dart';
+export 'polyline/polyline_marker.dart';
+export 'polyline/polyline_marker_render.dart';
 
 export 'rect/rect_marker.dart';
 export 'rect/rect_marker_render.dart';

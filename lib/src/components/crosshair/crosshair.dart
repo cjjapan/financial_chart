@@ -192,7 +192,7 @@ class GCrosshair extends GComponent {
   }
 
   /// clear the crosshair position
-  clearCrossPosition() {
+  void clearCrossPosition() {
     if (crossPosition.isEmpty) {
       return;
     }

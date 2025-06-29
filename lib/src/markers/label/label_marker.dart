@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 
 import '../../components/marker/overlay_marker.dart';
+import '../../components/marker/overlay_marker_render.dart';
 import '../../values/coord.dart';
 import '../../values/value.dart';
 import 'label_marker_render.dart';
@@ -14,11 +15,9 @@ class GLabelMarker extends GOverlayMarker {
   Alignment get alignment => _alignment.value;
   set alignment(Alignment value) => _alignment.value = value;
 
-  final double rotationTheta = 45;
-  final GCoordinate rotationCenter = GPositionCoord.rational(x: 0.5, y: 0.5);
-
   GLabelMarker({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -26,8 +25,11 @@ class GLabelMarker extends GOverlayMarker {
     required String text,
     required GCoordinate anchorCoord,
     Alignment alignment = Alignment.center,
-    super.render = const GLabelMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _text = GValue<String>(text),
        _alignment = GValue<Alignment>(alignment),
-       super(keyCoordinates: [anchorCoord]);
+       super(keyCoordinates: [anchorCoord]) {
+    super.render = render ?? GLabelMarkerRender();
+  }
 }

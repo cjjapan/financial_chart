@@ -38,7 +38,7 @@ class GGraphAreaRender extends GGraphRender<GGraphArea, GGraphAreaTheme> {
         (highlightInterval / pointViewPort.pointSize(area.width)).round();
 
     for (
-      var point = pointViewPort.startPoint.floor();
+      int point = pointViewPort.startPoint.floor();
       point <= pointViewPort.endPoint.ceil();
       point++
     ) {
@@ -68,7 +68,7 @@ class GGraphAreaRender extends GGraphRender<GGraphArea, GGraphAreaTheme> {
       double x = pointViewPort.pointToPosition(area, point.toDouble());
       valuePoints.add(Offset(x, valuePosition));
       basePoints.add(Offset(x, basePosition));
-      if (graph.highlight && (point % highlightIntervalPoints == 0)) {
+      if (graph.highlighted && (point % highlightIntervalPoints == 0)) {
         highlightMarks.add(Vector2(x, valuePosition));
         if (graph.baseValueKey != null || graph.baseValue != null) {
           highlightMarks.add(Vector2(x, basePosition));
@@ -88,7 +88,7 @@ class GGraphAreaRender extends GGraphRender<GGraphArea, GGraphAreaTheme> {
       return;
     }
     _drawGraph(canvas, theme, valuePoints, basePoints);
-    drawHighlightMarks(
+    drawGraphHighlightMarks(
       canvas: canvas,
       graph: graph,
       area: area,

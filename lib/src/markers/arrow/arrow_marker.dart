@@ -1,4 +1,5 @@
 import '../../components/marker/overlay_marker.dart';
+import '../../components/marker/overlay_marker_render.dart';
 import '../../values/coord.dart';
 import '../../values/value.dart';
 import 'arrow_marker_render.dart';
@@ -17,6 +18,7 @@ class GArrowMarker extends GOverlayMarker {
 
   GArrowMarker({
     super.id,
+    super.label,
     super.visible,
     super.layer,
     super.hitTestMode,
@@ -25,8 +27,11 @@ class GArrowMarker extends GOverlayMarker {
     required GCoordinate endCoord,
     double headWidth = 4,
     double headLength = 10,
-    super.render = const GArrowMarkerRender(),
+    GOverlayMarkerRender? render,
+    super.scaleHandler,
   }) : _headWidth = GValue<double>(headWidth),
        _headLength = GValue<double>(headLength),
-       super(keyCoordinates: [startCoord, endCoord]);
+       super(keyCoordinates: [startCoord, endCoord]) {
+    super.render = render ?? GArrowMarkerRender();
+  }
 }

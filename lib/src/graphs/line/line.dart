@@ -20,8 +20,11 @@ class GGraphLine<T extends GGraphTheme> extends GGraph<T> {
 
   GGraphLine({
     super.id,
+    super.label,
     super.layer,
     super.visible,
+    super.highlighted,
+    super.selected,
     super.valueViewPortId,
     required this.valueKey,
     bool smoothing = false,

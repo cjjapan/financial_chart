@@ -13,6 +13,7 @@ class GGraphGrids<T extends GGraphTheme> extends GGraph<T> {
 
   GGraphGrids({
     super.id,
+    super.label,
     super.layer,
     super.visible,
     super.valueViewPortId,

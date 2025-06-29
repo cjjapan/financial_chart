@@ -33,7 +33,7 @@ import 'dash_path.dart';
 /// also returns true.
 bool isSingle(List params, {allowNone = false}) {
   int count = 0;
-  for (var param in params) {
+  for (final param in params) {
     if (param != null) {
       count++;
     }

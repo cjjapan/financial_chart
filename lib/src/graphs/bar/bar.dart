@@ -21,10 +21,13 @@ class GGraphBar<T extends GGraphTheme> extends GGraph<T> {
 
   GGraphBar({
     super.id,
+    super.label,
     required this.valueKey,
     double? baseValue,
     super.layer,
     super.visible,
+    super.highlighted,
+    super.selected,
     super.valueViewPortId,
     super.hitTestMode,
     super.crosshairHighlightValueKeys,

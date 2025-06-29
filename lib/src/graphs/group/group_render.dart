@@ -18,12 +18,12 @@ class GGraphGroupRender extends GGraphRender<GGraphGroup, GGraphTheme> {
     required GGraphTheme theme,
   }) {
     if (childrenRenders.isEmpty) {
-      for (var child in component.graphs) {
+      for (final child in component.graphs) {
         final render = child.getRender() as GGraphRender;
         childrenRenders.add(render);
       }
     }
-    for (var child in component.graphs) {
+    for (final child in component.graphs) {
       if (child.visible == false) {
         continue;
       }
@@ -46,7 +46,7 @@ class GGraphGroupRender extends GGraphRender<GGraphGroup, GGraphTheme> {
 
   @override
   bool hitTest({required Offset position, double? epsilon}) {
-    for (var child in childrenRenders) {
+    for (final child in childrenRenders) {
       if (child.hitTest(position: position, epsilon: epsilon)) {
         return true;
       }

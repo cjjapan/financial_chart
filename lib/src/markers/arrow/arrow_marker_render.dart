@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:vector_math/vector_math.dart';
+
 import '../../chart.dart';
 import '../../components/component.dart';
 import '../../components/marker/overlay_marker_theme.dart';
@@ -12,7 +14,6 @@ import 'arrow_marker.dart';
 
 class GArrowMarkerRender
     extends GOverlayMarkerRender<GArrowMarker, GOverlayMarkerTheme> {
-  const GArrowMarkerRender();
   @override
   void doRenderMarker({
     required Canvas canvas,
@@ -37,7 +38,7 @@ class GArrowMarkerRender
         pointViewPort: pointViewPort,
       );
 
-      // draw the arrow triangle along the line direction
+      // draw the arrow head along the line direction
       final arrowPath = Path();
       final headLength = marker.headLength;
       final headWidth = marker.headWidth;
@@ -69,6 +70,61 @@ class GArrowMarkerRender
       linePath.moveTo(start.dx, start.dy);
       linePath.lineTo(arrowStart.dx, arrowStart.dy);
       drawPath(canvas: canvas, path: linePath, style: theme.markerStyle);
+
+      controlHandles.clear();
+      _hitTestLinePoints.clear();
+      if (chart.hitTestEnable && marker.hitTestEnable) {
+        controlHandles.addAll({
+          "start": GControlHandle(
+            position: Offset(start.dx, start.dy),
+            type: GControlHandleType.resize,
+            keyCoordinateIndex: 0,
+          ),
+          "end": GControlHandle(
+            position: Offset(end.dx, end.dy),
+            type: GControlHandleType.resize,
+            keyCoordinateIndex: 1,
+          ),
+        });
+        _hitTestLinePoints.addAll([
+          // line
+          [Vector2(start.dx, start.dy), Vector2(arrowStart.dx, arrowStart.dy)],
+          // arrow head
+          [
+            Vector2(end.dx, end.dy),
+            Vector2(arrowEnd.dx, arrowEnd.dy),
+            Vector2(arrowEnd2.dx, arrowEnd2.dy),
+            Vector2(end.dx, end.dy),
+          ],
+        ]);
+      }
+
+      if (marker.highlighted || marker.selected) {
+        super.drawControlHandles(
+          canvas: canvas,
+          marker: marker,
+          theme: theme,
+          area: area,
+          valueViewPort: valueViewPort,
+          pointViewPort: pointViewPort,
+        );
+      }
     }
+  }
+
+  final List<List<Vector2>> _hitTestLinePoints = [];
+
+  @override
+  bool hitTest({required Offset position, double? epsilon}) {
+    if (_hitTestLinePoints.isEmpty) {
+      return false;
+    }
+    if (super.hitTestControlHandles(position: position, epsilon: epsilon)) {
+      return true;
+    }
+    if (super.hitTestLines(lines: _hitTestLinePoints, position: position)) {
+      return true;
+    }
+    return false;
   }
 }

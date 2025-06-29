@@ -19,6 +19,7 @@ const controlTabs = [
   "Crosshair",
   "Tooltip",
   "Graphs",
+  "Markers",
 ];
 
 class WorkshopControlView extends StatefulWidget {

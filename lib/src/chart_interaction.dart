@@ -31,14 +31,8 @@ class GChartInteractionHandler with Diagnosticable {
 
   GChartInteractionHandler();
 
-  void Function({
-    required Offset position,
-    required double scale,
-    required double verticalScale,
-  })?
-  _hookScaleUpdate;
-  void Function(int pointerCount, double scaleVelocity, Velocity? velocity)?
-  _hookScaleEnd;
+  GScaleUpdateCallback? _hookScaleUpdate;
+  GScaleEndCallback? _hookScaleEnd;
 
   void attach(GChart chart) {
     _chart = chart;
@@ -126,14 +120,25 @@ class GChartInteractionHandler with Diagnosticable {
     for (int p = 0; p < _chart.panels.length; p++) {
       GPanel panel = _chart.panels[p];
       for (int g = 0; g < panel.graphs.length; g++) {
-        panel.graphs[g].highlight = false;
+        if (panel.graphs[g].highlighted) {
+          panel.graphs[g].highlighted = false;
+        }
+        for (int m = 0; m < panel.graphs[g].overlayMarkers.length; m++) {
+          if (panel.graphs[g].overlayMarkers[m].highlighted) {
+            panel.graphs[g].overlayMarkers[m].highlighted = false;
+          }
+        }
       }
     }
     if (!(pointViewPortInteractionHelper.isScaling ||
         _chart.pointViewPort.isAnimating)) {
-      final hit = _chart.hitTestGraph(position: position);
+      final hit = _chart.hitTestPanelGraphs(position: position);
       if (hit != null) {
-        hit.$2.highlight = true;
+        if (hit.$3 != null) {
+          hit.$3!.highlighted = true;
+        } else {
+          hit.$2.highlighted = true;
+        }
       }
     }
     _notify();
@@ -566,9 +571,30 @@ class GChartInteractionHandler with Diagnosticable {
     if (!graphArea.contains(start)) {
       return null;
     }
-    final graph =
-        _chart.hitTestPanelGraphs(panel: panel, position: start) ??
-        panel.graphs.last;
+    final hitTest = panel.hitTestGraphs(position: start);
+
+    // try scaling overlay markers
+    if (hitTest.$2?.scaleHandler != null) {
+      final handlers = (hitTest.$2?.scaleHandler)!.tryScale(
+        chart: _chart,
+        panel: panel,
+        graph: hitTest.$1!,
+        marker: hitTest.$2!,
+        pointViewPort: _chart.pointViewPort,
+        valueViewPort: panel.findValueViewPortById(hitTest.$1!.valueViewPortId),
+        area: graphArea,
+        position: start,
+      );
+      if (handlers != null) {
+        _hookScaleUpdate = handlers.$1;
+        _hookScaleEnd = handlers.$2;
+        return hitTest.$1!;
+      }
+      return null;
+    }
+
+    // try scaling graph
+    final graph = hitTest.$1 ?? panel.graphs.last;
     if (_isTouchCrossMode.value || panel.graphPanMode == GGraphPanMode.none) {
       // move crosshair only
       _hookScaleUpdate = ({

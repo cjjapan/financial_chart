@@ -256,8 +256,8 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     required String key,
     bool ignoreInvalid = true,
   }) {
-    var fromIndex = pointToIndex(fromPoint);
-    var toIndex = pointToIndex(toPoint);
+    int fromIndex = pointToIndex(fromPoint);
+    int toIndex = pointToIndex(toPoint);
     double minValue = double.infinity;
     double maxValue = double.negativeInfinity;
     if (fromIndex < 0) {
@@ -394,7 +394,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     }
   }
 
-  _notify() {
+  void _notify() {
     if (super.hasListeners) {
       notifyListeners();
     }

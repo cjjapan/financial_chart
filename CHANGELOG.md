@@ -1,3 +1,25 @@
+## 0.3.3 
+2025-06-30 
+- add `GPanel`.`onSecondaryTapGraphArea` callback.
+- add `selected`, `locked`, `label` properties to `GComponent` and rename `highlight` to `highlighted`.
+- add `GGraph`.`clearMarkers`, `hitTestOverlayMarkers` methods.
+- rename `GGraph`.`drawHighlightMarks` method to `drawGraphHighlightMarks`.
+- add `GPanel`.`hitTestGraphs` method.
+- add `GHitTestMode`.`auto` enum value.
+- add `GCoordinate`.`copyByPosition` method.
+- add `GSize`.`copyFromViewSize` method.
+- add `GPositionCoordinate`.`xIsInverted`, `yIsInverted` property.
+- add `GChart`.`printDebugPaintCount` property.
+- change return value of `GChart`.`hitTestPanelGraphs`method.
+- refactor overlay markers. 
+  + add hitTest logic for overlay markers.
+  + draw control handles for `GOverlayMarker`.
+  + **[breaking change]** rename class `GLineMarker` to `GPolyLineMarker`.
+  + **[breaking change]** change `GArcMarker`.`close` property to `closeType`.
+  + add `scaleHandler` property to `GOverlayMarker`.
+  + add `controlHandleThemes` property to `GOverlayMarkerTheme` and remove `controlPointsStyle`.
+- update workshop demo to add `Markers` tab.
+
 ## 0.3.2
 2025-05-27
 - skip rendering of `double.nan` and `double.infinite` values for area and line graphs.

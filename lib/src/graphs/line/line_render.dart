@@ -27,7 +27,7 @@ class GGraphLineRender extends GGraphRender<GGraphLine, GGraphLineTheme> {
         (highlightInterval / pointViewPort.pointSize(area.width)).round();
     _hitTestLinePoints.clear();
     for (
-      var point = pointViewPort.startPoint.floor();
+      int point = pointViewPort.startPoint.floor();
       point <= pointViewPort.endPoint.ceil();
       point++
     ) {
@@ -41,7 +41,7 @@ class GGraphLineRender extends GGraphRender<GGraphLine, GGraphLineTheme> {
       double x = pointViewPort.pointToPosition(area, point.toDouble());
       double y = valueViewPort.valueToPosition(area, value);
       linePoints.add(Vector2(x, y));
-      if (graph.highlight && (point % highlightIntervalPoints == 0)) {
+      if (graph.highlighted && (point % highlightIntervalPoints == 0)) {
         highlightMarks.add(Vector2(x, y));
       }
     }
@@ -58,7 +58,7 @@ class GGraphLineRender extends GGraphRender<GGraphLine, GGraphLineTheme> {
       _hitTestLinePoints.addAll(hitTestLinePoints);
     }
 
-    drawHighlightMarks(
+    drawGraphHighlightMarks(
       canvas: canvas,
       graph: graph,
       area: area,

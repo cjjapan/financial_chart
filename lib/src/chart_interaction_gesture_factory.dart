@@ -119,19 +119,19 @@ extension GChartInteractionGestures on GChartInteractionHandler {
           chart: _chart,
         ),
         (GChartDoubleTapGestureRecognizer instance) {
-          instance.onDoubleTapDown = (details) {
-            controller.doubleTap(position: details.localPosition);
-            for (final panel in _chart.panels) {
-              if (panel.onDoubleTapGraphArea != null &&
-                  panel.graphArea().contains(details.localPosition)) {
-                panel.onDoubleTapGraphArea?.call(details.localPosition);
-                break;
+          instance
+            ..onDoubleTapDown = (details) {
+              controller.doubleTap(position: details.localPosition);
+              for (final panel in _chart.panels) {
+                if (panel.onDoubleTapGraphArea != null &&
+                    panel.graphArea().contains(details.localPosition)) {
+                  panel.onDoubleTapGraphArea?.call(details.localPosition);
+                  break;
+                }
               }
+              //widget.onDoubleTapDown?.call(details);
             }
-            //widget.onDoubleTapDown?.call(details);
-          };
-          instance.gestureSettings =
-              MediaQuery.maybeOf(context)?.gestureSettings;
+            ..gestureSettings = MediaQuery.maybeOf(context)?.gestureSettings;
         },
       ),
       // ----- LongPressGestureRecognizer -----
@@ -178,35 +178,45 @@ extension GChartInteractionGestures on GChartInteractionHandler {
         },
       ),
       // ----- TapGestureRecognizer -----
-      GChartTapGestureRecognizer:
-          GestureRecognizerFactoryWithHandlers<GChartTapGestureRecognizer>(
-            () => GChartTapGestureRecognizer(
-              supportedDevices: supportedDevices,
-              chart: _chart,
-            ),
-            (GChartTapGestureRecognizer instance) {
-              instance.onTapDown = (details) {
-                controller.tapDown(
-                  position: details.localPosition,
-                  isTouch: details.kind == PointerDeviceKind.touch,
-                );
-                //widget.onTapDown?.call(details);
-              };
-              instance.onTapUp = (details) {
-                controller.tapUp();
-                for (final panel in _chart.panels) {
-                  if (panel.onTapGraphArea != null &&
-                      panel.graphArea().contains(details.localPosition)) {
-                    panel.onTapGraphArea?.call(details.localPosition);
-                    break;
-                  }
+      GChartTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+        GChartTapGestureRecognizer
+      >(
+        () => GChartTapGestureRecognizer(
+          supportedDevices: supportedDevices,
+          chart: _chart,
+        ),
+        (GChartTapGestureRecognizer instance) {
+          instance
+            ..onTapDown = (details) {
+              controller.tapDown(
+                position: details.localPosition,
+                isTouch: details.kind == PointerDeviceKind.touch,
+              );
+              //widget.onTapDown?.call(details);
+            }
+            ..onTapUp = (details) {
+              controller.tapUp();
+              for (final panel in _chart.panels) {
+                if (panel.onTapGraphArea != null &&
+                    panel.graphArea().contains(details.localPosition)) {
+                  panel.onTapGraphArea?.call(details.localPosition);
+                  break;
                 }
-                //widget.onTapUp?.call(details);
-              };
-              instance.gestureSettings =
-                  MediaQuery.maybeOf(context)?.gestureSettings;
-            },
-          ),
+              }
+              //widget.onTapUp?.call(details);
+            }
+            ..onSecondaryTapUp = (details) {
+              for (final panel in _chart.panels) {
+                if (panel.onSecondaryTapGraphArea != null &&
+                    panel.graphArea().contains(details.localPosition)) {
+                  panel.onSecondaryTapGraphArea?.call(details.localPosition);
+                  break;
+                }
+              }
+            }
+            ..gestureSettings = MediaQuery.maybeOf(context)?.gestureSettings;
+        },
+      ),
     };
   }
 }

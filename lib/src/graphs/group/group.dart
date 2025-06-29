@@ -12,19 +12,30 @@ class GGraphGroup extends GGraph<GGraphTheme> {
   final List<GGraph> graphs;
 
   @override
-  set highlight(bool value) {
-    super.highlight = value;
+  set highlighted(bool value) {
+    super.highlighted = value;
     for (final graph in graphs) {
-      graph.highlight = value;
+      graph.highlighted = value;
+    }
+  }
+
+  @override
+  set selected(bool value) {
+    super.selected = value;
+    for (final graph in graphs) {
+      graph.selected = value;
     }
   }
 
   GGraphGroup({
     super.id,
+    super.label,
     required this.graphs,
     super.valueViewPortId,
     super.layer,
     super.visible,
+    bool highlighted = false,
+    bool selected = false,
     super.overlayMarkers,
     super.render,
   }) : super(
@@ -36,6 +47,8 @@ class GGraphGroup extends GGraph<GGraphTheme> {
     );
     super.render = render ?? GGraphGroupRender();
     graphs.sort((a, b) => a.layer.compareTo(b.layer));
+    this.highlighted = highlighted;
+    this.selected = selected;
   }
 
   GGraph? findGraphById(String id) {

@@ -49,57 +49,70 @@ enum GSizeValueType {
 ///
 /// see different [sizeType] defined in [GSizeValueType].
 class GSize extends GValue<double> {
+  /// defines the type of the value.
   final GSizeValueType sizeType;
-  final GViewSizeConvertor? viewSizeConvertor;
+
+  /// The converter function to convert a value to view size in view area.
+  final GViewSizeConvertor? viewSizeConverter;
+
+  /// The converter function to convert view size back to specified size type value.
+  final GViewSizeConvertor? viewSizeConverterReverse;
+
+  /// size value with meaning defined by [sizeType].
   double get sizeValue => value;
 
   /// Create a size value with [size] as value in view area.
-  GSize.valueSize(double size)
+  GSize.valueSize(super.size)
     : sizeType = GSizeValueType.valueSize,
-      viewSizeConvertor = null,
-      super(size);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [size] as points in point viewport.
-  GSize.pointSize(double size)
+  GSize.pointSize(super.size)
     : sizeType = GSizeValueType.pointSize,
-      viewSizeConvertor = null,
-      super(size);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [size] as view size.
-  GSize.viewSize(double size)
+  GSize.viewSize(super.size)
     : sizeType = GSizeValueType.viewSize,
-      viewSizeConvertor = null,
-      super(size);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [ratio] as ratio of view height which is view height * ratio.
-  GSize.viewHeightRatio(double ratio)
+  GSize.viewHeightRatio(super.ratio)
     : sizeType = GSizeValueType.viewHeightRatio,
-      viewSizeConvertor = null,
-      super(ratio);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [ratio] as ratio of view width which is view width * ratio.
-  GSize.viewWidthRatio(double ratio)
+  GSize.viewWidthRatio(super.ratio)
     : sizeType = GSizeValueType.viewWidthRatio,
-      viewSizeConvertor = null,
-      super(ratio);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [ratio] as ratio of min of view width and height which is min(view width, view height) * ratio.
-  GSize.viewMinRatio(double ratio)
+  GSize.viewMinRatio(super.ratio)
     : sizeType = GSizeValueType.viewMinRatio,
-      viewSizeConvertor = null,
-      super(ratio);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [ratio] as ratio of max of view width and height which is max(view width, view height) * ratio.
-  GSize.viewMaxRatio(double ratio)
+  GSize.viewMaxRatio(super.ratio)
     : sizeType = GSizeValueType.viewMaxRatio,
-      viewSizeConvertor = null,
-      super(ratio);
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
 
   /// Create a size value with [sizeValue] calculated by a user defined custom function.
-  GSize.custom(double sizeValue, this.viewSizeConvertor)
-    : sizeType = GSizeValueType.custom,
-      assert(viewSizeConvertor != null),
-      super(sizeValue);
+  GSize.custom(
+    super.sizeValue,
+    this.viewSizeConverter,
+    this.viewSizeConverterReverse,
+  ) : sizeType = GSizeValueType.custom,
+      assert(
+        viewSizeConverter != null && viewSizeConverterReverse != null,
+        'viewSizeConverter and viewSizeConverterReverse must not be null for custom size type.',
+      );
 
   /// Convert the size value to view size.
   double toViewSize({
@@ -123,11 +136,48 @@ class GSize extends GValue<double> {
       case GSizeValueType.viewMaxRatio:
         return max(area.width, area.height) * sizeValue;
       case GSizeValueType.custom:
-        return viewSizeConvertor!(
+        return viewSizeConverter!(
           sizeValue: sizeValue,
           area: area,
           pointViewPort: pointViewPort,
           valueViewPort: valueViewPort,
+        );
+    }
+  }
+
+  GSize copyFromViewSize({
+    required double viewSize,
+    required Rect area,
+    required GPointViewPort pointViewPort,
+    required GValueViewPort valueViewPort,
+  }) {
+    switch (sizeType) {
+      case GSizeValueType.viewSize:
+        return GSize.viewSize(viewSize);
+      case GSizeValueType.valueSize:
+        return GSize.valueSize(
+          valueViewPort.sizeToValue(area.height, viewSize),
+        );
+      case GSizeValueType.pointSize:
+        return GSize.pointSize(pointViewPort.sizeToPoint(area.width, viewSize));
+      case GSizeValueType.viewHeightRatio:
+        return GSize.viewHeightRatio(viewSize / area.height);
+      case GSizeValueType.viewWidthRatio:
+        return GSize.viewWidthRatio(viewSize / area.width);
+      case GSizeValueType.viewMinRatio:
+        return GSize.viewMinRatio(viewSize / min(area.width, area.height));
+      case GSizeValueType.viewMaxRatio:
+        return GSize.viewMaxRatio(viewSize / max(area.width, area.height));
+      case GSizeValueType.custom:
+        return GSize.custom(
+          viewSizeConverterReverse!(
+            sizeValue: viewSize,
+            area: area,
+            pointViewPort: pointViewPort,
+            valueViewPort: valueViewPort,
+          ),
+          viewSizeConverterReverse!,
+          viewSizeConverter!,
         );
     }
   }

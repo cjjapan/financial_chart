@@ -133,6 +133,8 @@ class GChart extends ChangeNotifier with Diagnosticable {
 
   bool get isScaling => _interactionHandler?.isScalingViewPort == true;
 
+  final bool printDebugPaintCount;
+
   GChart({
     required this.dataSource,
     required this.panels,
@@ -148,6 +150,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     this.preRender,
     this.postRender,
     bool hitTestEnable = true,
+    this.printDebugPaintCount = false,
   }) : background = (background ?? GBackground()),
        crosshair = (crosshair ?? GCrosshair()),
        splitter = (splitter ?? GSplitter()),
@@ -176,8 +179,8 @@ class GChart extends ChangeNotifier with Diagnosticable {
       pointViewPort.initializeAnimation(vsync);
     }
     pointViewPort.addListener(_pointViewPortChanged);
-    for (var panel in panels) {
-      for (var valueViewPort in panel.valueViewPorts) {
+    for (final panel in panels) {
+      for (final valueViewPort in panel.valueViewPorts) {
         valueViewPort.addListener(
           () => _valueViewPortChanged(updatedViewPort: valueViewPort),
         );
@@ -191,7 +194,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
   /// Add a new panel to the chart.
   void addPanel(GPanel panel) {
     panels.add(panel);
-    for (var valueViewPort in panel.valueViewPorts) {
+    for (final valueViewPort in panel.valueViewPorts) {
       valueViewPort.addListener(
         () => _valueViewPortChanged(updatedViewPort: valueViewPort),
       );
@@ -253,7 +256,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
 
   /// Paint the chart on the canvas.
   void paint(Canvas canvas, Size size) {
-    if (kDebugMode) {
+    if (kDebugMode && printDebugPaintCount) {
       _paintCount.value += 1;
       if (_paintCount.value % 100 == 0) {
         // ignore: avoid_print
@@ -337,7 +340,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
           for (int p = 0; p < panels.length; p++) {
             final panel = panels[p];
             final panelGraphHeightBefore = panelsGraphHeightBefore[p];
-            for (var valueViewPort in panel.valueViewPorts) {
+            for (final valueViewPort in panel.valueViewPorts) {
               if (!valueViewPort.autoScaleFlg &&
                   panelGraphHeightBefore > 0 &&
                   panelGraphHeightBefore != panel.graphArea().height) {
@@ -408,11 +411,11 @@ class GChart extends ChangeNotifier with Diagnosticable {
       );
     }
     for (int p = 0; p < panels.length; p++) {
-      var panel = panels[p];
+      final panel = panels[p];
       if (!panel.visible) {
         continue;
       }
-      for (var valueViewPort in panel.valueViewPorts) {
+      for (final valueViewPort in panel.valueViewPorts) {
         if (resetValueViewPort &&
             valueViewPort.autoScaleFlg &&
             valueViewPort.autoScaleStrategy != null) {
@@ -426,30 +429,17 @@ class GChart extends ChangeNotifier with Diagnosticable {
     }
   }
 
-  GGraph? hitTestPanelGraphs({
-    required GPanel panel,
+  (GPanel, GGraph, GOverlayMarker?)? hitTestPanelGraphs({
     required Offset position,
   }) {
-    for (int g = panel.graphs.length - 1; g > 0; g--) {
-      GGraph graph = panel.graphs[g];
-      if (graph.visible && graph.getRender().hitTest(position: position)) {
-        return graph;
-      }
-    }
-    return null;
-  }
-
-  (GPanel, GGraph)? hitTestGraph({required Offset position}) {
     if (dataSource.isLoading || dataSource.isEmpty) {
       return null;
     }
     for (int p = 0; p < panels.length; p++) {
       GPanel panel = panels[p];
-      if (panel.panelArea().contains(position)) {
-        GGraph? graph = hitTestPanelGraphs(panel: panel, position: position);
-        if (graph != null) {
-          return (panel, graph);
-        }
+      final (graph, marker) = panel.hitTestGraphs(position: position);
+      if (graph != null) {
+        return (panel, graph, marker);
       }
     }
     return null;
@@ -513,7 +503,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
   @override
   void dispose() {
     pointViewPort.dispose();
-    for (var panel in panels) {
+    for (final panel in panels) {
       panel.dispose();
     }
     dataSource.removeListener(_notify);

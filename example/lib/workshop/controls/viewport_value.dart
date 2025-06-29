@@ -30,7 +30,7 @@ class _ValueViewPortControlViewState extends State<ValueViewPortControlView> {
         const ControlLabel(
           label: "range",
           description:
-              "update or reset the visible range of Point viewport (on y direction)",
+              "update or reset the visible range of Value viewport (on y direction)",
         ),
         AppToggleButtons<String>(
           items: const ["Zoom in"],
@@ -79,7 +79,7 @@ class _ValueViewPortControlViewState extends State<ValueViewPortControlView> {
         const ControlLabel(
           label: "resizeMode",
           description:
-              "change the behavior how to update the point view port range when resizing the view size."
+              "change the behavior how to update the value view port range when resizing the view size."
               "\nhere it apply to the price viewport in the top panel."
               "\nNOTICE this only works when the viewport's auto scale is off."
               "\nresize the window or panel to see the effect (on y direction).",

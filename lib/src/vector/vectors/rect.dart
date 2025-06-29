@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:vector_math/vector_math.dart';
 import 'line.dart';
 import 'extensions.dart';
@@ -204,5 +206,101 @@ class RectUtil {
       rotationTheta: rotationTheta,
     );
     return (distance <= (epsilon ?? 5.0));
+  }
+
+  static bool hitTestRoundedRect({
+    required Rect rect,
+    required double cornerRadius,
+    required Offset point,
+    required double epsilon,
+    bool testArea = true,
+  }) {
+    final left = rect.left;
+    final right = rect.right;
+    final top = rect.top;
+    final bottom = rect.bottom;
+
+    final leftCorner = left + cornerRadius;
+    final rightCorner = right - cornerRadius;
+    final topCorner = top + cornerRadius;
+    final bottomCorner = bottom - cornerRadius;
+
+    if (testArea) {
+      // check if point is inside the rectangle area
+      if (point.dx >= left &&
+          point.dx <= right &&
+          point.dy >= top &&
+          point.dy <= bottom) {
+        // check if point is inside the corner circles
+        if (cornerRadius > 1e-6) {
+          Offset topLeftCenter = Offset(leftCorner, topCorner);
+          Offset topRightCenter = Offset(rightCorner, topCorner);
+          Offset bottomLeftCenter = Offset(leftCorner, bottomCorner);
+          Offset bottomRightCenter = Offset(rightCorner, bottomCorner);
+
+          if (point.dx < leftCorner && point.dy < topCorner) {
+            return (point - topLeftCenter).distance <= cornerRadius + epsilon;
+          }
+          if (point.dx > rightCorner && point.dy < topCorner) {
+            return (point - topRightCenter).distance <= cornerRadius + epsilon;
+          }
+          if (point.dx < leftCorner && point.dy > bottomCorner) {
+            return (point - bottomLeftCenter).distance <=
+                cornerRadius + epsilon;
+          }
+          if (point.dx > rightCorner && point.dy > bottomCorner) {
+            return (point - bottomRightCenter).distance <=
+                cornerRadius + epsilon;
+          }
+          return true; // Point is inside the rectangle area with corner circles
+        } else {
+          return true; // Point is inside the rectangle area without corner circles
+        }
+      }
+    } else {
+      // check border lines
+      if ((point.dx >= leftCorner - epsilon &&
+              point.dx <= rightCorner + epsilon &&
+              (point.dy >= top - epsilon && point.dy <= top + epsilon)) ||
+          (point.dx >= leftCorner - epsilon &&
+              point.dx <= rightCorner + epsilon &&
+              (point.dy >= bottom - epsilon && point.dy <= bottom + epsilon)) ||
+          (point.dy >= topCorner - epsilon &&
+              point.dy <= bottomCorner + epsilon &&
+              (point.dx >= left - epsilon && point.dx <= left + epsilon)) ||
+          (point.dy >= topCorner - epsilon &&
+              point.dy <= bottomCorner + epsilon &&
+              (point.dx >= right - epsilon && point.dx <= right + epsilon))) {
+        return true;
+      }
+
+      // check corner circles
+      if (cornerRadius > 1e-6) {
+        Offset topLeftCenter = Offset(leftCorner, topCorner);
+        Offset topRightCenter = Offset(rightCorner, topCorner);
+        Offset bottomLeftCenter = Offset(leftCorner, bottomCorner);
+        Offset bottomRightCenter = Offset(rightCorner, bottomCorner);
+
+        if (point.dx < leftCorner && point.dy < topCorner) {
+          return (point - topLeftCenter).distance >= cornerRadius - epsilon &&
+              (point - topLeftCenter).distance <= cornerRadius + epsilon;
+        }
+        if (point.dx > rightCorner && point.dy < topCorner) {
+          return (point - topRightCenter).distance >= cornerRadius - epsilon &&
+              (point - topRightCenter).distance <= cornerRadius + epsilon;
+        }
+        if (point.dx < leftCorner && point.dy > bottomCorner) {
+          return (point - bottomLeftCenter).distance >=
+                  cornerRadius - epsilon &&
+              (point - bottomLeftCenter).distance <= cornerRadius + epsilon;
+        }
+        if (point.dx > rightCorner && point.dy > bottomCorner) {
+          return (point - bottomRightCenter).distance >=
+                  cornerRadius - epsilon &&
+              (point - bottomRightCenter).distance <= cornerRadius + epsilon;
+        }
+      }
+    }
+    return false;
   }
 }

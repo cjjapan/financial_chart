@@ -36,7 +36,7 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
     final List<Vector2> highlightMarks = <Vector2>[];
     List<List<double>> graphValues = [];
     for (
-      var point = pointViewPort.startPoint.floor();
+      int point = pointViewPort.startPoint.floor();
       point <= pointViewPort.endPoint.ceil();
       point++
     ) {
@@ -96,7 +96,7 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
           ]);
         }
       }
-      if (graph.highlight && (point % highlightIntervalPoints == 0)) {
+      if (graph.highlighted && (point % highlightIntervalPoints == 0)) {
         highlightMarks.add(Vector2(barPosition, (hp + lp) / 2));
       }
     }
@@ -107,7 +107,7 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       _drawOhlcGraph(canvas, graph, theme, barRenderWidth, graphValues);
     }
 
-    drawHighlightMarks(
+    drawGraphHighlightMarks(
       canvas: canvas,
       graph: graph,
       area: area,
@@ -136,7 +136,7 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       final bool strokeMinus =
           theme.barStyleMinus.getStrokePaint() != null &&
           theme.barStyleMinus.strokeColor != theme.barStyleMinus.fillColor;
-      for (var i = 0; i < graphValues.length; i++) {
+      for (int i = 0; i < graphValues.length; i++) {
         double x = graphValues[i][0];
         double x1 = x - barRenderWidth / 2;
         double x2 = x + barRenderWidth / 2;
@@ -352,7 +352,7 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
     if (theme.barStyleMinus.isSimple && theme.barStylePlus.isSimple) {
       List<double> borderPlus = [];
       List<double> borderMinus = [];
-      for (var i = 0; i < graphValues.length; i++) {
+      for (int i = 0; i < graphValues.length; i++) {
         double x = graphValues[i][0];
         double x1 = x - barRenderWidth / 2;
         double x2 = x + barRenderWidth / 2;

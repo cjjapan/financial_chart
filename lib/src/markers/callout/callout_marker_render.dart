@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 import '../../chart.dart';
@@ -7,7 +8,6 @@ import 'callout_marker.dart';
 
 class GCalloutMarkerRender
     extends GOverlayMarkerRender<GCalloutMarker, GOverlayMarkerTheme> {
-  const GCalloutMarkerRender();
   @override
   void doRenderMarker({
     required Canvas canvas,
@@ -34,28 +34,57 @@ class GCalloutMarkerRender
       defaultAlign: marker.alignment,
       style: theme.labelStyle!,
     );
+    super.controlHandles.clear();
+    final alignment = marker.alignment;
+    double pointerMargin = marker.pointerMargin;
+    Rect rect = blockArea.translate(
+      alignment.x * pointerMargin,
+      alignment.y * pointerMargin,
+    );
+    center = rect.center;
+    backgroundPath = null;
     if (theme.labelStyle?.backgroundStyle != null) {
-      final alignment = marker.alignment;
-      double pointerMargin = marker.pointerMargin;
-      Rect rect = blockArea.translate(
-        alignment.x * pointerMargin,
-        alignment.y * pointerMargin,
-      );
-      final bgPath = _createBackgroundPath(marker, theme, anchor, rect);
+      backgroundPath = _createBackgroundPath(marker, theme, anchor, rect);
       drawPath(
         canvas: canvas,
-        path: bgPath,
+        path: backgroundPath!,
         style: theme.labelStyle!.backgroundStyle!,
       );
-      painter.paint(
-        canvas,
-        textPaintPoint.translate(
-          alignment.x * pointerMargin,
-          alignment.y * pointerMargin,
-        ),
-      );
     } else {
-      painter.paint(canvas, textPaintPoint);
+      backgroundPath = Path()..addRect(rect);
+    }
+    painter.paint(
+      canvas,
+      textPaintPoint.translate(
+        alignment.x * pointerMargin,
+        alignment.y * pointerMargin,
+      ),
+    );
+    if (chart.hitTestEnable && marker.hitTestEnable) {
+      super.controlHandles.addAll({
+        "align": GControlHandle(
+          position: Offset(
+            rect.center.dx + rect.width / 2 * alignment.x,
+            rect.center.dy + rect.height / 2 * alignment.y,
+          ),
+          type: GControlHandleType.align,
+        ),
+        "anchor": GControlHandle(
+          position: anchor,
+          type: GControlHandleType.move,
+          keyCoordinateIndex: 0,
+        ),
+      });
+    }
+    if (marker.highlighted || marker.selected) {
+      super.drawControlHandles(
+        canvas: canvas,
+        marker: marker,
+        theme: theme,
+        area: area,
+        valueViewPort: valueViewPort,
+        pointViewPort: pointViewPort,
+      );
     }
   }
 
@@ -370,5 +399,40 @@ class GCalloutMarkerRender
     Path path = Path.combine(PathOperation.union, path1, path2);
 
     return path;
+  }
+
+  Path? backgroundPath;
+  Offset? center;
+
+  @override
+  bool hitTest({required Offset position, double? epsilon}) {
+    if (super.hitTestControlHandles(position: position, epsilon: epsilon)) {
+      return true;
+    }
+
+    if (backgroundPath != null) {
+      if (backgroundPath!.contains(position)) {
+        return true;
+      }
+      /*
+      // test by border segments
+      final it = _backgroundPath!.computeMetrics().iterator;
+      while (it.moveNext()) {
+        final metric = it.current;
+        final segments = (metric.length / 5).round();
+        for (int i = 0; i < segments; i++) {
+          final tangent = metric.getTangentForOffset(
+            (i * metric.length) / segments,
+          );
+          if (tangent != null &&
+              (tangent.position - position).distance <=
+                  (epsilon ?? kDefaultHitTestEpsilon)) {
+            return true;
+          }
+        }
+      }*/
+    }
+
+    return false;
   }
 }

@@ -3,16 +3,14 @@ import 'package:flutter/painting.dart';
 import '../chart.dart';
 import '../style/label_style.dart';
 import '../style/paint_style.dart';
-import 'component_theme.dart';
-import 'axis/axis.dart';
-import 'axis/axis_theme.dart';
-import 'component.dart';
-import 'panel/panel.dart';
-import 'render_util.dart';
+import '../vector/vectors.dart';
+import 'components.dart';
+
+const double kDefaultHitTestEpsilon = 5.0;
 
 /// Base class for component renderers.
 abstract class GRender<C extends GComponent, T extends GComponentTheme> {
-  const GRender({this.hitTestEpsilon = 5.0});
+  const GRender({this.hitTestEpsilon = kDefaultHitTestEpsilon});
 
   final double hitTestEpsilon;
 
@@ -138,6 +136,42 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     );
   }
 
+  /// Draw the highlight marks (when hit test result is true).
+  void drawHighlightMarks({
+    required Canvas canvas,
+    required GComponent component,
+    required Rect area,
+    required GGraphHighlightMarkerTheme? highlightMarkerTheme,
+    required List<Vector2> highlightMarks,
+  }) {
+    if (component.visible &&
+        component.highlighted &&
+        highlightMarks.isNotEmpty &&
+        highlightMarkerTheme != null &&
+        highlightMarkerTheme.size > 0) {
+      renderClipped(
+        canvas: canvas,
+        clipRect: area,
+        render: () {
+          for (int i = 0; i < highlightMarks.length; i++) {
+            final point = highlightMarks[i];
+            final p = addOvalPath(
+              rect: Rect.fromCircle(
+                center: Offset(point.x, point.y),
+                radius: highlightMarkerTheme.size,
+              ),
+            );
+            drawPath(
+              canvas: canvas,
+              path: p,
+              style: highlightMarkerTheme.style,
+            );
+          }
+        },
+      );
+    }
+  }
+
   Offset getTextBlockPaintPoint(
     Offset axis,
     double width,
@@ -223,6 +257,24 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     required Rect area,
     required T theme,
   });
+
+  bool hitTestLines({
+    required List<List<Vector2>> lines,
+    required Offset position,
+    double? epsilon,
+  }) {
+    for (int i = 0; i < lines.length; i++) {
+      if (PolygonUtil.hitTest(
+        vertices: lines[i],
+        px: position.dx,
+        py: position.dy,
+        epsilon: epsilon ?? hitTestEpsilon,
+      )) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   bool hitTest({required Offset position, double? epsilon}) {
     return false;

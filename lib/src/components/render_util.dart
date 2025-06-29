@@ -8,6 +8,17 @@ import '../style/paint_style.dart';
 import 'axis/axis.dart';
 import 'axis/axis_theme.dart';
 
+enum GArcCloseType {
+  /// The arc is not closed, it is just a segment of a circle.
+  none,
+
+  /// The arc is closed by two lines connecting the start and end to the center.
+  center,
+
+  /// The arc is closed by single line connecting the start to end.
+  direct,
+}
+
 /// Utility class for rendering.
 class GRenderUtil {
   static void renderClipped({
@@ -307,7 +318,7 @@ class GRenderUtil {
     required double radius,
     required double startAngle,
     required double endAngle,
-    bool close = false,
+    GArcCloseType closeType = GArcCloseType.none,
   }) {
     Path path = toPath ?? Path();
     path.moveTo(
@@ -323,8 +334,10 @@ class GRenderUtil {
       largeArc: endAngle - startAngle > pi,
       clockwise: true,
     );
-    if (close) {
-      path.lineTo(center.dx, center.dy);
+    if (closeType != GArcCloseType.none) {
+      if (closeType == GArcCloseType.center) {
+        path.lineTo(center.dx, center.dy);
+      }
       path.close();
     }
     return path;

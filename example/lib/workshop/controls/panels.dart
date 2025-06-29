@@ -146,7 +146,7 @@ class _PanelControlViewState extends State<PanelControlView> {
         const ControlLabel(
           label: "onTapGraphArea",
           description:
-              "trigger a callback when tap the graph area. "
+              "trigger a callback when tap on the graph area. "
               "\nhere it apply to the first panel."
               "\nNOTICE that when onDoubleTapGraphArea also being set there is a delay cause by distinguishing single from double taps.",
         ),
@@ -166,7 +166,7 @@ class _PanelControlViewState extends State<PanelControlView> {
         const ControlLabel(
           label: "onDoubleTapGraphArea",
           description:
-              "trigger a callback when double tap the graph area. "
+              "trigger a callback when double tap on the graph area. "
               "\nhere it apply to the first panel.",
         ),
         AppToggleButtonsBoolean(
@@ -178,6 +178,25 @@ class _PanelControlViewState extends State<PanelControlView> {
               };
             } else {
               state.chart?.panels[0].onDoubleTapGraphArea = null;
+            }
+            state.notify();
+          },
+        ),
+        const ControlLabel(
+          label: "onSecondaryTapGraphArea",
+          description:
+              "trigger a callback when secondary tap (usually right mouse button click) on the graph area. "
+              "\nhere it apply to the first panel.",
+        ),
+        AppToggleButtonsBoolean(
+          selected: state.chart!.panels[0].onSecondaryTapGraphArea != null,
+          onSelected: (enable) {
+            if (enable) {
+              state.chart?.panels[0].onSecondaryTapGraphArea = (position) {
+                _notifyTap("SecondaryTap", state, position);
+              };
+            } else {
+              state.chart?.panels[0].onSecondaryTapGraphArea = null;
             }
             state.notify();
           },

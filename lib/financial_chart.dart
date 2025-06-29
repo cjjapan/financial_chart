@@ -1,5 +1,5 @@
 /// A chart library for financial data.
-library financial_chart;
+library;
 
 export 'src/components/components.dart';
 export 'src/data/data_source.dart';
@@ -23,3 +23,4 @@ export 'src/chart.dart';
 export 'src/chart_render.dart';
 
 export 'src/chart_widget.dart';
+export 'src/vector/vectors.dart';

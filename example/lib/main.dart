@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'demos/basic.dart';
 import 'demos/dynamic_data.dart';
 import 'demos/live.dart';
-import 'demos/markers.dart';
 import 'workshop/workshop.dart';
 
 final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.light);
@@ -29,7 +27,7 @@ final routes = {
   // '/demo/graphs/custom': (context) => const DemoGraphStepPage(),
   // '/demo/graphs/group': (context) => const DemoGraphGroupPage(),
   // '/demo/graphs/all': (context) => const DemoGraphsPage(),
-  '/demo/markers': (context) => const DemoMarkersPage(),
+  // '/demo/markers': (context) => const DemoMarkersPage(),
   '/demo/loading_data': (context) => const DemoDynamicDataPage(),
   '/demo/live_update': (context) => const DemoLiveUpdatePage(),
   // '/demo/testing': (context) => const PlayApp(),
@@ -76,9 +74,9 @@ class _MyAppState extends State<MyApp> {
 }
 
 void main() {
-  if (kDebugMode) {
-    debugPrintGestureArenaDiagnostics = true;
-  }
+  // if (kDebugMode) {
+  //  debugPrintGestureArenaDiagnostics = true;
+  // }
   runApp(const MyApp());
 }
 

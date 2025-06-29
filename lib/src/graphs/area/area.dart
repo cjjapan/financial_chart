@@ -26,11 +26,14 @@ class GGraphArea<T extends GGraphTheme> extends GGraph<T> {
 
   GGraphArea({
     super.id,
+    super.label,
     required this.valueKey,
     double? baseValue = 0,
     String? baseValueKey,
     super.layer,
     super.visible,
+    super.highlighted,
+    super.selected,
     super.valueViewPortId,
     super.hitTestMode,
     super.crosshairHighlightValueKeys,
