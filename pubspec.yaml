@@ -2,16 +2,16 @@ name: financial_chart
 description: A chart library for financial data. supports candlestick, ohlc, line, area, bar charts and custom chart types.
 repository: https://github.com/cjjapan/financial_chart
 issue_tracker: https://github.com/cjjapan/financial_chart/issues
-homepage: https://github.com/cjjapan/financial_chart
+homepage: https://cjjapan.github.io/financial_chart_docs/
+documentation: https://cjjapan.github.io/financial_chart_docs/
 topics:
   - chart
-  - charts
   - graph
   - candlestick
   - stock
 # publish_to: "none"
 
-version: 0.3.3
+version: 0.3.4
 
 environment:
   sdk: ^3.8.0

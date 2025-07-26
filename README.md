@@ -19,21 +19,12 @@ high performance and easy to customize and extend.
 - Live update of data and graphs.
 - Customizable theme support with dark and light presets.
 
-### Examples
-Checkout the example app in the `example` folder and run.
+### Usage
+
+[Getting started](https://cjjapan.github.io/financial_chart_docs/)  
+[Examples ...](https://github.com/cjjapan/financial_chart/tree/main/example/lib/demos)
 #### [Try live demo](https://cjjapan.github.io/financial_chart)
 
-### Installation
-Add the library as a dependency to your `pubspec.yaml` file:
-```yaml
-dependencies:
-  financial_chart: ^latest_version
-```
-Then run `flutter pub get`.
-
-### Usage
-[Basic usage](https://github.com/cjjapan/financial_chart/tree/main/example/lib/demos/basic.dart)  
-[More examples ...](https://github.com/cjjapan/financial_chart/tree/main/example/lib/demos)
 
 ### License
 This project is licensed under the [MIT License](https://github.com/cjjapan/financial_chart/tree/main/LICENSE).
