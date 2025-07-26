@@ -1,3 +1,7 @@
+## 0.3.4
+2025-07-26
+- add documentation link.
+
 ## 0.3.3 
 2025-06-30 
 - add `GPanel`.`onSecondaryTapGraphArea` callback.
