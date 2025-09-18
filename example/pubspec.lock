@@ -345,4 +345,4 @@ packages:
     version: "6.6.1"
 sdks:
   dart: ">=3.9.2 <4.0.0"
-  flutter: ">=3.32.0"
+  flutter: "3.35.4"
