@@ -10,6 +10,7 @@ high performance and easy to customize and extend.
 ### Features
 - Supports OHLC, candlestick, line, area, bar graphs.
 - Supports markers over graphs and axes, including labels, lines, arrows, callouts, shapes, etc.
+- Supports both linear and logarithmic value axes.
 - Easy to extend to add custom graph types and markers.
 - Resizable multiple panels and multiple graphs and axes in single panel.
 - Show tooltips and crosshair lines for data points.
@@ -19,11 +20,12 @@ high performance and easy to customize and extend.
 - Live update of data and graphs.
 - Customizable theme support with dark and light presets.
 
+#### [Try live demo](https://cjjapan.github.io/financial_chart)
+
 ### Usage
 
 [Getting started](https://cjjapan.github.io/financial_chart_docs/)  
 [Examples ...](https://github.com/cjjapan/financial_chart/tree/main/example/lib/demos)
-#### [Try live demo](https://cjjapan.github.io/financial_chart)
 
 
 ### License

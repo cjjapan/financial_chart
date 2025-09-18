@@ -164,17 +164,18 @@ class DemoGraphsPageState extends DemoBasePageState {
           child: AppPopupMenu<String>(
             items: const ["top", "bottom"],
             onSelected: (String selected) {
-              chart!.panels[0].findGraphById("area")!.layer =
-                  (selected == "top")
-                      ? (GComponent.kDefaultLayer + 1)
-                      : (GComponent.kDefaultLayer - 1);
+              chart!.panels[0]
+                  .findGraphById("area")!
+                  .layer = (selected == "top")
+                  ? (GComponent.kDefaultLayer + 1)
+                  : (GComponent.kDefaultLayer - 1);
               repaintChart();
             },
             selected:
                 (chart!.panels[0].findGraphById("area")!.layer <
-                        GComponent.kDefaultLayer)
-                    ? "bottom"
-                    : "top",
+                    GComponent.kDefaultLayer)
+                ? "bottom"
+                : "top",
             labelResolver: (item) => item,
           ),
         ),

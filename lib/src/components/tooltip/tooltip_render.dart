@@ -266,12 +266,11 @@ class GTooltipRender extends GRender<GTooltip, GTooltipTheme> {
       final prop = dataSource.getSeriesProperty(key);
       final label = prop.label;
       final value = dataKeyValues[key];
-      final valueText =
-          (value != null)
-              ? (prop.valueFormater != null)
-                  ? prop.valueFormater!(value)
-                  : dataSource.seriesValueFormater(value, prop.precision)
-              : '';
+      final valueText = (value != null)
+          ? (prop.valueFormater != null)
+                ? prop.valueFormater!(value)
+                : dataSource.seriesValueFormater(value, prop.precision)
+          : '';
       texts.add([
         GTableTextItemPainter(
           text: label,

@@ -45,10 +45,9 @@ class CircleUtil {
     double px,
     double py,
   ) {
-    Vector2 direction =
-        Vector2(px - cx, py - cy)
-          ..normalize()
-          ..scale(r);
+    Vector2 direction = Vector2(px - cx, py - cy)
+      ..normalize()
+      ..scale(r);
     return Vector2(cx + direction.x, cy + direction.y);
   }
 

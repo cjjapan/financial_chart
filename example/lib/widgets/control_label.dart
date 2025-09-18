@@ -15,35 +15,34 @@ class ControlLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:
-          description.isEmpty
-              ? null
-              : () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+      onTap: description.isEmpty
+          ? null
+          : () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    title: Text(
+                      title ?? label,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    content: Text(
+                      description,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('OK'),
                       ),
-                      title: Text(
-                        title ?? label,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      content: Text(
-                        description,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
+                    ],
+                  );
+                },
+              );
+            },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         margin: const EdgeInsets.all(0),

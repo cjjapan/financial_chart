@@ -203,13 +203,11 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       }
       // draw the bars
       if (fillPlus.isNotEmpty) {
-        Paint fillPlusPaint =
-            Paint()
-              ..color =
-                  theme.barStylePlus.fillColor ??
-                  const Color.fromARGB(0, 0, 0, 0)
-              ..style = PaintingStyle.fill
-              ..strokeWidth = barRenderWidth;
+        Paint fillPlusPaint = Paint()
+          ..color =
+              theme.barStylePlus.fillColor ?? const Color.fromARGB(0, 0, 0, 0)
+          ..style = PaintingStyle.fill
+          ..strokeWidth = barRenderWidth;
         canvas.drawRawPoints(
           PointMode.lines,
           Float32List.fromList(fillPlus),
@@ -217,13 +215,11 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
         );
       }
       if (fillMinus.isNotEmpty) {
-        Paint fillMinusPaint =
-            Paint()
-              ..color =
-                  theme.barStyleMinus.fillColor ??
-                  const Color.fromARGB(0, 0, 0, 0)
-              ..style = PaintingStyle.fill
-              ..strokeWidth = barRenderWidth;
+        Paint fillMinusPaint = Paint()
+          ..color =
+              theme.barStyleMinus.fillColor ?? const Color.fromARGB(0, 0, 0, 0)
+          ..style = PaintingStyle.fill
+          ..strokeWidth = barRenderWidth;
         canvas.drawRawPoints(
           PointMode.lines,
           Float32List.fromList(fillMinus),
@@ -232,17 +228,16 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       }
       // draw the lines
       if (borderPlus.isNotEmpty) {
-        Paint borderPlusPaint =
-            Paint()
-              ..color =
-                  (theme.barStylePlus.strokeColor ??
-                      theme.barStylePlus.fillColor ??
-                      const Color.fromARGB(0, 0, 0, 0))
-              ..strokeWidth = min(
-                max(1.0, theme.barStylePlus.strokeWidth ?? 1.0),
-                barRenderWidth,
-              )
-              ..strokeCap = theme.barStylePlus.strokeCap ?? StrokeCap.round;
+        Paint borderPlusPaint = Paint()
+          ..color =
+              (theme.barStylePlus.strokeColor ??
+              theme.barStylePlus.fillColor ??
+              const Color.fromARGB(0, 0, 0, 0))
+          ..strokeWidth = min(
+            max(1.0, theme.barStylePlus.strokeWidth ?? 1.0),
+            barRenderWidth,
+          )
+          ..strokeCap = theme.barStylePlus.strokeCap ?? StrokeCap.round;
         canvas.drawRawPoints(
           PointMode.lines,
           Float32List.fromList(borderPlus),
@@ -250,17 +245,16 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
         );
       }
       if (borderMinus.isNotEmpty) {
-        Paint borderMinusPaint =
-            Paint()
-              ..color =
-                  (theme.barStyleMinus.strokeColor ??
-                      theme.barStyleMinus.fillColor ??
-                      const Color.fromARGB(0, 0, 0, 0))
-              ..strokeWidth = min(
-                max(1.0, theme.barStyleMinus.strokeWidth ?? 1.0),
-                barRenderWidth,
-              )
-              ..strokeCap = theme.barStyleMinus.strokeCap ?? StrokeCap.round;
+        Paint borderMinusPaint = Paint()
+          ..color =
+              (theme.barStyleMinus.strokeColor ??
+              theme.barStyleMinus.fillColor ??
+              const Color.fromARGB(0, 0, 0, 0))
+          ..strokeWidth = min(
+            max(1.0, theme.barStyleMinus.strokeWidth ?? 1.0),
+            barRenderWidth,
+          )
+          ..strokeCap = theme.barStyleMinus.strokeCap ?? StrokeCap.round;
         canvas.drawRawPoints(
           PointMode.lines,
           Float32List.fromList(borderMinus),
@@ -277,30 +271,28 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       double cp = graphValues[i][4];
 
       if (op >= cp) {
-        Path fillPath =
-            Path()
-              ..moveTo(barPosition - barRenderWidth / 2, cp)
-              ..lineTo(barPosition - barRenderWidth / 2, op)
-              ..lineTo(barPosition + barRenderWidth / 2, op)
-              ..lineTo(barPosition + barRenderWidth / 2, cp)
-              ..close();
+        Path fillPath = Path()
+          ..moveTo(barPosition - barRenderWidth / 2, cp)
+          ..lineTo(barPosition - barRenderWidth / 2, op)
+          ..lineTo(barPosition + barRenderWidth / 2, op)
+          ..lineTo(barPosition + barRenderWidth / 2, cp)
+          ..close();
         drawPath(
           canvas: canvas,
           path: fillPath,
           style: theme.barStylePlus,
           fillOnly: true,
         );
-        Path strokePath =
-            Path()
-              ..moveTo(barPosition, hp)
-              ..lineTo(barPosition, cp)
-              ..lineTo(barPosition - barRenderWidth / 2, cp)
-              ..lineTo(barPosition - barRenderWidth / 2, op)
-              ..lineTo(barPosition + barRenderWidth / 2, op)
-              ..lineTo(barPosition + barRenderWidth / 2, cp)
-              ..lineTo(barPosition, cp)
-              ..moveTo(barPosition, op)
-              ..lineTo(barPosition, lp);
+        Path strokePath = Path()
+          ..moveTo(barPosition, hp)
+          ..lineTo(barPosition, cp)
+          ..lineTo(barPosition - barRenderWidth / 2, cp)
+          ..lineTo(barPosition - barRenderWidth / 2, op)
+          ..lineTo(barPosition + barRenderWidth / 2, op)
+          ..lineTo(barPosition + barRenderWidth / 2, cp)
+          ..lineTo(barPosition, cp)
+          ..moveTo(barPosition, op)
+          ..lineTo(barPosition, lp);
         drawPath(
           canvas: canvas,
           path: strokePath,
@@ -308,30 +300,28 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
           strokeOnly: true,
         );
       } else {
-        Path fillPath =
-            Path()
-              ..moveTo(barPosition - barRenderWidth / 2, op)
-              ..lineTo(barPosition - barRenderWidth / 2, cp)
-              ..lineTo(barPosition + barRenderWidth / 2, cp)
-              ..lineTo(barPosition + barRenderWidth / 2, op)
-              ..close();
+        Path fillPath = Path()
+          ..moveTo(barPosition - barRenderWidth / 2, op)
+          ..lineTo(barPosition - barRenderWidth / 2, cp)
+          ..lineTo(barPosition + barRenderWidth / 2, cp)
+          ..lineTo(barPosition + barRenderWidth / 2, op)
+          ..close();
         drawPath(
           canvas: canvas,
           path: fillPath,
           style: theme.barStyleMinus,
           fillOnly: true,
         );
-        Path strokePath =
-            Path()
-              ..moveTo(barPosition, hp)
-              ..lineTo(barPosition, op)
-              ..lineTo(barPosition - barRenderWidth / 2, op)
-              ..lineTo(barPosition - barRenderWidth / 2, cp)
-              ..lineTo(barPosition + barRenderWidth / 2, cp)
-              ..lineTo(barPosition + barRenderWidth / 2, op)
-              ..lineTo(barPosition, op)
-              ..moveTo(barPosition, cp)
-              ..lineTo(barPosition, lp);
+        Path strokePath = Path()
+          ..moveTo(barPosition, hp)
+          ..lineTo(barPosition, op)
+          ..lineTo(barPosition - barRenderWidth / 2, op)
+          ..lineTo(barPosition - barRenderWidth / 2, cp)
+          ..lineTo(barPosition + barRenderWidth / 2, cp)
+          ..lineTo(barPosition + barRenderWidth / 2, op)
+          ..lineTo(barPosition, op)
+          ..moveTo(barPosition, cp)
+          ..lineTo(barPosition, lp);
         drawPath(
           canvas: canvas,
           path: strokePath,
@@ -369,17 +359,16 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       }
       // batch draw the ohlc lines
       if (borderPlus.isNotEmpty) {
-        Paint borderPlusPaint =
-            Paint()
-              ..color =
-                  (theme.barStylePlus.strokeColor ??
-                      theme.barStylePlus.fillColor ??
-                      const Color.fromARGB(0, 0, 0, 0))
-              ..strokeWidth = min(
-                max(1.0, theme.barStylePlus.strokeWidth ?? 1.0),
-                barRenderWidth,
-              )
-              ..strokeCap = theme.barStylePlus.strokeCap ?? StrokeCap.round;
+        Paint borderPlusPaint = Paint()
+          ..color =
+              (theme.barStylePlus.strokeColor ??
+              theme.barStylePlus.fillColor ??
+              const Color.fromARGB(0, 0, 0, 0))
+          ..strokeWidth = min(
+            max(1.0, theme.barStylePlus.strokeWidth ?? 1.0),
+            barRenderWidth,
+          )
+          ..strokeCap = theme.barStylePlus.strokeCap ?? StrokeCap.round;
         canvas.drawRawPoints(
           PointMode.lines,
           Float32List.fromList(borderPlus),
@@ -387,17 +376,16 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
         );
       }
       if (borderMinus.isNotEmpty) {
-        Paint borderMinusPaint =
-            Paint()
-              ..color =
-                  (theme.barStyleMinus.strokeColor ??
-                      theme.barStyleMinus.fillColor ??
-                      const Color.fromARGB(0, 0, 0, 0))
-              ..strokeWidth = min(
-                max(1.0, theme.barStyleMinus.strokeWidth ?? 1.0),
-                barRenderWidth,
-              )
-              ..strokeCap = theme.barStyleMinus.strokeCap ?? StrokeCap.round;
+        Paint borderMinusPaint = Paint()
+          ..color =
+              (theme.barStyleMinus.strokeColor ??
+              theme.barStyleMinus.fillColor ??
+              const Color.fromARGB(0, 0, 0, 0))
+          ..strokeWidth = min(
+            max(1.0, theme.barStyleMinus.strokeWidth ?? 1.0),
+            barRenderWidth,
+          )
+          ..strokeCap = theme.barStyleMinus.strokeCap ?? StrokeCap.round;
         canvas.drawRawPoints(
           PointMode.lines,
           Float32List.fromList(borderMinus),
@@ -415,14 +403,13 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
       double cp = graphValues[i][4];
 
       if (op >= cp) {
-        Path strokePath =
-            Path()
-              ..moveTo(barPosition - barRenderWidth / 2, op)
-              ..lineTo(barPosition, op)
-              ..moveTo(barPosition, hp)
-              ..lineTo(barPosition, lp)
-              ..moveTo(barPosition, cp)
-              ..lineTo(barPosition + barRenderWidth / 2, cp);
+        Path strokePath = Path()
+          ..moveTo(barPosition - barRenderWidth / 2, op)
+          ..lineTo(barPosition, op)
+          ..moveTo(barPosition, hp)
+          ..lineTo(barPosition, lp)
+          ..moveTo(barPosition, cp)
+          ..lineTo(barPosition + barRenderWidth / 2, cp);
         drawPath(
           canvas: canvas,
           path: strokePath,
@@ -430,14 +417,13 @@ class GGraphOhlcRender extends GGraphRender<GGraphOhlc, GGraphOhlcTheme> {
           strokeOnly: true,
         );
       } else {
-        Path strokePath =
-            Path()
-              ..moveTo(barPosition - barRenderWidth / 2, op)
-              ..lineTo(barPosition, op)
-              ..moveTo(barPosition, hp)
-              ..lineTo(barPosition, lp)
-              ..moveTo(barPosition, cp)
-              ..lineTo(barPosition + barRenderWidth / 2, cp);
+        Path strokePath = Path()
+          ..moveTo(barPosition - barRenderWidth / 2, op)
+          ..lineTo(barPosition, op)
+          ..moveTo(barPosition, hp)
+          ..lineTo(barPosition, lp)
+          ..moveTo(barPosition, cp)
+          ..lineTo(barPosition + barRenderWidth / 2, cp);
         drawPath(
           canvas: canvas,
           path: strokePath,

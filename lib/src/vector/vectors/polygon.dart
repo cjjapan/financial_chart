@@ -148,8 +148,9 @@ class PolygonUtil {
       if (point.isSame(vertices[i])) {
         return true;
       }
-      final Vector2 vertB =
-          i == vertices.length - 1 ? vertices[0] : vertices[i + 1];
+      final Vector2 vertB = i == vertices.length - 1
+          ? vertices[0]
+          : vertices[i + 1];
       final Map<String, bool> rayCastIntersection = _rayCastIntersect(
         point,
         vertices[i],

@@ -1,3 +1,11 @@
+## 0.3.5
+2025-09-18
+- sdk version up.
+- add `GValueViewPort`.`scaleType` to support logarithmic price scale.
+- add `GSvgMarker` overlay marker.
+- add screenshot.
+- minor fix.
+
 ## 0.3.4
 2025-07-26
 - add documentation link.

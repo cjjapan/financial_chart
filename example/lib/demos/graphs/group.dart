@@ -61,66 +61,71 @@ class DemoGraphGroupPageState extends DemoBasePageState {
                 id: "ichi-base",
                 valueViewPortId: "price",
                 valueKey: keyIchimokuBase,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.red,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.red,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphLine(
                 id: "ichi-conv",
                 valueViewPortId: "price",
                 valueKey: keyIchimokuConversion,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.yellow,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.yellow,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphLine(
                 id: "ichi-spanA",
                 valueViewPortId: "price",
                 valueKey: keyIchimokuSpanA,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.green,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.green,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphLine(
                 id: "ichi-spanB",
                 valueViewPortId: "price",
                 valueKey: keyIchimokuSpanB,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.orange,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.orange,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphLine(
                 id: "ichi-lagging",
                 valueViewPortId: "price",
                 valueKey: keyIchimokuLagging,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.purple,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.purple,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphArea(
                 id: "area",

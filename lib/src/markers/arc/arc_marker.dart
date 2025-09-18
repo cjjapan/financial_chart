@@ -74,9 +74,8 @@ class GArcMarker extends GOverlayMarker {
     required double startTheta,
     required double endTheta,
     GArcCloseType closeType = GArcCloseType.none,
-    Alignment alignment =
-        Alignment
-            .center, // where anchor point located on the bound rect of the circle
+    Alignment alignment = Alignment
+        .center, // where anchor point located on the bound rect of the circle
     GOverlayMarkerRender? render,
     super.scaleHandler,
   }) : _radiusSize = GValue<GSize?>(radiusSize),

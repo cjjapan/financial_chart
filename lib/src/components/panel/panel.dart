@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../components.dart';
 import '../../values/coord.dart';
 import '../../values/value.dart';
+import '../../data/data_source.dart';
 
 /// The action mode when panning the graph area of the panel.
 enum GGraphPanMode {
@@ -190,14 +191,13 @@ class GPanel extends GComponent {
       ...pointAxes,
       ...valueAxes,
     ]);
-    final splitterArea =
-        hasSplitter
-            ? Rect.fromCenter(
-              center: panelArea.bottomCenter,
-              width: panelArea.width,
-              height: splitterHeight,
-            )
-            : Rect.zero;
+    final splitterArea = hasSplitter
+        ? Rect.fromCenter(
+            center: panelArea.bottomCenter,
+            width: panelArea.width,
+            height: splitterHeight,
+          )
+        : Rect.zero;
     _areas
       ..addAll(axesAreas)
       ..add(graphArea)
@@ -206,8 +206,9 @@ class GPanel extends GComponent {
   }
 
   GValueViewPort findValueViewPortById(String id) {
-    final found =
-        valueViewPorts.where((element) => element.id == id).firstOrNull;
+    final found = valueViewPorts
+        .where((element) => element.id == id)
+        .firstOrNull;
     if (found == null) {
       throw Exception(
         "Value viewport with id $id not found. Available ids: ${valueViewPorts.map((e) => e.id).toList()}",
@@ -224,10 +225,9 @@ class GPanel extends GComponent {
     if (!graphArea().contains(position)) {
       return null;
     }
-    final valueViewPort =
-        valueViewPorts
-            .where((element) => element.id == valueViewPortId)
-            .firstOrNull;
+    final valueViewPort = valueViewPorts
+        .where((element) => element.id == valueViewPortId)
+        .firstOrNull;
     if (valueViewPort == null) {
       return null;
     }
@@ -260,6 +260,47 @@ class GPanel extends GComponent {
       }
     }
     return (null, null);
+  }
+
+  /// Find the closest data point in the graph area of this panel.
+  /// Returns the closest point and the key of the data value.
+  /// If no data point is found, returns null.
+  (int, String)? closestDataPoint({
+    required Offset position,
+    required GDataSource dataSource,
+    required GPointViewPort pointViewPort,
+    required GValueViewPort valueViewPort,
+    required List<String> dataKeysToSearch,
+  }) {
+    if (!graphArea().contains(position)) {
+      return null;
+    }
+    final closestPoint = pointViewPort
+        .positionToPoint(graphArea(), position.dx)
+        .round();
+    final value = valueViewPort.positionToValue(graphArea(), position.dy);
+    final data = dataSource.getData(closestPoint);
+    if (data == null) {
+      return null;
+    }
+    String? closestKey;
+    double closestDistance = double.infinity;
+
+    for (final key in dataKeysToSearch) {
+      final dataValue = dataSource.getSeriesValue(
+        point: closestPoint,
+        key: key,
+      );
+      if (dataValue != null) {
+        final distance = (dataValue - value).abs();
+        if (distance < closestDistance) {
+          closestKey = key;
+          closestDistance = distance;
+        }
+      }
+    }
+
+    return closestKey != null ? (closestPoint, closestKey) : null;
   }
 
   void dispose() {

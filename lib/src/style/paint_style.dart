@@ -76,12 +76,12 @@ class PaintStyle extends Equatable {
     _strokePaint = _createStrokePaint();
     isSimple =
         (fillGradient == null &&
-            fillShader == null &&
-            strokeGradient == null &&
-            strokeShader == null &&
-            gradientBounds == null &&
-            dash == null &&
-            dashOffset == null);
+        fillShader == null &&
+        strokeGradient == null &&
+        strokeShader == null &&
+        gradientBounds == null &&
+        dash == null &&
+        dashOffset == null);
     isEmpty = (_fillPaint == null && _strokePaint == null);
   }
 

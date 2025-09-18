@@ -22,36 +22,34 @@ class AppLabelWidget extends StatelessWidget {
         spacing: 2,
         children: [
           TextButton.icon(
-            onPressed:
-                (description == null || description?.isEmpty == true)
-                    ? null
-                    : () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              label,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+            onPressed: (description == null || description?.isEmpty == true)
+                ? null
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                            label,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            content: Text(description!),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-            icon:
-                (description == null || description?.isEmpty == true)
-                    ? null
-                    : const Icon(Icons.help_outline, size: 14),
+                          ),
+                          content: Text(description!),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+            icon: (description == null || description?.isEmpty == true)
+                ? null
+                : const Icon(Icons.help_outline, size: 14),
             iconAlignment: IconAlignment.end,
             label: Text(
               label,

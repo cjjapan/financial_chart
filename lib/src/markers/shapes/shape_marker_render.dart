@@ -37,8 +37,8 @@ class GShapeMarkerRender
       );
       final centerTranslate =
           ((marker.alignment.x.abs() + marker.alignment.y.abs()).round() >= 2)
-              ? radius / 1.41421356237
-              : radius;
+          ? radius / 1.41421356237
+          : radius;
       // calculate the center point from marker.alignment and anchor
       // the alignment is the direction to the anchor point
       center = anchor;
@@ -74,19 +74,18 @@ class GShapeMarkerRender
             type: GControlHandleType.move,
             keyCoordinateIndex: 0,
           ),
-          "size":
-              (marker.alignment == Alignment.center)
-                  ? GControlHandle(
-                    position: Offset(center.dx + radius, center.dy),
-                    type: GControlHandleType.resize,
-                  )
-                  : GControlHandle(
-                    position: Offset(
-                      center.dx + centerTranslate * marker.alignment.x,
-                      center.dy + centerTranslate * marker.alignment.y,
-                    ),
-                    type: GControlHandleType.resize,
+          "size": (marker.alignment == Alignment.center)
+              ? GControlHandle(
+                  position: Offset(center.dx + radius, center.dy),
+                  type: GControlHandleType.resize,
+                )
+              : GControlHandle(
+                  position: Offset(
+                    center.dx + centerTranslate * marker.alignment.x,
+                    center.dy + centerTranslate * marker.alignment.y,
                   ),
+                  type: GControlHandleType.resize,
+                ),
         });
       }
       if (marker.highlighted || marker.selected) {

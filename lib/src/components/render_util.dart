@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/painting.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../style/dash_path.dart';
 import '../style/label_style.dart';
@@ -60,10 +61,9 @@ class GRenderUtil {
     bool strokeOnly = false,
   }) {
     if (!strokeOnly) {
-      final fillBounds =
-          (style.fillGradient == null)
-              ? null
-              : (gradientBounds ?? style.gradientBounds ?? path.getBounds());
+      final fillBounds = (style.fillGradient == null)
+          ? null
+          : (gradientBounds ?? style.gradientBounds ?? path.getBounds());
       final fillPaint = style.getFillPaint(gradientBounds: fillBounds);
       if (fillPaint != null) {
         canvas.drawPath(path, fillPaint);
@@ -71,10 +71,9 @@ class GRenderUtil {
     }
 
     if (!fillOnly) {
-      final strokeBounds =
-          (style.strokeGradient == null)
-              ? null
-              : (gradientBounds ?? style.gradientBounds ?? path.getBounds());
+      final strokeBounds = (style.strokeGradient == null)
+          ? null
+          : (gradientBounds ?? style.gradientBounds ?? path.getBounds());
       final strokePaint = style.getStrokePaint(gradientBounds: strokeBounds);
       if (strokePaint != null) {
         Path? theDashPath;
@@ -98,10 +97,9 @@ class GRenderUtil {
     required LabelStyle style,
   }) {
     final painter = TextPainter(
-      text:
-          style.textStyle != null
-              ? TextSpan(text: text, style: style.textStyle)
-              : style.span!(text),
+      text: style.textStyle != null
+          ? TextSpan(text: text, style: style.textStyle)
+          : style.span!(text),
       textAlign: style.textAlign ?? TextAlign.start,
       textDirection: style.textDirection ?? TextDirection.ltr,
       textScaler: style.textScaler ?? TextScaler.noScaling,
@@ -217,6 +215,31 @@ class GRenderUtil {
       defaultAlign: defaultAlign,
       style: labelTheme.labelStyle,
     );
+  }
+
+  static Rect drawSvg({
+    required PictureInfo pictureInfo,
+    required Offset anchor,
+    Alignment alignment = Alignment.center,
+    Size? size,
+    required Canvas canvas,
+  }) {
+    final drawSize = size ?? pictureInfo.size;
+    final rect = GRenderUtil.rectFromAnchorAndAlignment(
+      anchor: anchor,
+      width: drawSize.width,
+      height: drawSize.height,
+      alignment: alignment,
+    );
+    canvas.save();
+    canvas.translate(rect.left, rect.top);
+    canvas.scale(
+      drawSize.width / pictureInfo.size.width,
+      drawSize.height / pictureInfo.size.height,
+    );
+    canvas.drawPicture(pictureInfo.picture);
+    canvas.restore();
+    return rect;
   }
 
   static Offset getTextBlockPaintPoint(

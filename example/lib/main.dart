@@ -9,8 +9,8 @@ import 'workshop/workshop.dart';
 final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.light);
 
 final routes = {
-  '/demo':
-      (context) => const MenuPage(pathPrefix: '/demo', title: "Chart demos"),
+  '/demo': (context) =>
+      const MenuPage(pathPrefix: '/demo', title: "Chart demos"),
   '/demo/basic': (context) => const BasicDemoPage(),
   '/demo/workshop': (context) => WorkshopApp(themeMode: themeMode),
   // '/demo/axes': (context) => const DemoAxesPage(),
@@ -97,46 +97,42 @@ class MenuPage extends StatelessWidget {
         title: Text(title ?? pathPrefix.split('/').last.replaceAll("_", " ")),
       ),
       body: ListView(
-        children:
-            pages
-                .map(
-                  (path) => Container(
-                    key: Key(path),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 2,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, path);
-                      },
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 10,
+        children: pages
+            .map(
+              (path) => Container(
+                key: Key(path),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, path);
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            path.split('/').last[0].toUpperCase() +
+                                path
+                                    .split('/')
+                                    .last
+                                    .substring(1)
+                                    .replaceAll("_", " "),
+                            style: Theme.of(context).textTheme.titleMedium!,
                           ),
-                          child: Row(
-                            children: [
-                              Text(
-                                path.split('/').last[0].toUpperCase() +
-                                    path
-                                        .split('/')
-                                        .last
-                                        .substring(1)
-                                        .replaceAll("_", " "),
-                                style: Theme.of(context).textTheme.titleMedium!,
-                              ),
-                              Expanded(child: Container()),
-                              const Icon(Icons.keyboard_arrow_right),
-                            ],
-                          ),
-                        ),
+                          Expanded(child: Container()),
+                          const Icon(Icons.keyboard_arrow_right),
+                        ],
                       ),
                     ),
                   ),
-                )
-                .toList(),
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }

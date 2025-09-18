@@ -116,7 +116,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     SystemMouseCursors.basic,
   );
 
-  final GValue<bool> _hitTestEnable = GValue(true);
+  final GValue<bool> _hitTestEnable;
   bool get hitTestEnable => _hitTestEnable.value;
   set hitTestEnable(bool value) {
     _hitTestEnable.value = value;
@@ -161,9 +161,8 @@ class GChart extends ChangeNotifier with Diagnosticable {
              autoScaleStrategy: const GPointViewPortAutoScaleStrategyLatest(),
            ),
        _theme = GValue(theme),
-       _area = GValue(area) {
-    _hitTestEnable.value = hitTestEnable;
-  }
+       _area = GValue(area),
+       _hitTestEnable = GValue(hitTestEnable);
 
   /// Initialization of the chart. (should be called only once internally by [GChartWidget])
   void internalInitialize({
@@ -218,16 +217,14 @@ class GChart extends ChangeNotifier with Diagnosticable {
   void ensureInitialData() {
     assert(!dataSource.isLoading);
     layout(area);
-    final fromPoint =
-        pointViewPort.isValid
-            ? pointViewPort.startPoint.floor()
-            : dataSource.indexToPoint(0);
+    final fromPoint = pointViewPort.isValid
+        ? pointViewPort.startPoint.floor()
+        : dataSource.indexToPoint(0);
     final points =
         panels[0].graphArea().width / pointViewPort.defaultPointWidth;
-    final toPoint =
-        pointViewPort.isValid
-            ? pointViewPort.endPoint.ceil()
-            : ((fromPoint + points).ceil() + 10);
+    final toPoint = pointViewPort.isValid
+        ? pointViewPort.endPoint.ceil()
+        : ((fromPoint + points).ceil() + 10);
     dataSource.ensureData(fromPoint: fromPoint, toPoint: toPoint).then((_) {
       if (!pointViewPort.isValid) {
         // if not being set with initial value, set it with the auto scaled value.
@@ -301,10 +298,12 @@ class GChart extends ChangeNotifier with Diagnosticable {
     }
     if (_area.value != refinedArea || force) {
       final visiblePanel = panels.where((p) => p.visible).first;
-      double graphWidthBefore =
-          visiblePanel.isLayoutReady ? visiblePanel.graphArea().width : 0;
-      double graphHeightBefore =
-          visiblePanel.isLayoutReady ? visiblePanel.graphArea().height : 0;
+      double graphWidthBefore = visiblePanel.isLayoutReady
+          ? visiblePanel.graphArea().width
+          : 0;
+      double graphHeightBefore = visiblePanel.isLayoutReady
+          ? visiblePanel.graphArea().height
+          : 0;
       crosshair.updateCrossPosition(
         chart: this,
         trigger: GCrosshairTrigger.resized,
@@ -376,16 +375,15 @@ class GChart extends ChangeNotifier with Diagnosticable {
       (sum, panel) => sum + (panel.visible ? panel.heightWeight : 0),
     );
     double y = area.top;
-    List<Rect> panelAreas =
-        panels.map((panel) {
-          if (!panel.visible) {
-            return Rect.zero;
-          }
-          double height = area.height * panel.heightWeight / totalHeightWeight;
-          Rect panelArea = Rect.fromLTRB(area.left, y, area.right, y + height);
-          y += height;
-          return panelArea;
-        }).toList();
+    List<Rect> panelAreas = panels.map((panel) {
+      if (!panel.visible) {
+        return Rect.zero;
+      }
+      double height = area.height * panel.heightWeight / totalHeightWeight;
+      Rect panelArea = Rect.fromLTRB(area.left, y, area.right, y + height);
+      y += height;
+      return panelArea;
+    }).toList();
     for (int p = 0; p < panels.length; p++) {
       GPanel? nextPanel = nextVisiblePanel(startIndex: p + 1);
       bool hasSplitter =

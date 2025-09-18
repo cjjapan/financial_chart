@@ -146,10 +146,12 @@ class GPositionCoord extends GCoordinate {
     required GValueViewPort valueViewPort,
     required GPointViewPort pointViewPort,
   }) {
-    double newX =
-        xIsInverted ? (position.dx + xOffset) : (position.dx - xOffset);
-    double newY =
-        yIsInverted ? (position.dy + yOffset) : (position.dy - yOffset);
+    double newX = xIsInverted
+        ? (position.dx + xOffset)
+        : (position.dx - xOffset);
+    double newY = yIsInverted
+        ? (position.dy + yOffset)
+        : (position.dy - yOffset);
     if (xIsRatio) {
       newX /= area.width;
     }

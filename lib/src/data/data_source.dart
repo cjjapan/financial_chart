@@ -347,22 +347,21 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
           _notify();
           final expectedCount = firstPoint - fromPointRequest;
           await priorDataLoader!(
-                pointCount: expectedCount,
-                toPointExclusive: firstPoint,
-                toPointValueExclusive: getPointValue(firstPoint) as P,
-              )
-              .then((data) async {
-                if (data.isNotEmpty) {
-                  dataList.insertAll(0, data);
-                  _basePoint.value = _basePoint.value - data.length;
-                  await dataLoaded?.call(this);
-                }
-                if (data.length < expectedCount) {
-                  // no more data before this point
-                  _minPoint.value = firstPoint;
-                }
-                _notify();
-              });
+            pointCount: expectedCount,
+            toPointExclusive: firstPoint,
+            toPointValueExclusive: getPointValue(firstPoint) as P,
+          ).then((data) async {
+            if (data.isNotEmpty) {
+              dataList.insertAll(0, data);
+              _basePoint.value = _basePoint.value - data.length;
+              await dataLoaded?.call(this);
+            }
+            if (data.length < expectedCount) {
+              // no more data before this point
+              _minPoint.value = firstPoint;
+            }
+            _notify();
+          });
         }
         if (afterDataLoader != null &&
             toPoint > lastPoint &&
@@ -371,21 +370,20 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
           _notify();
           final expectedCount = toPointRequest - lastPoint;
           await afterDataLoader!(
-                fromPointExclusive: lastPoint,
-                fromPointValueExclusive: getPointValue(lastPoint) as P,
-                pointCount: expectedCount,
-              )
-              .then((data) async {
-                if (data.isNotEmpty) {
-                  dataList.addAll(data);
-                  await dataLoaded?.call(this);
-                }
-                if (data.length < expectedCount) {
-                  // no more data after this point
-                  _maxPoint.value = lastPoint;
-                }
-                _notify();
-              });
+            fromPointExclusive: lastPoint,
+            fromPointValueExclusive: getPointValue(lastPoint) as P,
+            pointCount: expectedCount,
+          ).then((data) async {
+            if (data.isNotEmpty) {
+              dataList.addAll(data);
+              await dataLoaded?.call(this);
+            }
+            if (data.length < expectedCount) {
+              // no more data after this point
+              _maxPoint.value = lastPoint;
+            }
+            _notify();
+          });
         }
       }
     } finally {

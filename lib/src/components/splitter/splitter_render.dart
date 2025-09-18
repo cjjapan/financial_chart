@@ -33,12 +33,11 @@ class GSplitterRender extends GRender<GSplitter, GSplitterTheme> {
           renderClipped(
             canvas: canvas,
             clipRect: area,
-            render:
-                () => doRenderSplitter(
-                  canvas: canvas,
-                  area: panel.splitterArea(),
-                  theme: theme,
-                ),
+            render: () => doRenderSplitter(
+              canvas: canvas,
+              area: panel.splitterArea(),
+              theme: theme,
+            ),
           );
         }
       }

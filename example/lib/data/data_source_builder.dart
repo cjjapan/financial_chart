@@ -176,25 +176,21 @@ Future<GDataSource<int, GData<int>>> createDataSource({
 
   // synchronous data loading
   if (asyncDelayMillis <= 0) {
-    final dataList =
-        ohlcDataInput.entries
-            .map(
-              (e) => GData<int>(
-                pointValue: e.time,
-                seriesValues: [
-                  e.open,
-                  e.high,
-                  e.low,
-                  e.close,
-                  e.volume,
-                  ...List<double>.filled(
-                    seriesList.length - 5,
-                    double.infinity,
-                  ),
-                ],
-              ),
-            )
-            .toList();
+    final dataList = ohlcDataInput.entries
+        .map(
+          (e) => GData<int>(
+            pointValue: e.time,
+            seriesValues: [
+              e.open,
+              e.high,
+              e.low,
+              e.close,
+              e.volume,
+              ...List<double>.filled(seriesList.length - 5, double.infinity),
+            ],
+          ),
+        )
+        .toList();
     for (int s = 5; s < seriesList.length; s++) {
       seriesList[s].$2.rebuild();
       for (int i = 0; i < dataList.length; i++) {
@@ -234,58 +230,60 @@ Future<GDataSource<int, GData<int>>> createDataSource({
         );
       }).toList();
     },
-    priorDataLoader: ({
-      required int toPointExclusive,
-      required int toPointValueExclusive,
-      required int pointCount,
-    }) async {
-      final loaded = await ohlcDataInput.loadPrior(
-        pointCount,
-        toPointValueExclusive,
-      );
-      if (loaded.isEmpty) {
-        return [];
-      }
-      return loaded.map((e) {
-        return GData<int>(
-          pointValue: e.time,
-          seriesValues: [
-            e.open,
-            e.high,
-            e.low,
-            e.close,
-            e.volume,
-            ...List<double>.filled(seriesList.length - 5, double.infinity),
-          ],
-        );
-      }).toList();
-    },
-    afterDataLoader: ({
-      required int fromPointExclusive,
-      required int fromPointValueExclusive,
-      required int pointCount,
-    }) async {
-      final loaded = await ohlcDataInput.loadAfter(
-        pointCount,
-        fromPointValueExclusive,
-      );
-      if (loaded.isEmpty) {
-        return [];
-      }
-      return loaded.map((e) {
-        return GData<int>(
-          pointValue: e.time,
-          seriesValues: [
-            e.open,
-            e.high,
-            e.low,
-            e.close,
-            e.volume,
-            ...List<double>.filled(seriesList.length, double.infinity),
-          ],
-        );
-      }).toList();
-    },
+    priorDataLoader:
+        ({
+          required int toPointExclusive,
+          required int toPointValueExclusive,
+          required int pointCount,
+        }) async {
+          final loaded = await ohlcDataInput.loadPrior(
+            pointCount,
+            toPointValueExclusive,
+          );
+          if (loaded.isEmpty) {
+            return [];
+          }
+          return loaded.map((e) {
+            return GData<int>(
+              pointValue: e.time,
+              seriesValues: [
+                e.open,
+                e.high,
+                e.low,
+                e.close,
+                e.volume,
+                ...List<double>.filled(seriesList.length - 5, double.infinity),
+              ],
+            );
+          }).toList();
+        },
+    afterDataLoader:
+        ({
+          required int fromPointExclusive,
+          required int fromPointValueExclusive,
+          required int pointCount,
+        }) async {
+          final loaded = await ohlcDataInput.loadAfter(
+            pointCount,
+            fromPointValueExclusive,
+          );
+          if (loaded.isEmpty) {
+            return [];
+          }
+          return loaded.map((e) {
+            return GData<int>(
+              pointValue: e.time,
+              seriesValues: [
+                e.open,
+                e.high,
+                e.low,
+                e.close,
+                e.volume,
+                ...List<double>.filled(seriesList.length, double.infinity),
+              ],
+            );
+          }).toList();
+        },
     // this is called when the data source is updated with new data
     dataLoaded: (dataSource) async {
       // update indicator values.

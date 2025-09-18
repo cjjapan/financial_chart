@@ -41,18 +41,17 @@ abstract class GMarkerRender<M extends GMarker, T extends GMarkerTheme>
     renderClipped(
       canvas: canvas,
       clipRect: area,
-      render:
-          () => doRenderMarker(
-            canvas: canvas,
-            chart: chart,
-            panel: panel,
-            component: component,
-            marker: marker,
-            area: area,
-            theme: theme,
-            pointViewPort: pointViewPort,
-            valueViewPort: validValueViewPort,
-          ),
+      render: () => doRenderMarker(
+        canvas: canvas,
+        chart: chart,
+        panel: panel,
+        component: component,
+        marker: marker,
+        area: area,
+        theme: theme,
+        pointViewPort: pointViewPort,
+        valueViewPort: validValueViewPort,
+      ),
     );
   }
 

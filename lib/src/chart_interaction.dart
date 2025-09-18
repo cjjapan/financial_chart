@@ -67,7 +67,7 @@ class GChartInteractionHandler with Diagnosticable {
       // test if hit resize splitter
       if (panel.resizable &&
           p < _chart.panels.length - 1 &&
-          _chart.panels[p + 1].resizable &&
+          _chart.nextVisiblePanel(startIndex: p + 1)?.resizable == true &&
           panel.splitterArea().contains(position)) {
         return SystemMouseCursors.resizeUpDown;
       }
@@ -171,8 +171,9 @@ class GChartInteractionHandler with Diagnosticable {
             notify: true,
           );
         } else if (_chart.pointerScrollMode == GPointerScrollMode.zoom) {
-          final centerPoint =
-              pointViewPort.positionToPoint(area, position.dx).toDouble();
+          final centerPoint = pointViewPort
+              .positionToPoint(area, position.dx)
+              .toDouble();
           final scaleRatio = 1 - scrollDelta.dy / area.height;
           pointViewPort.autoScaleFlg = false;
           pointViewPort.zoom(area, scaleRatio, centerPoint: centerPoint);
@@ -398,28 +399,26 @@ class GChartInteractionHandler with Diagnosticable {
       double weightDensity =
           (panel1.heightWeight + panel2.heightWeight) / (h1 + h2);
       _chart.splitter.resizingPanelIndex = panel1Index;
-      _hookScaleUpdate = ({
-        required Offset position,
-        required double scale,
-        required double verticalScale,
-      }) {
-        double moveDistance = min(
-          max((position.dy - start.dy), moveToleranceMin),
-          moveToleranceMax,
-        );
-        double h1New = h1 + moveDistance;
-        double h2New = h2 - moveDistance;
-        panel1.heightWeight = h1New * weightDensity;
-        panel2.heightWeight = h2New * weightDensity;
-        _chart.resize(newArea: _chart.area, force: true);
-      };
-      _hookScaleEnd = (
-        int pointerCount,
-        double scaleVelocity,
-        Velocity? velocity,
-      ) {
-        _chart.splitter.resizingPanelIndex = null;
-      };
+      _hookScaleUpdate =
+          ({
+            required Offset position,
+            required double scale,
+            required double verticalScale,
+          }) {
+            double moveDistance = min(
+              max((position.dy - start.dy), moveToleranceMin),
+              moveToleranceMax,
+            );
+            double h1New = h1 + moveDistance;
+            double h2New = h2 - moveDistance;
+            panel1.heightWeight = h1New * weightDensity;
+            panel2.heightWeight = h2New * weightDensity;
+            _chart.resize(newArea: _chart.area, force: true);
+          };
+      _hookScaleEnd =
+          (int pointerCount, double scaleVelocity, Velocity? velocity) {
+            _chart.splitter.resizingPanelIndex = null;
+          };
       return panel1;
     }
     return null;
@@ -435,61 +434,60 @@ class GChartInteractionHandler with Diagnosticable {
           pointViewPortInteractionHelper.interactionStart(pointViewPort);
           pointViewPort.autoScaleFlg = false;
           double lastX = start.dx;
-          _hookScaleUpdate = ({
-            required Offset position,
-            required double scale,
-            required double verticalScale,
-          }) {
-            if (axis.scaleMode == GAxisScaleMode.zoom ||
-                (scale > 0 && scale != 1.0)) {
-              double scaleRatio =
-                  (axisArea.right - position.dx) / (axisArea.right - start.dx);
-              if (scale > 0 && scale != 1.0) {
-                pointViewPortInteractionHelper.interactionZoomUpdate(
-                  axisArea,
-                  start,
-                  position,
-                  scale,
-                );
-              } else {
-                pointViewPortInteractionHelper.interactionZoomUpdate(
-                  axisArea,
-                  start,
-                  null,
-                  scaleRatio,
-                );
-              }
-            } else if (axis.scaleMode == GAxisScaleMode.move) {
-              double moveDistance = (position.dx - start.dx);
-              pointViewPortInteractionHelper.interactionMoveUpdate(
-                axisArea,
-                moveDistance,
-              );
-            } else if (axis.scaleMode == GAxisScaleMode.select) {
-              pointViewPortInteractionHelper.interactionSelectUpdate(
-                axisArea,
-                start.dx,
-                position.dx,
-                finished: false,
-              );
-            }
-            lastX = position.dx;
-          };
-          _hookScaleEnd = (
-            int pointerCount,
-            double scaleVelocity,
-            Velocity? velocity,
-          ) {
-            if (axis.scaleMode == GAxisScaleMode.select) {
-              pointViewPortInteractionHelper.interactionSelectUpdate(
-                axisArea,
-                start.dx,
-                lastX,
-                finished: true,
-              );
-            }
-            pointViewPortInteractionHelper.interactionEnd();
-          };
+          _hookScaleUpdate =
+              ({
+                required Offset position,
+                required double scale,
+                required double verticalScale,
+              }) {
+                if (axis.scaleMode == GAxisScaleMode.zoom ||
+                    (scale > 0 && scale != 1.0)) {
+                  double scaleRatio =
+                      (axisArea.right - position.dx) /
+                      (axisArea.right - start.dx);
+                  if (scale > 0 && scale != 1.0) {
+                    pointViewPortInteractionHelper.interactionZoomUpdate(
+                      axisArea,
+                      start,
+                      position,
+                      scale,
+                    );
+                  } else {
+                    pointViewPortInteractionHelper.interactionZoomUpdate(
+                      axisArea,
+                      start,
+                      null,
+                      scaleRatio,
+                    );
+                  }
+                } else if (axis.scaleMode == GAxisScaleMode.move) {
+                  double moveDistance = (position.dx - start.dx);
+                  pointViewPortInteractionHelper.interactionMoveUpdate(
+                    axisArea,
+                    moveDistance,
+                  );
+                } else if (axis.scaleMode == GAxisScaleMode.select) {
+                  pointViewPortInteractionHelper.interactionSelectUpdate(
+                    axisArea,
+                    start.dx,
+                    position.dx,
+                    finished: false,
+                  );
+                }
+                lastX = position.dx;
+              };
+          _hookScaleEnd =
+              (int pointerCount, double scaleVelocity, Velocity? velocity) {
+                if (axis.scaleMode == GAxisScaleMode.select) {
+                  pointViewPortInteractionHelper.interactionSelectUpdate(
+                    axisArea,
+                    start.dx,
+                    lastX,
+                    finished: true,
+                  );
+                }
+                pointViewPortInteractionHelper.interactionEnd();
+              };
           return axis;
         }
       }
@@ -510,55 +508,54 @@ class GChartInteractionHandler with Diagnosticable {
           viewPort.autoScaleFlg = false;
           valueViewPortInteractionHelper.interactionStart(viewPort);
           double lastY = start.dy;
-          _hookScaleUpdate = ({
-            required Offset position,
-            required double scale,
-            required double verticalScale,
-          }) {
-            if (axis.scaleMode == GAxisScaleMode.zoom) {
-              double scaleRatio = min(
-                max(
-                  (axisArea.bottom - start.dy) /
-                      (axisArea.bottom - min(position.dy, axisArea.bottom - 1)),
-                  0.01,
-                ),
-                100,
-              );
-              valueViewPortInteractionHelper.interactionZoomUpdate(
-                axisArea,
-                scaleRatio,
-              );
-            } else if (axis.scaleMode == GAxisScaleMode.move) {
-              double moveDistance = (position.dy - start.dy);
-              valueViewPortInteractionHelper.interactionMoveUpdate(
-                axisArea,
-                moveDistance,
-              );
-            } else if (axis.scaleMode == GAxisScaleMode.select) {
-              valueViewPortInteractionHelper.interactionSelectUpdate(
-                axisArea,
-                start.dy,
-                position.dy,
-                finished: false,
-              );
-            }
-            lastY = position.dy;
-          };
-          _hookScaleEnd = (
-            int pointerCount,
-            double scaleVelocity,
-            Velocity? velocity,
-          ) {
-            if (axis.scaleMode == GAxisScaleMode.select) {
-              valueViewPortInteractionHelper.interactionSelectUpdate(
-                axisArea,
-                start.dy,
-                lastY,
-                finished: true,
-              );
-            }
-            valueViewPortInteractionHelper.interactionEnd();
-          };
+          _hookScaleUpdate =
+              ({
+                required Offset position,
+                required double scale,
+                required double verticalScale,
+              }) {
+                if (axis.scaleMode == GAxisScaleMode.zoom) {
+                  double scaleRatio = min(
+                    max(
+                      (axisArea.bottom - start.dy) /
+                          (axisArea.bottom -
+                              min(position.dy, axisArea.bottom - 1)),
+                      0.01,
+                    ),
+                    100,
+                  );
+                  valueViewPortInteractionHelper.interactionZoomUpdate(
+                    axisArea,
+                    scaleRatio,
+                  );
+                } else if (axis.scaleMode == GAxisScaleMode.move) {
+                  double moveDistance = (position.dy - start.dy);
+                  valueViewPortInteractionHelper.interactionMoveUpdate(
+                    axisArea,
+                    moveDistance,
+                  );
+                } else if (axis.scaleMode == GAxisScaleMode.select) {
+                  valueViewPortInteractionHelper.interactionSelectUpdate(
+                    axisArea,
+                    start.dy,
+                    position.dy,
+                    finished: false,
+                  );
+                }
+                lastY = position.dy;
+              };
+          _hookScaleEnd =
+              (int pointerCount, double scaleVelocity, Velocity? velocity) {
+                if (axis.scaleMode == GAxisScaleMode.select) {
+                  valueViewPortInteractionHelper.interactionSelectUpdate(
+                    axisArea,
+                    start.dy,
+                    lastY,
+                    finished: true,
+                  );
+                }
+                valueViewPortInteractionHelper.interactionEnd();
+              };
           return axis;
         }
       }
@@ -597,13 +594,14 @@ class GChartInteractionHandler with Diagnosticable {
     final graph = hitTest.$1 ?? panel.graphs.last;
     if (_isTouchCrossMode.value || panel.graphPanMode == GGraphPanMode.none) {
       // move crosshair only
-      _hookScaleUpdate = ({
-        required Offset position,
-        required double scale,
-        required double verticalScale,
-      }) {
-        _chart.mouseCursor.value = SystemMouseCursors.precise;
-      };
+      _hookScaleUpdate =
+          ({
+            required Offset position,
+            required double scale,
+            required double verticalScale,
+          }) {
+            _chart.mouseCursor.value = SystemMouseCursors.precise;
+          };
       _hookScaleEnd =
           (int pointerCount, double scaleVelocity, Velocity? velocity) {};
       return graph;
@@ -619,45 +617,42 @@ class GChartInteractionHandler with Diagnosticable {
     if (scaleValue) {
       valueViewPortInteractionHelper.interactionStart(valueViewPort);
     }
-    _hookScaleUpdate = ({
-      required Offset position,
-      required double scale,
-      required double verticalScale,
-    }) {
-      _chart.mouseCursor.value = SystemMouseCursors.grab;
-      double moveDistanceX = (position.dx - start.dx);
-      if (scale != 1.0) {
-        if (scale != 1.0 && scale > 0) {
-          //pointViewPort.interactionMoveUpdate(graphArea, moveDistanceX);
-          pointViewPortInteractionHelper.interactionZoomUpdate(
+    _hookScaleUpdate =
+        ({
+          required Offset position,
+          required double scale,
+          required double verticalScale,
+        }) {
+          _chart.mouseCursor.value = SystemMouseCursors.grab;
+          double moveDistanceX = (position.dx - start.dx);
+          if (scale != 1.0) {
+            if (scale != 1.0 && scale > 0) {
+              //pointViewPort.interactionMoveUpdate(graphArea, moveDistanceX);
+              pointViewPortInteractionHelper.interactionZoomUpdate(
+                graphArea,
+                start,
+                position,
+                scale,
+              );
+            }
+            if (verticalScale != 1.0 && verticalScale > 0 && scaleValue) {
+              //valueViewPort.interactionZoomUpdate(graphArea, verticalScale);
+            }
+            return;
+          }
+          pointViewPortInteractionHelper.interactionMoveUpdate(
             graphArea,
-            start,
-            position,
-            scale,
+            moveDistanceX,
           );
-        }
-        if (verticalScale != 1.0 && verticalScale > 0 && scaleValue) {
-          //valueViewPort.interactionZoomUpdate(graphArea, verticalScale);
-        }
-        return;
-      }
-      pointViewPortInteractionHelper.interactionMoveUpdate(
-        graphArea,
-        moveDistanceX,
-      );
-      if (scaleValue) {
-        double moveDistanceY = (position.dy - start.dy);
-        valueViewPortInteractionHelper.interactionMoveUpdate(
-          graphArea,
-          moveDistanceY,
-        );
-      }
-    };
-    _hookScaleEnd = (
-      int pointerCount,
-      double scaleVelocity,
-      Velocity? velocity,
-    ) {
+          if (scaleValue) {
+            double moveDistanceY = (position.dy - start.dy);
+            valueViewPortInteractionHelper.interactionMoveUpdate(
+              graphArea,
+              moveDistanceY,
+            );
+          }
+        };
+    _hookScaleEnd = (int pointerCount, double scaleVelocity, Velocity? velocity) {
       _hookScaleEnd = null;
       _chart.mouseCursor.value = SystemMouseCursors.precise;
       bool momentum =

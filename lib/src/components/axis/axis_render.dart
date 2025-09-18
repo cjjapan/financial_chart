@@ -46,6 +46,9 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
     for (int i = 0; i < valueTicks.length; i++) {
       double value = valueTicks[i];
       double valuePosition = valueViewPort.valueToPosition(area, value);
+      if (valuePosition.isNaN || valuePosition.isInfinite) {
+        continue;
+      }
 
       addLinePath(
         toPath: tickLinesPath,
@@ -54,9 +57,11 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
         x2: axis.isAlignLeft ? (area.left + theme.tickerLength) : area.right,
         y2: valuePosition,
       );
-      final labelText = (axis.valueFormatter ??
-              chart.dataSource.seriesValueFormater)
-          .call(value, valueViewPort.valuePrecision);
+      final labelText =
+          (axis.valueFormatter ?? chart.dataSource.seriesValueFormater).call(
+            value,
+            valueViewPort.valuePrecision,
+          );
       if (labelText.isNotEmpty) {
         drawValueAxisLabel(
           canvas: canvas,
@@ -142,9 +147,11 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
       ]) {
         final value = rangeValue!;
         double valuePosition = valueViewPort.valueToPosition(area, value);
-        final labelText = (axis.valueFormatter ??
-                chart.dataSource.seriesValueFormater)
-            .call(value, valueViewPort.valuePrecision);
+        final labelText =
+            (axis.valueFormatter ?? chart.dataSource.seriesValueFormater).call(
+              value,
+              valueViewPort.valuePrecision,
+            );
         if (labelText.isNotEmpty) {
           drawValueAxisLabel(
             canvas: canvas,
@@ -209,20 +216,18 @@ class GPointAxisRender extends GAxisRender<GPointAxis> {
       addLinePath(
         toPath: tickLinesPath,
         x1: pointPosition,
-        y1:
-            component.isAlignTop
-                ? area.top
-                : (area.bottom - theme.tickerLength),
+        y1: component.isAlignTop
+            ? area.top
+            : (area.bottom - theme.tickerLength),
         x2: pointPosition,
-        y2:
-            component.isAlignTop
-                ? (area.top + theme.tickerLength)
-                : area.bottom,
+        y2: component.isAlignTop
+            ? (area.top + theme.tickerLength)
+            : area.bottom,
       );
 
-      final labelText = (component.pointFormatter ??
-              chart.dataSource.pointValueFormater)
-          .call(point, pointValue);
+      final labelText =
+          (component.pointFormatter ?? chart.dataSource.pointValueFormater)
+              .call(point, pointValue);
       if (labelText.isNotEmpty) {
         drawPointAxisLabel(
           canvas: canvas,
@@ -311,9 +316,9 @@ class GPointAxisRender extends GAxisRender<GPointAxis> {
             area,
             point.toDouble(),
           );
-          final labelText = (component.pointFormatter ??
-                  chart.dataSource.pointValueFormater)
-              .call(point, pointValue);
+          final labelText =
+              (component.pointFormatter ?? chart.dataSource.pointValueFormater)
+                  .call(point, pointValue);
           if (labelText.isNotEmpty) {
             drawPointAxisLabel(
               canvas: canvas,

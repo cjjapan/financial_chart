@@ -82,12 +82,14 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
     lastData.seriesValues[dataSource.seriesKeyToIndex(keyLow)] = ohlcValues
         .reduce(min); // low
     // update axis marker and line marker
-    lineMarker!.keyCoordinates[0] = (lineMarker!.keyCoordinates[0]
-            as GCustomCoord)
-        .copyWith(y: latestPrice);
-    lineMarker!.keyCoordinates[1] = (lineMarker!.keyCoordinates[1]
-            as GCustomCoord)
-        .copyWith(y: latestPrice);
+    lineMarker!.keyCoordinates[0] =
+        (lineMarker!.keyCoordinates[0] as GCustomCoord).copyWith(
+          y: latestPrice,
+        );
+    lineMarker!.keyCoordinates[1] =
+        (lineMarker!.keyCoordinates[1] as GCustomCoord).copyWith(
+          y: latestPrice,
+        );
     valueAxisMarker!.labelValue = latestPrice;
     pointAxisMarker!.labelPoint = dataSource.lastPoint;
     // reset viewport if allowed and redraw chart
@@ -103,11 +105,10 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
     final chartTheme = themes.first;
     valueAxisMarker = GValueAxisMarker.label(
       id: "axis-marker-latest",
-      labelValue:
-          dataSource.getSeriesValue(
-            point: dataSource.lastPoint,
-            key: keyClose,
-          )!,
+      labelValue: dataSource.getSeriesValue(
+        point: dataSource.lastPoint,
+        key: keyClose,
+      )!,
     );
     pointAxisMarker = GPointAxisMarker.label(
       id: "axis-marker-latest",
@@ -119,22 +120,20 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
         coordinates: [
           GCustomCoord(
             x: 0.0,
-            y:
-                dataSource.getSeriesValue(
-                  point: dataSource.lastPoint,
-                  key: keyClose,
-                )!,
+            y: dataSource.getSeriesValue(
+              point: dataSource.lastPoint,
+              key: keyClose,
+            )!,
             coordinateConvertor: kCoordinateConvertorXPositionYValue,
             coordinateConvertorReverse:
                 kCoordinateConvertorXPositionYValueReverse,
           ),
           GCustomCoord(
             x: 1.0,
-            y:
-                dataSource.getSeriesValue(
-                  point: dataSource.lastPoint,
-                  key: keyClose,
-                )!,
+            y: dataSource.getSeriesValue(
+              point: dataSource.lastPoint,
+              key: keyClose,
+            )!,
             coordinateConvertor: kCoordinateConvertorXPositionYValue,
             coordinateConvertorReverse:
                 kCoordinateConvertorXPositionYValueReverse,
@@ -254,11 +253,10 @@ class DemoLiveUpdatePageState extends DemoBasePageState {
               }
               repaintChart();
             },
-            selected:
-                chart!.panels[0]
-                    .findGraphById("ohlc")!
-                    .overlayMarkers[0]
-                    .visible,
+            selected: chart!.panels[0]
+                .findGraphById("ohlc")!
+                .overlayMarkers[0]
+                .visible,
           ),
         ),
         AppLabelWidget(

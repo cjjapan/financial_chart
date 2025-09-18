@@ -154,11 +154,10 @@ class GGraphBarRender extends GGraphRender<GGraphBar, GGraphBarTheme> {
     }
     // draw the rectangles
     if (fillPoints.isNotEmpty) {
-      Paint fillAbovePaint =
-          Paint()
-            ..color = barStyle.fillColor ?? const Color.fromARGB(0, 0, 0, 0)
-            ..style = PaintingStyle.fill
-            ..strokeWidth = barWidth;
+      Paint fillAbovePaint = Paint()
+        ..color = barStyle.fillColor ?? const Color.fromARGB(0, 0, 0, 0)
+        ..style = PaintingStyle.fill
+        ..strokeWidth = barWidth;
       canvas.drawRawPoints(
         PointMode.lines,
         Float32List.fromList(fillPoints),
@@ -167,14 +166,13 @@ class GGraphBarRender extends GGraphRender<GGraphBar, GGraphBarTheme> {
     }
     // draw the rectangle borders
     if (borderPoints.isNotEmpty) {
-      Paint borderAbovePaint =
-          Paint()
-            ..color =
-                (barStyle.strokeColor ??
-                    barStyle.fillColor ??
-                    const Color.fromARGB(0, 0, 0, 0))
-            ..strokeWidth = min(max(1.0, barStyle.strokeWidth ?? 0), barWidth)
-            ..strokeCap = barStyle.strokeCap ?? StrokeCap.round;
+      Paint borderAbovePaint = Paint()
+        ..color =
+            (barStyle.strokeColor ??
+            barStyle.fillColor ??
+            const Color.fromARGB(0, 0, 0, 0))
+        ..strokeWidth = min(max(1.0, barStyle.strokeWidth ?? 0), barWidth)
+        ..strokeCap = barStyle.strokeCap ?? StrokeCap.round;
       canvas.drawRawPoints(
         PointMode.lines,
         Float32List.fromList(borderPoints),

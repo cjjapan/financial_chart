@@ -66,14 +66,13 @@ class GSplineMarkerRender
     } else {
       final points = marker.keyCoordinates
           .map(
-            (c) =>
-                c
-                    .toPosition(
-                      area: area,
-                      valueViewPort: valueViewPort,
-                      pointViewPort: pointViewPort,
-                    )
-                    .toVector2(),
+            (c) => c
+                .toPosition(
+                  area: area,
+                  valueViewPort: valueViewPort,
+                  pointViewPort: pointViewPort,
+                )
+                .toVector2(),
           )
           .toList(growable: false);
       final splinePoints = SplineUtil.catmullRomSpline(points, marker.close)

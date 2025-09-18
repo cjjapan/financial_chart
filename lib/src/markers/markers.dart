@@ -28,3 +28,6 @@ export 'label/label_marker_render.dart';
 
 export 'callout/callout_marker.dart';
 export 'callout/callout_marker_render.dart';
+
+export 'svg/svg_marker.dart';
+export 'svg/svg_marker_render.dart';

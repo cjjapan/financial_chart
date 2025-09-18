@@ -57,28 +57,26 @@ class ChartWorkshopPageState extends State<ChartWorkshopPage>
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(toolbarHeight: 56, title: const Text('Chart workshop')),
-      drawer:
-          size.width < breakPoint
-              ? Padding(
-                padding: const EdgeInsets.only(top: 56, bottom: paddingSize),
-                child: Drawer(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  width: drawerWidth,
-                  child: drawer(context, workshopState, true),
+      drawer: size.width < breakPoint
+          ? Padding(
+              padding: const EdgeInsets.only(top: 56, bottom: paddingSize),
+              child: Drawer(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
                 ),
-              )
-              : null,
-      body:
-          size.width < breakPoint
-              ? body(context, workshopState)
-              : Row(
-                children: [
-                  drawer(context, workshopState, false),
-                  Expanded(child: body(context, workshopState)),
-                ],
+                width: drawerWidth,
+                child: drawer(context, workshopState, true),
               ),
+            )
+          : null,
+      body: size.width < breakPoint
+          ? body(context, workshopState)
+          : Row(
+              children: [
+                drawer(context, workshopState, false),
+                Expanded(child: body(context, workshopState)),
+              ],
+            ),
     );
   }
 

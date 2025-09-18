@@ -1,5 +1,4 @@
-import 'package:flutter/painting.dart';
-
+import 'package:flutter/material.dart';
 import '../components/components.dart';
 import '../style/paint_style.dart';
 
@@ -39,6 +38,45 @@ class GTableTextItemPainter extends GTableItemPainter {
   }) {
     _textPainter = TextPainter(textDirection: TextDirection.ltr)
       ..text = TextSpan(text: text, style: style);
+    _textPainter.layout();
+    _contentSize = _textPainter.size;
+  }
+
+  @override
+  Size get contentSize => _contentSize;
+
+  @override
+  void paint(Canvas canvas, Rect contentRect) {
+    super.paint(canvas, contentRect);
+    _textPainter.paint(canvas, contentRect.topLeft);
+  }
+}
+
+class GTableIconItemPainter extends GTableItemPainter {
+  final IconData icon;
+  final double iconSize;
+  final Color? iconColor;
+  late final TextPainter _textPainter;
+  late Size _contentSize;
+
+  GTableIconItemPainter({
+    required this.icon,
+    this.iconSize = 24.0,
+    this.iconColor,
+    super.padding,
+    super.alignment,
+    super.blockStyle,
+  }) {
+    _textPainter = TextPainter(textDirection: TextDirection.ltr)
+      ..text = TextSpan(
+        text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(
+          fontSize: iconSize,
+          fontFamily: icon.fontFamily,
+          package: icon.fontPackage,
+          color: iconColor,
+        ),
+      );
     _textPainter.layout();
     _contentSize = _textPainter.size;
   }
@@ -157,7 +195,7 @@ class GTableLayoutPainter extends GTableLayout {
   }
 
   GTableLayoutPainter.twoColumnText({
-    required List<List<String>> texts,
+    required List<(String, String)> texts,
     Alignment leftColumnAlignment = Alignment.centerLeft,
     Alignment rightColumnAlignment = Alignment.centerRight,
     Alignment singleTextAlignment = Alignment.center,
@@ -178,19 +216,19 @@ class GTableLayoutPainter extends GTableLayout {
     this.alignment = Alignment.center,
   }) : super(items: [], spanItems: []) {
     for (int i = 0; i < texts.length; i++) {
-      if (texts[i].isEmpty) {
+      if (texts[i].$1.isEmpty && texts[i].$2.isEmpty) {
         continue; // skip empty rows
       }
-      if (texts[i].length == 2) {
+      if (texts[i].$2.isNotEmpty) {
         items.add([
           GTableTextItemPainter(
-            text: texts[i][0],
+            text: texts[i].$1,
             style: textStyle,
             alignment: leftColumnAlignment,
             padding: cellPadding,
           ),
           GTableTextItemPainter(
-            text: texts[i][1],
+            text: texts[i].$2,
             style: rightTextStyle ?? textStyle,
             alignment: rightColumnAlignment,
             padding: rightCellPadding ?? cellPadding,
@@ -208,7 +246,7 @@ class GTableLayoutPainter extends GTableLayout {
             colStart: 0,
             colEnd: 1,
             item: GTableTextItemPainter(
-              text: texts[i][0],
+              text: texts[i].$1,
               style: singleTextStyle ?? textStyle,
               alignment: singleTextAlignment,
               padding: singleCellPadding ?? cellPadding,
@@ -216,6 +254,62 @@ class GTableLayoutPainter extends GTableLayout {
           ),
         );
       }
+    }
+    super.layout();
+    paintOffset = GRenderUtil.getBlockPaintPoint(
+      anchor,
+      size.width,
+      size.height,
+      alignment,
+    );
+  }
+
+  GTableLayoutPainter.twoColumnIconAndText({
+    required List<(IconData?, String)> iconAndTexts,
+    Alignment leftColumnAlignment = Alignment.centerLeft,
+    Alignment rightColumnAlignment = Alignment.centerRight,
+    Alignment singleTextAlignment = Alignment.center,
+    EdgeInsets cellPadding = const EdgeInsets.symmetric(
+      vertical: 2,
+      horizontal: 4,
+    ),
+    EdgeInsets leftCellPadding = EdgeInsets.zero,
+    EdgeInsets? rightCellPadding,
+    required double iconSize,
+    Color? iconColor,
+    required TextStyle textStyle,
+    this.blockCornerRadius = 0,
+    this.blockStyle,
+    this.cellStyle,
+    this.anchor = Offset.zero,
+    this.alignment = Alignment.center,
+  }) : super(items: [], spanItems: [], padding: leftCellPadding) {
+    for (int i = 0; i < iconAndTexts.length; i++) {
+      if (iconAndTexts[i].$1 == null && iconAndTexts[i].$2.isEmpty) {
+        continue; // skip empty rows
+      }
+      items.add([
+        if (iconAndTexts[i].$1 != null)
+          GTableIconItemPainter(
+            icon: iconAndTexts[i].$1!,
+            iconSize: iconSize,
+            iconColor: iconColor,
+            alignment: leftColumnAlignment,
+            padding: cellPadding,
+          )
+        else
+          GTablePlaceHolderItemPainter(
+            contentSize: Size(iconSize, iconSize),
+            alignment: leftColumnAlignment,
+            padding: cellPadding,
+          ),
+        GTableTextItemPainter(
+          text: iconAndTexts[i].$2,
+          style: textStyle,
+          alignment: rightColumnAlignment,
+          padding: rightCellPadding ?? cellPadding,
+        ),
+      ]);
     }
     super.layout();
     paintOffset = GRenderUtil.getBlockPaintPoint(
@@ -317,15 +411,15 @@ class GTableLayoutPainter extends GTableLayout {
     if (cellStyle != null) {
       GRenderUtil.drawPath(
         canvas: canvas,
-        path:
-            Path()..addRect(
-              Rect.fromLTRB(
-                cellRect.left - item.padding.left,
-                cellRect.top - item.padding.top,
-                cellRect.right + item.padding.right,
-                cellRect.bottom + item.padding.bottom,
-              ),
+        path: Path()
+          ..addRect(
+            Rect.fromLTRB(
+              cellRect.left - item.padding.left,
+              cellRect.top - item.padding.top,
+              cellRect.right + item.padding.right,
+              cellRect.bottom + item.padding.bottom,
             ),
+          ),
         style: cellStyle,
       );
     }

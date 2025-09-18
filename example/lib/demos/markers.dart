@@ -43,11 +43,10 @@ class DemoMarkersPageState extends DemoBasePageState {
             scaleMode: GAxisScaleMode.zoom,
             axisMarkers: [
               GValueAxisMarker.label(
-                labelValue:
-                    dataSource.getSeriesValue(
-                      point: dataSource.lastPoint,
-                      key: keySMA,
-                    )!,
+                labelValue: dataSource.getSeriesValue(
+                  point: dataSource.lastPoint,
+                  key: keySMA,
+                )!,
               ),
             ],
             overlayMarkers: [
@@ -145,22 +144,20 @@ class DemoMarkersPageState extends DemoBasePageState {
                   coordinates: [
                     GCustomCoord(
                       x: 0,
-                      y:
-                          dataSource.getSeriesValue(
-                            point: dataSource.lastPoint,
-                            key: keySMA,
-                          )!,
+                      y: dataSource.getSeriesValue(
+                        point: dataSource.lastPoint,
+                        key: keySMA,
+                      )!,
                       coordinateConvertor: kCoordinateConvertorXPositionYValue,
                       coordinateConvertorReverse:
                           kCoordinateConvertorXPositionYValueReverse,
                     ),
                     GViewPortCoord(
                       point: dataSource.lastPoint.toDouble(),
-                      value:
-                          dataSource.getSeriesValue(
-                            point: dataSource.lastPoint,
-                            key: keySMA,
-                          )!,
+                      value: dataSource.getSeriesValue(
+                        point: dataSource.lastPoint,
+                        key: keySMA,
+                      )!,
                     ),
                   ],
                   theme: GOverlayMarkerTheme(
@@ -195,11 +192,10 @@ class DemoMarkersPageState extends DemoBasePageState {
               GOvalMarker.anchorAndRadius(
                 anchorCoord: GViewPortCoord(
                   point: dataSource.lastPoint.toDouble() + 5,
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint,
+                    key: keySMA,
+                  )!,
                 ),
                 pointRadiusSize: GSize.viewSize(10),
                 valueRadiusSize: GSize.viewSize(10),
@@ -216,11 +212,10 @@ class DemoMarkersPageState extends DemoBasePageState {
               GArcMarker.anchorAndRadius(
                 centerOCoord: GViewPortCoord(
                   point: dataSource.lastPoint.toDouble(),
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint,
+                    key: keySMA,
+                  )!,
                 ),
                 radiusSize: GSize.viewSize(30),
                 alignment: Alignment.center,
@@ -231,11 +226,10 @@ class DemoMarkersPageState extends DemoBasePageState {
               GShapeMarker(
                 anchorCoord: GViewPortCoord(
                   point: (dataSource.lastPoint - 10).toDouble(),
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint - 10,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint - 10,
+                    key: keySMA,
+                  )!,
                 ),
                 radiusSize: GSize.viewSize(20),
                 pathGenerator: GShapes.heart,
@@ -243,11 +237,10 @@ class DemoMarkersPageState extends DemoBasePageState {
               GShapeMarker(
                 anchorCoord: GViewPortCoord(
                   point: (dataSource.lastPoint - 20).toDouble(),
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint - 20,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint - 20,
+                    key: keySMA,
+                  )!,
                 ),
                 radiusSize: GSize.viewSize(20),
                 pathGenerator: (radius) => GShapes.circle(radius),
@@ -255,24 +248,22 @@ class DemoMarkersPageState extends DemoBasePageState {
               GShapeMarker(
                 anchorCoord: GViewPortCoord(
                   point: (dataSource.lastPoint - 30).toDouble(),
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint - 30,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint - 30,
+                    key: keySMA,
+                  )!,
                 ),
                 radiusSize: GSize.viewSize(20),
-                pathGenerator:
-                    (radius) => GShapes.polygon(radius, vertexCount: 6),
+                pathGenerator: (radius) =>
+                    GShapes.polygon(radius, vertexCount: 6),
               ),
               GShapeMarker(
                 anchorCoord: GViewPortCoord(
                   point: (dataSource.lastPoint - 40).toDouble(),
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint - 40,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint - 40,
+                    key: keySMA,
+                  )!,
                 ),
                 radiusSize: GSize.viewSize(20),
                 pathGenerator: (radius) => GShapes.star(radius, vertexCount: 5),
@@ -282,11 +273,10 @@ class DemoMarkersPageState extends DemoBasePageState {
                 text: "This\nmoves\nwhile\nthe\ngraph\nmoving",
                 anchorCoord: GViewPortCoord(
                   point: dataSource.lastPoint.toDouble() + 7,
-                  value:
-                      dataSource.getSeriesValue(
-                        point: dataSource.lastPoint,
-                        key: keySMA,
-                      )!,
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint,
+                    key: keySMA,
+                  )!,
                 ),
                 alignment: Alignment.centerRight,
               ),
@@ -392,7 +382,10 @@ class DemoMarkersPageState extends DemoBasePageState {
             onSelected: (Alignment selected) {
               (chart!.panels[0].findGraphById("line")!.findMarker("c1")
                       as GCalloutMarker)
-                  .alignment = Alignment(-selected.x, -selected.y);
+                  .alignment = Alignment(
+                -selected.x,
+                -selected.y,
+              );
               (chart!.panels[0].findGraphById("line")!.findMarker("c1")
                       as GCalloutMarker)
                   .keyCoordinates
@@ -447,11 +440,10 @@ class DemoMarkersPageState extends DemoBasePageState {
               }
               repaintChart();
             },
-            selected:
-                chart!.panels[0]
-                    .findGraphById("line")!
-                    .overlayMarkers[0]
-                    .visible,
+            selected: chart!.panels[0]
+                .findGraphById("line")!
+                .overlayMarkers[0]
+                .visible,
           ),
         ),
         AppLabelWidget(

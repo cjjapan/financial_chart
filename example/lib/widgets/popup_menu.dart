@@ -21,43 +21,38 @@ class AppPopupMenu<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuAnchor(
       //childFocusNode: _buttonFocusNode,
-      menuChildren:
-          items
-              .map(
-                (item) => MenuItemButton(
-                  onPressed: () => onSelected(item),
-                  child: Row(
-                    children: [
-                      if (selected != null && selected == item)
-                        const SizedBox(width: 24, child: Icon(Icons.check)),
-                      if (selected != null && selected != item)
-                        const SizedBox(width: 24),
-                      const SizedBox(width: 8),
-                      Text((labelResolver ?? _defaultLabelResolver).call(item)),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-      builder: (
-        BuildContext context,
-        MenuController controller,
-        Widget? child,
-      ) {
-        return AppButton(
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          text:
-              (selected != null)
+      menuChildren: items
+          .map(
+            (item) => MenuItemButton(
+              onPressed: () => onSelected(item),
+              child: Row(
+                children: [
+                  if (selected != null && selected == item)
+                    const SizedBox(width: 24, child: Icon(Icons.check)),
+                  if (selected != null && selected != item)
+                    const SizedBox(width: 24),
+                  const SizedBox(width: 8),
+                  Text((labelResolver ?? _defaultLabelResolver).call(item)),
+                ],
+              ),
+            ),
+          )
+          .toList(),
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+            return AppButton(
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+              text: (selected != null)
                   ? (labelResolver ?? _defaultLabelResolver).call(selected as T)
                   : '-',
-        );
-      },
+            );
+          },
     );
   }
 }

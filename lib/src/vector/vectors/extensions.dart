@@ -169,10 +169,9 @@ extension Vector2Extension on Vector2 {
   /// **not** a percentage (relative value).
   void moveToTarget(Vector2 target, double ds) {
     if (this != target) {
-      final diff =
-          _reusableVector
-            ..setFrom(target)
-            ..sub(this);
+      final diff = _reusableVector
+        ..setFrom(target)
+        ..sub(this);
 
       if (diff.length < ds) {
         setFrom(target);

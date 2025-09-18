@@ -121,8 +121,8 @@ class GGraphRender<C extends GGraph, T extends GGraphTheme>
           area: panel.graphArea(),
           theme:
               (marker.theme ??
-                  theme.overlayMarkerTheme ??
-                  chart.theme.overlayMarkerTheme),
+              theme.overlayMarkerTheme ??
+              chart.theme.overlayMarkerTheme),
           valueViewPort: panel.findValueViewPortById(graph.valueViewPortId),
         );
       }

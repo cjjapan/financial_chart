@@ -161,8 +161,9 @@ class GGraphAreaRender extends GGraphRender<GGraphArea, GGraphAreaTheme> {
       }
 
       if (intersection != null || i == valuePoints.length - 1) {
-        final style =
-            (isAbove == true) ? theme.styleAboveBase : theme.styleBelowBase;
+        final style = (isAbove == true)
+            ? theme.styleAboveBase
+            : theme.styleBelowBase;
         isAbove = null;
 
         Path areaPath = addPolygonPath(points: areaPoints, close: true);

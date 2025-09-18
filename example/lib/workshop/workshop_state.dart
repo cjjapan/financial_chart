@@ -128,40 +128,43 @@ class WorkshopState extends ChangeNotifier {
                 visible: false,
                 valueViewPortId: kVpPrice,
                 valueKey: keyIchimokuBase,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.red,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.red,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphLine(
                 id: "ichi-conv",
                 valueViewPortId: kVpPrice,
                 valueKey: keyIchimokuConversion,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.yellow,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.yellow,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphLine(
                 id: "ichi-lagging",
                 valueViewPortId: kVpPrice,
                 valueKey: keyIchimokuLagging,
-                theme: (chartTheme.graphThemes[GGraphLine.typeName]!
-                        as GGraphLineTheme)
-                    .copyWith(
-                      lineStyle: PaintStyle(
-                        strokeColor: Colors.purple,
-                        strokeWidth: 1.0,
-                      ),
-                    ),
+                theme:
+                    (chartTheme.graphThemes[GGraphLine.typeName]!
+                            as GGraphLineTheme)
+                        .copyWith(
+                          lineStyle: PaintStyle(
+                            strokeColor: Colors.purple,
+                            strokeWidth: 1.0,
+                          ),
+                        ),
               ),
               GGraphArea(
                 id: "ichi-ab",

@@ -28,15 +28,14 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     renderClipped(
       canvas: canvas,
       clipRect: area,
-      render:
-          () => doRender(
-            canvas: canvas,
-            chart: chart,
-            panel: panel,
-            component: component,
-            area: area,
-            theme: theme,
-          ),
+      render: () => doRender(
+        canvas: canvas,
+        chart: chart,
+        panel: panel,
+        component: component,
+        area: area,
+        theme: theme,
+      ),
     );
   }
 

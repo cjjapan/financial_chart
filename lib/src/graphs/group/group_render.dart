@@ -34,10 +34,9 @@ class GGraphGroupRender extends GGraphRender<GGraphGroup, GGraphTheme> {
         panel: panel,
         component: child,
         area: area,
-        theme:
-            child.theme == null
-                ? chart.theme.graphTheme(child.type)!
-                : (child.theme! as GGraphTheme),
+        theme: child.theme == null
+            ? chart.theme.graphTheme(child.type)!
+            : (child.theme! as GGraphTheme),
       );
     }
   }

@@ -188,50 +188,45 @@ class GChartWidgetState extends State<GChartWidget> {
             ),
             // tooltip widgets
             ...widget.chart.panels.asMap().entries.map(
-              (panelEntry) =>
-                  panelEntry.value.tooltip?.tooltipNotifier != null
-                      ? RepaintBoundary(
-                        child: ListenableBuilder(
-                          listenable:
-                              (panelEntry.value.tooltip?.tooltipNotifier)!,
-                          builder: (context, child) {
-                            final ctx =
-                                panelEntry
-                                    .value
-                                    .tooltip
-                                    ?.tooltipNotifier
-                                    ?.value;
-                            if (ctx == null) {
-                              return const SizedBox.shrink();
-                            }
-                            final tooltipWidget = panelEntry
-                                .value
-                                .tooltip
-                                ?.tooltipWidgetBuilder
-                                ?.call(
-                                  context,
-                                  ctx.area.size,
-                                  ctx.tooltip,
-                                  ctx.point,
-                                );
-                            if (tooltipWidget == null) {
-                              return const SizedBox.shrink();
-                            }
-                            return SizedBox(
-                              width: ctx.area.width,
-                              height: ctx.area.height,
-                              child: CustomSingleChildLayout(
-                                delegate: _TooltipSingleChildLayoutDelegate(
-                                  offset: ctx.anchorPosition,
-                                  area: ctx.area,
-                                ),
-                                child: IgnorePointer(child: tooltipWidget),
+              (panelEntry) => panelEntry.value.tooltip?.tooltipNotifier != null
+                  ? RepaintBoundary(
+                      child: ListenableBuilder(
+                        listenable:
+                            (panelEntry.value.tooltip?.tooltipNotifier)!,
+                        builder: (context, child) {
+                          final ctx =
+                              panelEntry.value.tooltip?.tooltipNotifier?.value;
+                          if (ctx == null) {
+                            return const SizedBox.shrink();
+                          }
+                          final tooltipWidget = panelEntry
+                              .value
+                              .tooltip
+                              ?.tooltipWidgetBuilder
+                              ?.call(
+                                context,
+                                ctx.area.size,
+                                ctx.tooltip,
+                                ctx.point,
+                              );
+                          if (tooltipWidget == null) {
+                            return const SizedBox.shrink();
+                          }
+                          return SizedBox(
+                            width: ctx.area.width,
+                            height: ctx.area.height,
+                            child: CustomSingleChildLayout(
+                              delegate: _TooltipSingleChildLayoutDelegate(
+                                offset: ctx.anchorPosition,
+                                area: ctx.area,
                               ),
-                            );
-                          },
-                        ),
-                      )
-                      : const SizedBox.shrink(),
+                              child: IgnorePointer(child: tooltipWidget),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         );

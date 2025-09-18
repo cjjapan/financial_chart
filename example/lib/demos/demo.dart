@@ -83,13 +83,12 @@ abstract class DemoBasePageState extends State<DemoBasePage>
             child: chart == null ? Container() : _buildControlPanel(context),
           ),
           Expanded(
-            child:
-                chart == null
-                    ? const Center(child: CircularProgressIndicator())
-                    : Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: buildChartWidget(chart!, this),
-                    ),
+            child: chart == null
+                ? const Center(child: CircularProgressIndicator())
+                : Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: buildChartWidget(chart!, this),
+                  ),
           ),
         ],
       ),

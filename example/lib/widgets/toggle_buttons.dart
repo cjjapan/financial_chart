@@ -39,12 +39,9 @@ class AppToggleButtons<T> extends StatelessWidget {
           onSelected(items[index]);
         },
         isSelected: items.map((e) => selected == e).toList(),
-        children:
-            items
-                .map(
-                  (e) => Text((labelResolver ?? _defaultLabelResolver).call(e)),
-                )
-                .toList(),
+        children: items
+            .map((e) => Text((labelResolver ?? _defaultLabelResolver).call(e)))
+            .toList(),
       ),
     );
   }

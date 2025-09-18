@@ -69,13 +69,12 @@ abstract class GOverlayMarkerRender<
             style: handleTheme.style,
           );
         case GControlHandleShape.diamond:
-          final path =
-              Path()
-                ..moveTo(handle.position.dx, rect.top)
-                ..lineTo(rect.right, handle.position.dy)
-                ..lineTo(handle.position.dx, rect.bottom)
-                ..lineTo(rect.left, handle.position.dy)
-                ..close();
+          final path = Path()
+            ..moveTo(handle.position.dx, rect.top)
+            ..lineTo(rect.right, handle.position.dy)
+            ..lineTo(handle.position.dx, rect.bottom)
+            ..lineTo(rect.left, handle.position.dy)
+            ..close();
           drawPath(canvas: canvas, path: path, style: handleTheme.style);
           break;
         case GControlHandleShape.crossCircle:
@@ -84,13 +83,12 @@ abstract class GOverlayMarkerRender<
             path: Path()..addOval(rect),
             style: handleTheme.style,
           );
-          final crossPath =
-              Path()
-                ..moveTo(rect.left, handle.position.dy)
-                ..lineTo(rect.right, handle.position.dy)
-                ..moveTo(handle.position.dx, rect.top)
-                ..lineTo(handle.position.dx, rect.bottom)
-                ..close();
+          final crossPath = Path()
+            ..moveTo(rect.left, handle.position.dy)
+            ..lineTo(rect.right, handle.position.dy)
+            ..moveTo(handle.position.dx, rect.top)
+            ..lineTo(handle.position.dx, rect.bottom)
+            ..close();
           drawPath(canvas: canvas, path: crossPath, style: handleTheme.style);
           break;
         case GControlHandleShape.crossSquare:
@@ -99,13 +97,12 @@ abstract class GOverlayMarkerRender<
             path: Path()..addRect(rect),
             style: handleTheme.style,
           );
-          final crossPath =
-              Path()
-                ..moveTo(rect.left, handle.position.dy)
-                ..lineTo(rect.right, handle.position.dy)
-                ..moveTo(handle.position.dx, rect.top)
-                ..lineTo(handle.position.dx, rect.bottom)
-                ..close();
+          final crossPath = Path()
+            ..moveTo(rect.left, handle.position.dy)
+            ..lineTo(rect.right, handle.position.dy)
+            ..moveTo(handle.position.dx, rect.top)
+            ..lineTo(handle.position.dx, rect.bottom)
+            ..close();
           drawPath(canvas: canvas, path: crossPath, style: handleTheme.style);
           break;
       }

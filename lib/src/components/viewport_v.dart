@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -7,6 +9,9 @@ import '../values/value.dart';
 import 'panel/panel.dart';
 import 'viewport_resize.dart';
 import 'viewport_v_scaler.dart';
+
+/// The value scale type of value viewport.
+enum GValueViewPortScaleType { linear, logarithmic }
 
 /// Viewport for value (vertical) axis
 class GValueViewPort extends ChangeNotifier with Diagnosticable {
@@ -58,6 +63,15 @@ class GValueViewPort extends ChangeNotifier with Diagnosticable {
   /// The maximum value range when scaling.
   final double? maxRangeSize;
 
+  /// The scale type of the viewport. see [GValueViewPortScaleType].
+  /// default to [GValueViewPortScaleType.linear].
+  final GValue<GValueViewPortScaleType> _scaleType =
+      GValue<GValueViewPortScaleType>(GValueViewPortScaleType.linear);
+  GValueViewPortScaleType get scaleType => _scaleType.value;
+  set scaleType(GValueViewPortScaleType value) => _scaleType.value = value;
+
+  final double logBase = 2.302585092994046; // =log(10);
+
   /// Callback when range updated.
   final GRange Function({required GRange updatedRange, required bool finished})?
   onRangeUpdate;
@@ -103,7 +117,7 @@ class GValueViewPort extends ChangeNotifier with Diagnosticable {
     this.onRangeUpdate,
     this.maxRangeSize,
     this.minRangeSize,
-    double? baseValue,
+    GValueViewPortScaleType scaleType = GValueViewPortScaleType.linear,
   }) {
     assert(
       (initialStartValue == null && initialEndValue == null) ||
@@ -122,6 +136,7 @@ class GValueViewPort extends ChangeNotifier with Diagnosticable {
         assert(minRangeSize! < maxRangeSize!);
       }
     }
+    _scaleType.value = scaleType;
     _range.update(initialStartValue ?? 0, initialEndValue ?? 1);
     _animationMilliseconds.value = animationMilliseconds;
     if (resizeMode != null) {
@@ -292,14 +307,53 @@ class GValueViewPort extends ChangeNotifier with Diagnosticable {
     }
   }
 
+  double symlog(double x, {double linthresh = 0.01, double linscale = 1.0}) {
+    final sign = x >= 0 ? 1.0 : -1.0;
+    final absX = x.abs();
+    if (absX <= linthresh) {
+      return x;
+    } else {
+      return sign * (linthresh + log(absX / linthresh) / log(10) * linscale);
+    }
+  }
+
+  double invSymlog(double y, {double linthresh = 0.01, double linscale = 1.0}) {
+    final sign = y >= 0 ? 1.0 : -1.0;
+    final absy = y.abs();
+    if (absy <= linthresh) {
+      return y;
+    } else {
+      return sign * linthresh * pow(10, (absy - linthresh) / linscale);
+    }
+  }
+
   /// convert value to position
   double valueToPosition(Rect area, double value) {
+    if (scaleType == GValueViewPortScaleType.logarithmic) {
+      final logValue = symlog(value) / logBase;
+      final logStart = symlog(startValue) / logBase;
+      final logEnd = symlog(endValue) / logBase;
+      final pos =
+          area.bottom -
+          (logValue - logStart) / (logEnd - logStart) * area.height;
+      return pos;
+    }
+
     return area.bottom -
         (value - startValue) / (endValue - startValue) * area.height;
   }
 
   /// convert position to value
   double positionToValue(Rect area, double position) {
+    if (scaleType == GValueViewPortScaleType.logarithmic) {
+      final logStart = symlog(startValue) / logBase;
+      final logEnd = symlog(endValue) / logBase;
+      final logValue =
+          logStart +
+          (area.bottom - position) / area.height * (logEnd - logStart);
+      final value = invSymlog(logValue * logBase);
+      return value;
+    }
     return startValue +
         (area.bottom - position) / area.height * (endValue - startValue);
   }
@@ -353,11 +407,29 @@ class GValueViewPort extends ChangeNotifier with Diagnosticable {
     }
     autoScaleFlg = false;
     double centerValue = (startRange.first! + startRange.last!) / 2;
-    double endValueNew =
-        centerValue + (startRange.last! - centerValue) / zoomRatio;
-    double startValueNew =
-        centerValue + (startRange.first! - centerValue) / zoomRatio;
-    (startValueNew, endValueNew) = clampScaleRange(startValueNew, endValueNew);
+    double startValueNew = startValue;
+    double endValueNew = endValue;
+    if (scaleType == GValueViewPortScaleType.linear) {
+      endValueNew = centerValue + (startRange.last! - centerValue) / zoomRatio;
+      startValueNew =
+          centerValue + (startRange.first! - centerValue) / zoomRatio;
+      (startValueNew, endValueNew) = clampScaleRange(
+        startValueNew,
+        endValueNew,
+      );
+    } else {
+      final logStart = symlog(startRange.first!) / logBase;
+      final logEnd = symlog(startRange.last!) / logBase;
+      final logCenter = (logStart + logEnd) / 2;
+      double logEndNew = logCenter + (logEnd - logCenter) / zoomRatio;
+      double logStartNew = logCenter + (logStart - logCenter) / zoomRatio;
+      endValueNew = invSymlog(logEndNew * logBase);
+      startValueNew = invSymlog(logStartNew * logBase);
+      (startValueNew, endValueNew) = clampScaleRange(
+        startValueNew,
+        endValueNew,
+      );
+    }
     animateToRange(
       GRange.range(startValueNew, endValueNew),
       true,

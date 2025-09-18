@@ -94,6 +94,19 @@ class _ValueViewPortControlViewState extends State<ValueViewPortControlView> {
             state.notify();
           },
         ),
+        const ControlLabel(
+          label: "scaleType",
+          description: "switch the value scale type.",
+        ),
+        AppToggleButtons<GValueViewPortScaleType>(
+          items: GValueViewPortScaleType.values,
+          labelResolver: (m) => m.name,
+          selected: viewPort.scaleType,
+          onSelected: (type) {
+            viewPort.scaleType = type;
+            state.notify();
+          },
+        ),
       ],
     );
   }

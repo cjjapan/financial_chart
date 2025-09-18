@@ -137,62 +137,57 @@ class DemoTooltipPageState extends DemoBasePageState {
             items: const [true, false],
             onSelected: (bool selected) {
               if (selected) {
-                chart!.panels[0].tooltip!.tooltipWidgetBuilder = (
-                  context,
-                  size,
-                  tooltip,
-                  point,
-                ) {
-                  final values = chart!.dataSource.getSeriesValueAsMap(
-                    point: point,
-                    keys: [keyOpen, keyHigh, keyLow, keyClose],
-                  );
-                  if (values.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-                  final graphTheme =
-                      chart!.theme.graphThemes["ohlc"] as GGraphOhlcTheme;
-                  final textColor =
-                      (values[keyOpen]! > values[keyClose]!
+                chart!.panels[0].tooltip!.tooltipWidgetBuilder =
+                    (context, size, tooltip, point) {
+                      final values = chart!.dataSource.getSeriesValueAsMap(
+                        point: point,
+                        keys: [keyOpen, keyHigh, keyLow, keyClose],
+                      );
+                      if (values.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      final graphTheme =
+                          chart!.theme.graphThemes["ohlc"] as GGraphOhlcTheme;
+                      final textColor = (values[keyOpen]! > values[keyClose]!
                           ? graphTheme.barStyleMinus.fillColor
                           : graphTheme.barStylePlus.fillColor);
-                  return Container(
-                    width: 160,
-                    height: 100,
-                    margin: const EdgeInsets.all(4),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(220),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black12),
-                    ),
-                    child: Column(
-                      children: [
-                        ...values.entries.map((e) {
-                          return Row(
-                            children: [
-                              Text(
-                                e.key.replaceFirst(
-                                  e.key[0],
-                                  e.key[0].toUpperCase(),
-                                ),
-                                style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Expanded(child: SizedBox.shrink()),
-                              Text(
-                                e.value.toStringAsFixed(2),
-                                style: TextStyle(color: textColor),
-                              ),
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
-                  );
-                };
+                      return Container(
+                        width: 160,
+                        height: 100,
+                        margin: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(220),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.black12),
+                        ),
+                        child: Column(
+                          children: [
+                            ...values.entries.map((e) {
+                              return Row(
+                                children: [
+                                  Text(
+                                    e.key.replaceFirst(
+                                      e.key[0],
+                                      e.key[0].toUpperCase(),
+                                    ),
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const Expanded(child: SizedBox.shrink()),
+                                  Text(
+                                    e.value.toStringAsFixed(2),
+                                    style: TextStyle(color: textColor),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ],
+                        ),
+                      );
+                    };
               } else {
                 chart!.panels[0].tooltip!.tooltipWidgetBuilder = null;
               }

@@ -112,8 +112,8 @@ class DemoGraphBarPageState extends DemoGraphBasePageState {
           repaintChart();
         },
         selected: graph.baseValue ?? 0,
-        labelResolver:
-            (item) => chart!.dataSource.seriesValueFormater.call(item, 0),
+        labelResolver: (item) =>
+            chart!.dataSource.seriesValueFormater.call(item, 0),
       ),
     ),
   ];

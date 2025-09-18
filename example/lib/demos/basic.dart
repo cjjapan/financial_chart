@@ -31,19 +31,18 @@ class BasicDemoPageState extends State<BasicDemoPage>
     loadYahooFinanceData('AAPL').then((response) {
       // build data source
       final dataSource = GDataSource<int, GData<int>>(
-        dataList:
-            response.candlesData.map((candle) {
-              return GData<int>(
-                pointValue: candle.date.millisecondsSinceEpoch,
-                seriesValues: [
-                  candle.open,
-                  candle.high,
-                  candle.low,
-                  candle.close,
-                  candle.volume.toDouble(),
-                ],
-              );
-            }).toList(),
+        dataList: response.candlesData.map((candle) {
+          return GData<int>(
+            pointValue: candle.date.millisecondsSinceEpoch,
+            seriesValues: [
+              candle.open,
+              candle.high,
+              candle.low,
+              candle.close,
+              candle.volume.toDouble(),
+            ],
+          );
+        }).toList(),
         seriesProperties: const [
           GDataSeriesProperty(key: 'open', label: 'Open', precision: 2),
           GDataSeriesProperty(key: 'high', label: 'High', precision: 2),
@@ -103,13 +102,12 @@ class BasicDemoPageState extends State<BasicDemoPage>
     return Scaffold(
       appBar: AppBar(title: const Text("Basic demo"), centerTitle: true),
       body: Container(
-        child:
-            chart == null
-                ? const Center(child: CircularProgressIndicator())
-                : Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: GChartWidget(chart: chart!, tickerProvider: this),
-                ),
+        child: chart == null
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: const EdgeInsets.all(10),
+                child: GChartWidget(chart: chart!, tickerProvider: this),
+              ),
       ),
     );
   }

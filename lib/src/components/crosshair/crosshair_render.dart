@@ -130,9 +130,9 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
       final point = pointViewPort.nearestPoint(axisArea, crossPosition);
       final pointValue = chart.dataSource.getPointValue(point);
       if (pointValue != null) {
-        final labelText = (pointAxis.pointFormatter ??
-                chart.dataSource.pointValueFormater)
-            .call(point, pointValue);
+        final labelText =
+            (pointAxis.pointFormatter ?? chart.dataSource.pointValueFormater)
+                .call(point, pointValue);
         if (labelText.isNotEmpty) {
           drawPointAxisLabel(
             canvas: canvas,
@@ -167,9 +167,9 @@ class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
         continue;
       }
       final value = valueViewPort.positionToValue(axisArea, crossPosition.dy);
-      final labelText = (valueAxis.valueFormatter ??
-              chart.dataSource.seriesValueFormater)
-          .call(value, valueViewPort.valuePrecision);
+      final labelText =
+          (valueAxis.valueFormatter ?? chart.dataSource.seriesValueFormater)
+              .call(value, valueViewPort.valuePrecision);
       if (labelText.isNotEmpty) {
         drawValueAxisLabel(
           canvas: canvas,

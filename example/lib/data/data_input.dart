@@ -89,17 +89,16 @@ Future<OHLCDataInputAsync> createAsyncDataInput(
   int asyncDelayMillis = 200,
 }) async {
   final response = await loadYahooFinanceData(ticker);
-  final ohlcList =
-      response.candlesData.map((candle) {
-        return OHLCData(
-          time: candle.date.millisecondsSinceEpoch,
-          open: candle.open,
-          close: candle.close,
-          high: candle.high,
-          low: candle.low,
-          volume: candle.volume.toDouble(),
-        );
-      }).toList();
+  final ohlcList = response.candlesData.map((candle) {
+    return OHLCData(
+      time: candle.date.millisecondsSinceEpoch,
+      open: candle.open,
+      close: candle.close,
+      high: candle.high,
+      low: candle.low,
+      volume: candle.volume.toDouble(),
+    );
+  }).toList();
   return OHLCDataInputAsyncMock(
     sourceDataList: ohlcList,
     asyncDelayMillis: asyncDelayMillis,

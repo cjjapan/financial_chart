@@ -46,12 +46,9 @@ class WorkshopControlViewState extends State<WorkshopControlView>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          widget.isDrawer
-              ? null
-              : BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 0.5),
-              ),
+      decoration: widget.isDrawer
+          ? null
+          : BoxDecoration(border: Border.all(color: Colors.grey, width: 0.5)),
       child: Column(
         children: [
           Stack(
@@ -192,9 +189,8 @@ class WorkshopControlViewState extends State<WorkshopControlView>
                     AppToggleButtons<ThemeMode>(
                       direction: Axis.horizontal,
                       items: const [ThemeMode.dark, ThemeMode.light],
-                      labelResolver:
-                          (m) =>
-                              "${m.name[0].toUpperCase()}${m.name.substring(1)}",
+                      labelResolver: (m) =>
+                          "${m.name[0].toUpperCase()}${m.name.substring(1)}",
                       selected: widget.workshopState.mode,
                       onSelected: (mode) {
                         widget.workshopState.mode = mode;

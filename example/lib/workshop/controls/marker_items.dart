@@ -50,6 +50,7 @@ class _MarkerItemsControlViewState extends State<MarkerItemsControlView> {
                 "heart",
                 "star",
                 "spline",
+                "svg",
               ],
               labelResolver: (m) => m,
               selected: currentMarkerType,
@@ -207,6 +208,14 @@ class _MarkerItemsControlViewState extends State<MarkerItemsControlView> {
               y: 0.5 + (i % 2 == 0 ? 0.1 : -0.1) * ((i > 0 && i < 10) ? 2 : 0),
             ),
           ),
+        );
+        break;
+      case "svg":
+        marker = GSvgMarker(
+          anchorPosition: coordinate,
+          alignment: Alignment.center,
+          size: Size(120, 120),
+          svgAssetKey: "assets/flutter.svg",
         );
         break;
       default:

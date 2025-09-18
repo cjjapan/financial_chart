@@ -50,6 +50,15 @@ class GPointTickerStrategyDefault implements GPointTickerStrategy {
   }
 }
 
+/// The interval type for logarithmic scale value ticks.
+enum GValueTickerLogScaleIntervalType {
+  /// ticks are spaced evenly in view size.
+  sizeSpacingEvenly,
+
+  /// ticks are spaced evenly in value.
+  valueSpacingEvenly,
+}
+
 /// Default strategy to calculate value ticks.
 class GValueTickerStrategyDefault implements GValueTickerStrategy {
   /// The minimum size of a tick in pixel.
@@ -57,7 +66,13 @@ class GValueTickerStrategyDefault implements GValueTickerStrategy {
   /// the final tick size will in range valueTickMinSize ~ valueTickMinSize*2
   final double tickerMinSize;
 
-  const GValueTickerStrategyDefault({this.tickerMinSize = 60});
+  final GValueTickerLogScaleIntervalType logScaleIntervalType;
+
+  const GValueTickerStrategyDefault({
+    this.tickerMinSize = 60,
+    this.logScaleIntervalType =
+        GValueTickerLogScaleIntervalType.sizeSpacingEvenly,
+  });
 
   double _defaultTickerValueInterval(double valueRange) {
     if (valueRange <= 0) {
@@ -98,25 +113,95 @@ class GValueTickerStrategyDefault implements GValueTickerStrategy {
       tickInterval /= 2;
       tickSize /= 2;
     }
-    List<double> valueTicks = [];
     double valueHigh = viewPort.endValue;
     double valueLow = viewPort.startValue;
     double baseValue = _defaultBaseValue(viewPort.centerValue, tickInterval);
 
-    double tickValue = baseValue;
-    while (tickValue <= valueHigh) {
-      if (tickValue >= valueLow) {
-        valueTicks.add(tickValue);
+    if (viewPort.scaleType == GValueViewPortScaleType.logarithmic) {
+      return generateLogTicks(
+        size: viewSize,
+        sizeInterval: tickSize,
+        lowValue: valueLow,
+        highValue: valueHigh,
+        valueIntervalMin: tickInterval,
+        viewPort: viewPort,
+      );
+    } else {
+      List<double> valueTicks = [];
+      double tickValue = baseValue;
+      while (tickValue <= valueHigh) {
+        if (tickValue >= valueLow) {
+          valueTicks.add(tickValue);
+        }
+        tickValue += tickInterval;
       }
-      tickValue += tickInterval;
-    }
-    tickValue = baseValue - tickInterval;
-    while (tickValue >= valueLow) {
-      if (tickValue <= valueHigh) {
-        valueTicks.add(tickValue);
+      tickValue = baseValue - tickInterval;
+      while (tickValue >= valueLow) {
+        if (tickValue <= valueHigh) {
+          valueTicks.add(tickValue);
+        }
+        tickValue -= tickInterval;
       }
-      tickValue -= tickInterval;
+      return valueTicks;
     }
-    return valueTicks;
+  }
+
+  List<double> generateLogTicks({
+    required double size,
+    required double sizeInterval,
+    required double lowValue,
+    required double highValue,
+    required double valueIntervalMin,
+    required GValueViewPort viewPort,
+  }) {
+    List<double> ticks = [];
+    final valueInterval = valueIntervalMin;
+    final centerValueRaw = (lowValue + highValue) / 2;
+    final centerValue =
+        (centerValueRaw / valueInterval).round() * valueInterval;
+
+    if (logScaleIntervalType ==
+        GValueTickerLogScaleIntervalType.valueSpacingEvenly) {
+      for (
+        double value = centerValue;
+        value >= lowValue - valueInterval;
+        value -= valueInterval
+      ) {
+        if (value >= lowValue - valueInterval && value <= highValue) {
+          ticks.add(value);
+        }
+      }
+
+      for (
+        double value = centerValue + valueInterval;
+        value <= highValue;
+        value += valueInterval
+      ) {
+        if (value >= lowValue && value <= highValue) {
+          ticks.add(value);
+        }
+      }
+    } else {
+      final minExp = (log(lowValue / centerValue) / viewPort.logBase);
+      final maxExp = (log(highValue / centerValue) / viewPort.logBase);
+      if (minExp.isInfinite || maxExp.isInfinite) {
+        return [];
+      }
+      final centerExp = 0.0;
+      final expInterval = (sizeInterval / size) * (maxExp - minExp);
+      double exp = centerExp;
+      while (exp >= minExp) {
+        final tick = centerValue * pow(10, exp);
+        ticks.add(tick);
+        exp -= expInterval;
+      }
+      exp = centerExp + expInterval;
+      while (exp <= maxExp) {
+        final tick = centerValue * pow(10, exp);
+        ticks.add(tick);
+        exp += expInterval;
+      }
+    }
+    return ticks;
   }
 }
