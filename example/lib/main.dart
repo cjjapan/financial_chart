@@ -36,7 +36,7 @@ final routes = {
   // '/demo/test_data_loader': (context) => const ChartDataLoadDemoPage(),
 };
 
-final initialRoute = '/demo/workshop';
+final initialRoute = '/demo';
 
 class CustomScrollBehavior extends MaterialScrollBehavior {
   @override
