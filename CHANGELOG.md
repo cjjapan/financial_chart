@@ -1,3 +1,18 @@
+## 0.3.6
+2025-10-11
+- add more markers.
+  + `GArrowLineMarker` - arrow line with customizable arrow heads at start and end.
+  + `GStatsLineMarker` - statistical line marker that extends `GArrowLineMarker` with value statistics.
+  + `GCrosslineMarker` - crossline marker for marking horizontal and vertical lines.
+  + `GCalloutMarker` - callout/annotation marker with pointer.
+  + `GFibRetracementMarker` - Fibonacci retracement marker.
+  + `GFibCircleMarker` - Fibonacci circle marker.
+  + `GFibArcMarker` - Fibonacci arc marker.
+  + `GFibResistanceFanMarker` - Fibonacci resistance fan marker.
+  + `GFibTimeZoneMarker` - Fibonacci timezone marker.
+- **[breaking change]** deprecate `GArrowMarker` in favor of `GArrowLineMarker`.
+- update workshop demo to include new markers.
+
 ## 0.3.5
 2025-09-18
 - sdk version up.

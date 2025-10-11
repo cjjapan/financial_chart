@@ -39,7 +39,20 @@ class _MarkerItemsControlViewState extends State<MarkerItemsControlView> {
               items: const [
                 "Arc 1",
                 "Arc 2",
-                "Arrow",
+                "Arrow 1",
+                "Arrow 2",
+                "crossline 1",
+                "crossline 2",
+                "statsLine 1",
+                "statsLine 2",
+                "fibonacci retracement",
+                "fibonacci circle",
+                "fibonacci arc 1",
+                "fibonacci arc 2",
+                "fibonacci resistance fan 1",
+                "fibonacci resistance fan 2",
+                "fibonacci timezone 1",
+                "fibonacci timezone 2",
                 "callout",
                 "label",
                 "oval",
@@ -114,10 +127,151 @@ class _MarkerItemsControlViewState extends State<MarkerItemsControlView> {
           closeType: GArcCloseType.none,
         );
         break;
-      case "Arrow":
-        marker = GArrowMarker(
+      case "Arrow 1":
+        marker = GArrowLineMarker(
           startCoord: coordinate,
           endCoord: GPositionCoord.rational(x: 0.8, y: 0.2),
+        );
+        break;
+      case "Arrow 2":
+        marker = GArrowLineMarker(
+          startCoord: coordinate,
+          endCoord: GPositionCoord.rational(x: 0.8, y: 0.2),
+          startHead: GArrowHead(type: GArrowHeadType.diamond),
+          endHead: GArrowHead(type: GArrowHeadType.stealth),
+        );
+        break;
+      case "crossline 1":
+        marker = GCrosslineMarker(anchor: coordinate);
+        break;
+      case "crossline 2":
+        final point = (chart.pointViewPort.endPoint.toInt() - 10);
+        marker = GCrosslineMarker(
+          anchor: GViewPortCoord(
+            point: point.toDouble(),
+            value:
+                chart.dataSource.getSeriesValue(point: point, key: "close") ??
+                chart.dataSource.getSeriesValue(
+                  point: chart.dataSource.lastPoint,
+                  key: "close",
+                )!,
+          ),
+          rightRay: false,
+        );
+        break;
+      case "statsLine 1":
+        marker = GStatsLineMarker(
+          startCoord: GPositionCoord.rational(x: 0.1, y: 0.5),
+          endCoord: GPositionCoord.rational(x: 0.5, y: 0.9),
+          theme: chart.theme.overlayMarkerTheme.copyWith(
+            labelStyle: chart.theme.overlayMarkerTheme.labelStyle?.copyWith(
+              backgroundStyle: PaintStyle(),
+            ),
+          ),
+        );
+        break;
+      case "statsLine 2":
+        marker = GStatsLineMarker(
+          startCoord: GPositionCoord.rational(x: 0.1, y: 0.9),
+          endCoord: GPositionCoord.rational(x: 0.5, y: 0.5),
+          statsBoxPosition: 0.5,
+          startRay: true,
+          endRay: true,
+          showAngleStats: true,
+          showPointStats: false,
+          showValueStats: false,
+          showDistance: false,
+          fillStyle: GStatsLineFillStyle.triangle,
+        );
+        break;
+      case "fibonacci retracement":
+        marker = GFibRetracementMarker(
+          startCoord: GPositionCoord.rational(x: 0.3, y: 0.3),
+          endCoord: GPositionCoord.rational(x: 0.7, y: 0.7),
+          startRay: false,
+          endRay: false,
+        );
+        break;
+      case "fibonacci circle":
+        marker = GFibCircleMarker(
+          startCoord: GPositionCoord.rational(x: 0.5, y: 0.5),
+          endCoord: GPositionCoord.rational(x: 0.7, y: 0.7),
+        );
+        break;
+      case "fibonacci arc 1":
+        marker = GFibArcMarker(
+          startCoord: GPositionCoord.rational(x: 0.5, y: 0.5),
+          endCoord: GPositionCoord.rational(x: 0.7, y: 0.7),
+          startTheta: 0,
+          endTheta: pi,
+        );
+        break;
+      case "fibonacci arc 2":
+        marker = GFibArcMarker(
+          startCoord: GPositionCoord.rational(x: 0.5, y: 0.5),
+          endCoord: GPositionCoord.rational(x: 0.7, y: 0.7),
+          startTheta: pi + pi / 2,
+          endTheta: 2 * pi - pi / 8,
+        );
+        break;
+      case "fibonacci resistance fan 1":
+        marker = GFibResistanceFanMarker(
+          startCoord: GPositionCoord.rational(x: 0.3, y: 0.7),
+          endCoord: GPositionCoord.rational(x: 0.8, y: 0.3),
+        );
+        break;
+      case "fibonacci resistance fan 2":
+        marker = GFibResistanceFanMarker(
+          startCoord: GPositionCoord.rational(x: 0.7, y: 0.3),
+          endCoord: GPositionCoord.rational(x: 0.3, y: 0.7),
+          extendRay: false,
+          showPointLevelStartLabels: false,
+          showValueLevelStartLabels: false,
+          theme: chart.theme.overlayMarkerTheme.copyWith(
+            labelStyle: chart.theme.overlayMarkerTheme.labelStyle?.copyWith(
+              backgroundStyle: PaintStyle(),
+            ),
+          ),
+        );
+        break;
+      case "fibonacci timezone 1":
+        final startPoint = (chart.pointViewPort.startPoint + 1)
+            .ceil()
+            .toDouble();
+        marker = GFibTimeZoneMarker(
+          startCoord: GCustomCoord(
+            x: startPoint.toDouble(),
+            y: 0.5,
+            coordinateConvertor: kCoordinateConvertorXPointYPosition,
+            coordinateConvertorReverse:
+                kCoordinateConvertorXPointYPositionReverse,
+          ),
+          endCoord: GCustomCoord(
+            x: startPoint.toDouble() + 1.0,
+            y: 0.5,
+            coordinateConvertor: kCoordinateConvertorXPointYPosition,
+            coordinateConvertorReverse:
+                kCoordinateConvertorXPointYPositionReverse,
+          ),
+        );
+        break;
+      case "fibonacci timezone 2":
+        final endPoint = (chart.pointViewPort.endPoint - 1).floor().toDouble();
+        marker = GFibTimeZoneMarker(
+          startCoord: GCustomCoord(
+            x: endPoint,
+            y: 0.5,
+            coordinateConvertor: kCoordinateConvertorXPointYPosition,
+            coordinateConvertorReverse:
+                kCoordinateConvertorXPointYPositionReverse,
+          ),
+          endCoord: GCustomCoord(
+            x: endPoint - 2.0,
+            y: 0.5,
+            coordinateConvertor: kCoordinateConvertorXPointYPosition,
+            coordinateConvertorReverse:
+                kCoordinateConvertorXPointYPositionReverse,
+          ),
         );
         break;
       case "callout":
@@ -125,14 +279,14 @@ class _MarkerItemsControlViewState extends State<MarkerItemsControlView> {
           anchorCoord: coordinate,
           alignment: Alignment.topLeft,
           text:
-              "I ran to where the sun shines and the wind blows soft, \nto where the grass is green and the water is clear. \nAnd I found peace.",
+              "A long long long long long long message line 1\nA long message line 2. \nA long message line 3. \nA long message line 4. \nA long message line 5.",
         );
         break;
       case "label":
         marker = GLabelMarker(
           anchorCoord: coordinate,
           alignment: Alignment.center,
-          text: "You gotta put the past behind you before you can move on.",
+          text: "Some message.",
         );
         break;
       case "oval":

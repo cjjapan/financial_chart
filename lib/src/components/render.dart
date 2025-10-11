@@ -1,3 +1,4 @@
+import 'package:financial_chart/financial_chart.dart';
 import 'package:flutter/painting.dart';
 
 import '../chart.dart';
@@ -184,7 +185,21 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     required double y1,
     required double x2,
     required double y2,
-  }) => GRenderUtil.addLinePath(toPath: toPath, x1: x1, y1: y1, x2: x2, y2: y2);
+    Rect? area,
+    bool startRay = false,
+    bool endRay = false,
+    List<double>? resultPathPoints,
+  }) => GRenderUtil.addLinePath(
+    toPath: toPath,
+    x1: x1,
+    y1: y1,
+    x2: x2,
+    y2: y2,
+    area: area,
+    startRay: startRay,
+    endRay: endRay,
+    resultPathPoints: resultPathPoints,
+  );
 
   Path addRectPath({
     Path? toPath,

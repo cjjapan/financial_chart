@@ -4,6 +4,7 @@ import '../../values/coord.dart';
 import '../../values/value.dart';
 import 'arrow_marker_render.dart';
 
+@Deprecated("Use GArrowLineMarker instead")
 class GArrowMarker extends GOverlayMarker {
   final GValue<double> _headWidth;
   double get headWidth => _headWidth.value;

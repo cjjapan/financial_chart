@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'demos/basic.dart';
 import 'demos/dynamic_data.dart';
 import 'demos/live.dart';
+import 'demos/sync_viewport.dart';
 import 'workshop/workshop.dart';
 
 final ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.light);
@@ -30,9 +31,12 @@ final routes = {
   // '/demo/markers': (context) => const DemoMarkersPage(),
   '/demo/loading_data': (context) => const DemoDynamicDataPage(),
   '/demo/live_update': (context) => const DemoLiveUpdatePage(),
+  '/demo/multiple_charts': (context) => const SyncDemoPage(),
   // '/demo/testing': (context) => const PlayApp(),
   // '/demo/test_data_loader': (context) => const ChartDataLoadDemoPage(),
 };
+
+final initialRoute = '/demo/workshop';
 
 class CustomScrollBehavior extends MaterialScrollBehavior {
   @override
@@ -62,7 +66,7 @@ class _MyAppState extends State<MyApp> {
             //showPerformanceOverlay: true,
             scrollBehavior: CustomScrollBehavior(),
             routes: routes,
-            initialRoute: '/demo',
+            initialRoute: initialRoute,
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
             themeMode: mode,
