@@ -1,3 +1,7 @@
+## 0.3.7
+2025-10-15
+- fix scaling issue of `GValueViewPort` with logarithmic scale when panning.
+
 ## 0.3.6
 2025-10-11
 - add more markers.
