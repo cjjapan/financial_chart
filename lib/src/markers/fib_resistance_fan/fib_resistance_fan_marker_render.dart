@@ -1,5 +1,4 @@
 import 'package:financial_chart/financial_chart.dart';
-import 'package:financial_chart/src/markers/fib_resistance_fan/fib_resistance_fan_marker.dart';
 import 'package:flutter/painting.dart';
 
 class GFibonacciResistanceFanMarkerRender

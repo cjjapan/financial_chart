@@ -146,12 +146,33 @@ class GValueViewPortInteractionHelper {
     if (!isScaling) {
       return;
     }
-    double valueMoved =
-        (movedDistance / area.height) *
-        (_rangeScaling.last! - _rangeScaling.first!);
-    double endValueNew = _rangeScaling.last! + valueMoved;
-    double startValueNew = _rangeScaling.first! + valueMoved;
-    _valueViewPort!.setRange(startValue: startValueNew, endValue: endValueNew);
+    if (_valueViewPort!.scaleType == GValueViewPortScaleType.linear) {
+      double valueMoved =
+          (movedDistance / area.height) *
+          (_rangeScaling.last! - _rangeScaling.first!);
+      double endValueNew = _rangeScaling.last! + valueMoved;
+      double startValueNew = _rangeScaling.first! + valueMoved;
+      _valueViewPort!.setRange(
+        startValue: startValueNew,
+        endValue: endValueNew,
+      );
+    } else if (_valueViewPort!.scaleType ==
+        GValueViewPortScaleType.logarithmic) {
+      double logMin = log(max(_valueViewPort!.startValue, 0.0000001));
+      double logMax = log(max(_valueViewPort!.endValue, 0.0000001));
+      double logRange = logMax - logMin;
+      double logValueMoved = (movedDistance / area.height) * logRange;
+      double endLogNew =
+          log(max(_rangeScaling.last!, 0.0000001)) + logValueMoved;
+      double startLogNew =
+          log(max(_rangeScaling.first!, 0.0000001)) + logValueMoved;
+      double endValueNew = exp(endLogNew);
+      double startValueNew = exp(startLogNew);
+      _valueViewPort!.setRange(
+        startValue: startValueNew,
+        endValue: endValueNew,
+      );
+    }
   }
 
   void interactionSelectUpdate(

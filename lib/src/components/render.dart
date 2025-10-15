@@ -1,12 +1,6 @@
 import 'package:financial_chart/financial_chart.dart';
 import 'package:flutter/painting.dart';
 
-import '../chart.dart';
-import '../style/label_style.dart';
-import '../style/paint_style.dart';
-import '../vector/vectors.dart';
-import 'components.dart';
-
 const double kDefaultHitTestEpsilon = 5.0;
 
 /// Base class for component renderers.
