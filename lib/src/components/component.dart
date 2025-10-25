@@ -18,31 +18,37 @@ abstract class GComponent<T extends GComponentTheme> with Diagnosticable {
   final GValue<String?> _label;
   String? get label => _label.value;
   set label(String? value) => _label.value = value;
+  GValue<String?> get labelNotifier => _label;
 
   /// Whether the component is visible.
   final GValue<bool> _visible;
   bool get visible => _visible.value;
   set visible(bool value) => _visible.value = value;
+  GValue<bool> get visibleNotifier => _visible;
 
   /// The layer of the component. highest layer will be on the top.
   final GValue<int> _layer;
   int get layer => _layer.value;
   set layer(int value) => _layer.value = value;
+  GValue<int> get layerNotifier => _layer;
 
   /// Whether the component is highlighted.
   final GValue<bool> _highlighted;
   bool get highlighted => _highlighted.value;
   set highlighted(bool value) => _highlighted.value = value;
+  GValue<bool> get highlightedNotifier => _highlighted;
 
   /// Whether the component is selected.
   final GValue<bool> _selected;
   bool get selected => _selected.value;
   set selected(bool value) => _selected.value = value;
+  GValue<bool> get selectedNotifier => _selected;
 
   /// Whether the component is locked.
   final GValue<bool> _locked;
   bool get locked => _locked.value;
   set locked(bool value) => _locked.value = value;
+  GValue<bool> get lockedNotifier => _locked;
 
   /// The hit test mode of the component.
   ///
@@ -52,6 +58,7 @@ abstract class GComponent<T extends GComponentTheme> with Diagnosticable {
   );
   GHitTestMode get hitTestMode => _hitTestMode.value;
   set hitTestMode(GHitTestMode value) => _hitTestMode.value = value;
+  GValue<GHitTestMode> get hitTestModeNotifier => _hitTestMode;
 
   bool get hitTestEnable => hitTestMode != GHitTestMode.none;
 

@@ -1,3 +1,7 @@
+## 0.3.8
+2025-10-25
+- Add `**Notifier` getters to properties of `GComponent` to allow listen updates.
+
 ## 0.3.7
 2025-10-15
 - fix scaling issue of `GValueViewPort` with logarithmic scale when panning.

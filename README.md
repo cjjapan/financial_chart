@@ -10,9 +10,9 @@ high performance and easy to customize and extend.
 ### Features
 - Supports OHLC, candlestick, line, area, bar graphs.
 - Supports markers over graphs and axes, including labels, lines, arrows, callouts, shapes, etc.
-- Supports both linear and logarithmic value axes.
 - Easy to extend to add custom graph types and markers.
 - Resizable multiple panels and multiple graphs and axes in single panel.
+- Supports both linear and logarithmic value axes.
 - Show tooltips and crosshair lines for data points.
 - Zoom and pan of axes and graph. double tap axes to reset zoom. supports momentum scrolling.
 - Show animation when zooming.

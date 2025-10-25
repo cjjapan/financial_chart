@@ -32,6 +32,7 @@ class GControlHandleTheme {
 
 /// Base class for graph marker theme
 class GOverlayMarkerTheme extends GMarkerTheme {
+  static final emptyPaintStyle = PaintStyle();
   final PaintStyle markerStyle;
   final LabelStyle? labelStyle;
   final Map<GControlHandleType, GControlHandleTheme> controlHandleThemes;
@@ -55,6 +56,8 @@ class GOverlayMarkerTheme extends GMarkerTheme {
   }
 
   GControlHandleTheme getControlHandleTheme(GControlHandleType handleType) {
-    return controlHandleThemes[handleType] ?? controlHandleThemes.values.first;
+    return controlHandleThemes[handleType] ??
+        controlHandleThemes.values.firstOrNull ??
+        GControlHandleTheme(style: emptyPaintStyle);
   }
 }
