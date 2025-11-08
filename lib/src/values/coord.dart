@@ -4,20 +4,25 @@ import '../components/viewport_h.dart';
 import '../components/viewport_v.dart';
 import 'pair.dart';
 
-/// base class for coordinate
+/// Base class for chart coordinates.
 abstract class GCoordinate extends GDoublePair {
+  /// Gets the x coordinate value.
   double get x => super.begin!;
+
+  /// Gets the y coordinate value.
   double get y => super.end!;
+
+  /// Creates a coordinate with x and y values.
   GCoordinate(super.x, super.y) : super.pair();
 
-  /// convert the coordinate to position in the view area
+  /// Converts the coordinate to a position in the view area.
   Offset toPosition({
     required Rect area,
     required GValueViewPort valueViewPort,
     required GPointViewPort pointViewPort,
   });
 
-  /// create a new [GCoordinate] instance from position.
+  /// Creates a new coordinate from a position.
   GCoordinate copyByPosition({
     required Rect area,
     required Offset position,
@@ -26,36 +31,27 @@ abstract class GCoordinate extends GDoublePair {
   });
 }
 
-/// Coordinate with x and y as position in the view area.
-///
-/// [x] and [y] can be absolute position or ratio of the width and height of the view area.
+/// Coordinate with x and y as positions or ratios in the view area.
 class GPositionCoord extends GCoordinate {
-  /// true if [x] is ratio of the width of the view area, false if x is absolute position
+  /// Whether x is a ratio of view width.
   final bool xIsRatio;
 
-  /// true if [y] is ratio of the height of the view area, false if y is absolute position
+  /// Whether y is a ratio of view height.
   final bool yIsRatio;
 
-  /// An additional x offset to the position
-  ///
-  /// useful when need to add some offset to the position calculated from rational position.
-  /// for example to define a coordinate 100 pixel from the right side we can
-  /// GPositionCoord(x: 1.0, xIsRatio: true, xOffset: -100, x: ...)
+  /// Additional x offset from the calculated position.
   final double xOffset;
 
-  /// An additional y offset to the position
-  ///
-  /// useful when need to add some offset to the position calculated from rational position.
-  /// for example to define a coordinate 100 pixel from the bottom side we can
-  /// GPositionCoord(y: 1.0, yIsRatio: true, yOffset: -100, x: ...)
+  /// Additional y offset from the calculated position.
   final double yOffset;
 
-  /// true means offsets are relative to end side(right) of the view area
+  /// Whether x offset is relative to the right side.
   final bool xIsInverted;
 
-  /// true means offsets are relative to end side(bottom) of the view area
+  /// Whether y offset is relative to the bottom side.
   final bool yIsInverted;
 
+  /// Creates a position coordinate.
   GPositionCoord({
     required double x,
     required double y,
@@ -67,7 +63,7 @@ class GPositionCoord extends GCoordinate {
     this.yIsInverted = false,
   }) : super(x, y);
 
-  /// create a copy of this coordinate with some changes
+  /// Creates a copy with specified changes.
   GPositionCoord copyWith({
     double? x,
     double? y,
@@ -88,7 +84,7 @@ class GPositionCoord extends GCoordinate {
     );
   }
 
-  /// create a coordinate with absolute position in the view area
+  /// Creates a coordinate with absolute position.
   GPositionCoord.absolute({
     required double x,
     required double y,

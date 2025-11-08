@@ -6,9 +6,11 @@ import '../render.dart';
 import 'splitter.dart';
 import 'splitter_theme.dart';
 
-/// The render for [GSplitter].
+/// Renderer for splitter components.
 class GSplitterRender extends GRender<GSplitter, GSplitterTheme> {
+  /// Creates a splitter renderer.
   const GSplitterRender();
+
   @override
   void doRender({
     required Canvas canvas,

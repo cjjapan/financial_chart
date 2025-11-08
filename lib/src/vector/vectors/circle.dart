@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:vector_math/vector_math.dart';
 
+/// Utility functions for circle geometry calculations.
 class CircleUtil {
+  /// Finds intersection points between a circle and a line.
   static List<Vector2> intersectionPointsToLine(
     double cx,
     double cy,
@@ -38,6 +40,7 @@ class CircleUtil {
     ];
   }
 
+  /// Finds the nearest point on a circle to a given point.
   static Vector2 nearestPointOn(
     double cx,
     double cy,

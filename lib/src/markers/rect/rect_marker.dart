@@ -7,30 +7,53 @@ import '../../values/size.dart';
 import '../../values/value.dart';
 import 'rect_marker_render.dart';
 
+/// Rectangle marker for displaying rectangular shapes.
 class GRectMarker extends GOverlayMarker {
   final GValue<GSize?> _cornerRadiusSize;
+
+  /// Gets the corner radius size.
   GSize? get cornerRadiusSize => _cornerRadiusSize.value;
+
+  /// Sets the corner radius size.
   set cornerRadiusSize(GSize? value) => _cornerRadiusSize.value = value;
 
   final GValue<GSize?> _pointRadiusSize;
+
+  /// Gets the point radius size.
   GSize? get pointRadiusSize => _pointRadiusSize.value;
+
+  /// Sets the point radius size.
   set pointRadiusSize(GSize? value) => _pointRadiusSize.value = value;
 
   final GValue<GSize?> _valueRadiusSize;
+
+  /// Gets the value radius size.
   GSize? get valueRadiusSize => _valueRadiusSize.value;
+
+  /// Sets the value radius size.
   set valueRadiusSize(GSize? value) => _valueRadiusSize.value = value;
 
+  /// Gets the anchor coordinate (when using point radius mode).
   GCoordinate? get anchorCoord =>
       _pointRadiusSize.value == null ? null : keyCoordinates[0];
+
+  /// Gets the starting coordinate (when using two-point mode).
   GCoordinate? get startCoord =>
       _pointRadiusSize.value != null ? null : keyCoordinates[0];
+
+  /// Gets the ending coordinate (when using two-point mode).
   GCoordinate? get endCoord =>
       _pointRadiusSize.value != null ? null : keyCoordinates[1];
 
   final GValue<Alignment> _alignment;
+
+  /// Gets the alignment for the rectangle.
   Alignment get alignment => _alignment.value;
+
+  /// Sets the alignment for the rectangle.
   set alignment(Alignment value) => _alignment.value = value;
 
+  /// Creates a rectangle marker from two corner coordinates.
   GRectMarker({
     super.id,
     super.label,

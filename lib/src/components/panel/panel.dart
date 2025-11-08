@@ -8,141 +8,159 @@ import '../../values/coord.dart';
 import '../../values/value.dart';
 import '../../data/data_source.dart';
 
-/// The action mode when panning the graph area of the panel.
+/// Pan mode for the graph area of a panel.
 enum GGraphPanMode {
-  /// no pan interaction
+  /// Pan interaction disabled.
   none,
 
-  /// pan the graph
+  /// Pan the graph area.
   auto,
 }
 
-/// Panel of the chart.
-///
-/// A chart is composed of multiple panels with vertical layout.
-/// A panel is a container for [GPointAxis], [GValueAxis], [GGraph], [GPointViewPort], [GValueViewPort] and [GTooltip].
+/// Panel component containing axes, graphs, and viewports.
 class GPanel extends GComponent {
-  /// The only one point viewport of the panel which shared by all the components in the panel.
-  /// final GPointViewPort pointViewPort;
-
-  /// The value viewports. axis and graph will refer to a value viewport by its id.
+  /// Value viewports for this panel.
   final List<GValueViewPort> valueViewPorts;
 
-  /// The point axes.
+  /// Point axes in this panel.
   final List<GPointAxis> pointAxes;
 
-  /// The value axes.
+  /// Value axes in this panel.
   final List<GValueAxis> valueAxes;
 
-  /// The graphs and their markers.
+  /// Graphs displayed in this panel.
   final List<GGraph> graphs;
 
-  /// The tooltip of the panel.
+  /// Tooltip for this panel.
   final GTooltip? tooltip;
 
-  /// Whether the panel is resizable.
-  ///
-  /// A resize handle will be shown at the middle of two panels when both are resizable.
   final GValue<bool> _resizable = GValue(true);
+
+  /// Gets whether this panel is resizable.
   bool get resizable => _resizable.value && visible;
+
+  /// Sets whether this panel is resizable.
   set resizable(bool value) => _resizable.value = value;
 
-  /// The height weight of the panel. height will be chart.height * [_heightWeight].
   final GValue<double> _heightWeight = GValue(1.0);
+
+  /// Gets the height weight for this panel.
   double get heightWeight => _heightWeight.value;
+
+  /// Sets the height weight for this panel.
   set heightWeight(double value) => _heightWeight.value = value;
 
-  /// The speed of the momentum scrolling.
-  ///
-  /// A value between 0 and 1.0, larger value means faster scrolling, 0 to disable.
   final GValue<double> _momentumScrollSpeed = GValue(0.5);
+
+  /// Gets the momentum scrolling speed (0 to 1).
   double get momentumScrollSpeed => _momentumScrollSpeed.value;
+
+  /// Sets the momentum scrolling speed (0 to 1).
   set momentumScrollSpeed(double value) =>
       _momentumScrollSpeed.value = min(max(value, 0), 1.0);
 
-  /// The action mode when panning the graph area of the panel.
   final GValue<GGraphPanMode> _graphPanMode = GValue(GGraphPanMode.auto);
+
+  /// Gets the pan mode for the graph area.
   GGraphPanMode get graphPanMode => _graphPanMode.value;
+
+  /// Sets the pan mode for the graph area.
   set graphPanMode(GGraphPanMode value) => _graphPanMode.value = value;
 
   @override
   bool get visible => super.visible && heightWeight > 0;
 
-  /// The areas of children components.
-  ///
-  /// contains areas: [...pointAxesAreas, ...valueAxesAreas, graphArea, panelArea, splitterArea]
   final List<Rect> _areas = [];
 
-  /// The height of the splitter (resize handle).
+  /// Height of the splitter handle in pixels.
   final double splitterHeight;
 
-  /// Whether the layout is ready.
+  /// Returns true if layout calculations are complete.
   bool get isLayoutReady => _areas.isNotEmpty;
 
-  /// The render area of the point axis at [index] of [pointAxes].
+  /// Gets the render area for a point axis by index.
   Rect pointAxisArea(int index) => _areas[index];
+
+  /// Gets the render area for a specific point axis.
   Rect pointAxisAreaOf(GPointAxis axis) => _areas[pointAxes.indexOf(axis)];
 
-  /// The render area of the value axis at [index] of [valueAxes].
+  /// Gets the render area for a value axis by index.
   Rect valueAxisArea(int index) => _areas[pointAxes.length + index];
+
+  /// Gets the render area for a specific value axis.
   Rect valueAxisAreaOf(GValueAxis axis) =>
       _areas[pointAxes.length + valueAxes.indexOf(axis)];
 
-  /// The render area of graphs.
+  /// Gets the render area for all graphs.
   Rect graphArea() => _areas[pointAxes.length + valueAxes.length];
 
-  /// The render area of the panel.
+  /// Gets the render area for the entire panel.
   Rect panelArea() => _areas[_areas.length - 2];
 
-  /// The render area of the splitter.
+  /// Gets the render area for the splitter handle.
   Rect splitterArea() => _areas.last;
 
-  /// The active graph.
+  /// Gets the last graph in the list (active graph).
   GGraph get activeGraph => graphs.last;
 
-  /// The callback function when tap (up) the graph area.
-  ///
-  /// NOTICE that when [onDoubleTapGraphArea] also being set there is a delay cause by distinguishing single from double taps
   final GValue<Function(Offset)?> _onTapGraphArea = GValue(null);
+
+  /// Gets the callback for tap events on the graph area.
   Function(Offset)? get onTapGraphArea => _onTapGraphArea.value;
+
+  /// Sets the callback for tap events on the graph area.
   set onTapGraphArea(Function(Offset)? value) => _onTapGraphArea.value = value;
 
-  /// The callback function when secondary tap (up) the graph area.
   final GValue<Function(Offset)?> _onSecondaryTapGraphArea = GValue(null);
+
+  /// Gets the callback for secondary tap events on the graph area.
   Function(Offset)? get onSecondaryTapGraphArea =>
       _onSecondaryTapGraphArea.value;
+
+  /// Sets the callback for secondary tap events on the graph area.
   set onSecondaryTapGraphArea(Function(Offset)? value) =>
       _onSecondaryTapGraphArea.value = value;
 
-  /// The callback function when double tap (down) the graph area.
-  ///
-  /// NOTICE that when this being set it will cause a delay on [onTapGraphArea] for distinguishing single from double taps
   final GValue<Function(Offset)?> _onDoubleTapGraphArea = GValue(null);
+
+  /// Gets the callback for double tap events on the graph area.
   Function(Offset)? get onDoubleTapGraphArea => _onDoubleTapGraphArea.value;
+
+  /// Sets the callback for double tap events on the graph area.
   set onDoubleTapGraphArea(Function(Offset)? value) =>
       _onDoubleTapGraphArea.value = value;
 
-  /// The callback function when long press down the graph area.
   final GValue<Function(Offset)?> _onLongPressStartGraphArea = GValue(null);
+
+  /// Gets the callback for long press start events on the graph area.
   Function(Offset)? get onLongPressStartGraphArea =>
       _onLongPressStartGraphArea.value;
+
+  /// Sets the callback for long press start events on the graph area.
   set onLongPressStartGraphArea(Function(Offset)? value) =>
       _onLongPressStartGraphArea.value = value;
 
-  /// The callback function when long press up the graph area.
   final GValue<Function(Offset)?> _onLongPressEndGraphArea = GValue(null);
+
+  /// Gets the callback for long press end events on the graph area.
   Function(Offset)? get onLongPressEndGraphArea =>
       _onLongPressEndGraphArea.value;
+
+  /// Sets the callback for long press end events on the graph area.
   set onLongPressEndGraphArea(Function(Offset)? value) =>
       _onLongPressEndGraphArea.value = value;
 
-  /// The callback function when long press move the graph area.
   final GValue<Function(Offset)?> _onLongPressMoveGraphArea = GValue(null);
+
+  /// Gets the callback for long press move events on the graph area.
   Function(Offset)? get onLongPressMoveGraphArea =>
       _onLongPressMoveGraphArea.value;
+
+  /// Sets the callback for long press move events on the graph area.
   set onLongPressMoveGraphArea(Function(Offset)? value) =>
       _onLongPressMoveGraphArea.value = value;
 
+  /// Creates a panel.
   GPanel({
     super.id,
     required this.pointAxes,

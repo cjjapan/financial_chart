@@ -4,77 +4,114 @@ import '../values/value.dart';
 import 'component_theme.dart';
 import 'render.dart';
 
-/// Base class for all visible components.
+/// Base class for all visible chart components.
 abstract class GComponent<T extends GComponentTheme> with Diagnosticable {
+  /// Default layer value for components.
   static const int kDefaultLayer = 1000;
 
-  /// Identifier of the component.
-  ///
-  /// Set it with a unique value if you want to access the component instance later by this id.
+  /// Unique identifier for the component.
   final String? id;
 
-  /// Label of the component.
-  /// set this to allow the component to be identified by a label.
   final GValue<String?> _label;
+
+  /// Gets the label of the component.
   String? get label => _label.value;
+
+  /// Sets the label of the component.
   set label(String? value) => _label.value = value;
+
+  /// Gets the label value notifier.
   GValue<String?> get labelNotifier => _label;
 
-  /// Whether the component is visible.
   final GValue<bool> _visible;
+
+  /// Gets whether the component is visible.
   bool get visible => _visible.value;
+
+  /// Sets whether the component is visible.
   set visible(bool value) => _visible.value = value;
+
+  /// Gets the visibility value notifier.
   GValue<bool> get visibleNotifier => _visible;
 
-  /// The layer of the component. highest layer will be on the top.
   final GValue<int> _layer;
+
+  /// Gets the layer of the component (higher layers appear on top).
   int get layer => _layer.value;
+
+  /// Sets the layer of the component.
   set layer(int value) => _layer.value = value;
+
+  /// Gets the layer value notifier.
   GValue<int> get layerNotifier => _layer;
 
-  /// Whether the component is highlighted.
   final GValue<bool> _highlighted;
+
+  /// Gets whether the component is highlighted.
   bool get highlighted => _highlighted.value;
+
+  /// Sets whether the component is highlighted.
   set highlighted(bool value) => _highlighted.value = value;
+
+  /// Gets the highlighted value notifier.
   GValue<bool> get highlightedNotifier => _highlighted;
 
-  /// Whether the component is selected.
   final GValue<bool> _selected;
+
+  /// Gets whether the component is selected.
   bool get selected => _selected.value;
+
+  /// Sets whether the component is selected.
   set selected(bool value) => _selected.value = value;
+
+  /// Gets the selected value notifier.
   GValue<bool> get selectedNotifier => _selected;
 
-  /// Whether the component is locked.
   final GValue<bool> _locked;
+
+  /// Gets whether the component is locked.
   bool get locked => _locked.value;
+
+  /// Sets whether the component is locked.
   set locked(bool value) => _locked.value = value;
+
+  /// Gets the locked value notifier.
   GValue<bool> get lockedNotifier => _locked;
 
-  /// The hit test mode of the component.
-  ///
-  /// see [GHitTestMode] for more details.
   final GValue<GHitTestMode> _hitTestMode = GValue<GHitTestMode>(
     GHitTestMode.border,
   );
+
+  /// Gets the hit test mode of the component.
   GHitTestMode get hitTestMode => _hitTestMode.value;
+
+  /// Sets the hit test mode of the component.
   set hitTestMode(GHitTestMode value) => _hitTestMode.value = value;
+
+  /// Gets the hit test mode value notifier.
   GValue<GHitTestMode> get hitTestModeNotifier => _hitTestMode;
 
+  /// Gets whether hit testing is enabled.
   bool get hitTestEnable => hitTestMode != GHitTestMode.none;
 
-  /// Theme of the component to override the global default theme.
   final GValue<T?> _theme;
+
+  /// Gets the theme of the component.
   T? get theme => _theme.value;
+
+  /// Sets the theme of the component.
   set theme(T? value) => _theme.value = value;
 
-  /// Render of the component.
+  /// The renderer for the component.
   @protected
   GRender? render;
 
+  /// Gets the renderer for the component.
   GRender getRender() {
     return render!;
   }
 
+  /// Creates a component.
   GComponent({
     this.id,
     String? label,
@@ -108,17 +145,17 @@ abstract class GComponent<T extends GComponentTheme> with Diagnosticable {
   }
 }
 
-/// Hit test mode of the component.
+/// Hit test mode for components.
 enum GHitTestMode {
-  /// No hit test.
+  /// No hit testing.
   none,
 
-  /// Hit test the border lines of the component.
+  /// Hit test border lines only.
   border,
 
-  /// Hit test the area of the component.
+  /// Hit test the entire area.
   area,
 
-  /// border or area depending on the render result.
+  /// Automatic selection based on rendering.
   auto,
 }

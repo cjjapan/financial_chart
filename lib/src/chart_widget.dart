@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'chart.dart';
 import 'chart_interaction.dart';
 
+/// Default loading indicator widget builder.
 Widget _defaultLoadingWidgetBuilder(BuildContext context, GChart chart) {
   return Container(
     width: double.infinity,
@@ -17,6 +18,7 @@ Widget _defaultLoadingWidgetBuilder(BuildContext context, GChart chart) {
   );
 }
 
+/// Default no data widget builder.
 Widget _defaultNoDataWidgetBuilder(BuildContext context, GChart chart) {
   return Center(
     child: Text(
@@ -31,15 +33,31 @@ Widget _defaultNoDataWidgetBuilder(BuildContext context, GChart chart) {
 }
 
 // ignore_for_file: avoid_print
+/// Widget for rendering and interacting with a chart.
 class GChartWidget extends StatefulWidget {
+  /// The chart model to display.
   final GChart chart;
+
+  /// Ticker provider for animations.
   final TickerProvider tickerProvider;
+
+  /// Builder for the loading indicator widget.
   final Widget Function(BuildContext context, GChart chart)
   loadingWidgetBuilder;
+
+  /// Builder for the no data widget.
   final Widget Function(BuildContext context, GChart chart) noDataWidgetBuilder;
+
+  /// Callback for pointer down events.
   final PointerDownEventListener? onPointerDown;
+
+  /// Callback for pointer up events.
   final PointerUpEventListener? onPointerUp;
+
+  /// Set of supported pointer device kinds.
   final Set<PointerDeviceKind>? supportedDevices;
+
+  /// Creates a chart widget.
   const GChartWidget({
     super.key,
     required this.chart,
@@ -61,11 +79,16 @@ class GChartWidget extends StatefulWidget {
   }
 }
 
+/// State for [GChartWidget].
 class GChartWidgetState extends State<GChartWidget> {
+  /// Creates the state.
   GChartWidgetState();
+
+  /// Current mouse cursor.
   MouseCursor cursor = SystemMouseCursors.basic;
   late GChartInteractionHandler _interactionHandler;
 
+  /// Initializes the chart with interaction handler.
   void initializeChart() {
     _interactionHandler = GChartInteractionHandler();
     _interactionHandler.attach(widget.chart);
@@ -242,10 +265,14 @@ class GChartWidgetState extends State<GChartWidget> {
   }
 }
 
+/// Layout delegate for positioning tooltip widgets.
 class _TooltipSingleChildLayoutDelegate extends SingleChildLayoutDelegate {
   _TooltipSingleChildLayoutDelegate({required this.offset, required this.area});
 
+  /// The offset position for the tooltip.
   final Offset? offset;
+
+  /// The area to constrain the tooltip.
   final Rect? area;
 
   @override
@@ -286,8 +313,12 @@ class _TooltipSingleChildLayoutDelegate extends SingleChildLayoutDelegate {
   ) => oldDelegate.offset != offset;
 }
 
+/// Custom painter for rendering the chart.
 class GChartPainter extends CustomPainter {
+  /// The chart to paint.
   final GChart chart;
+
+  /// Creates a chart painter.
   GChartPainter({required this.chart}) : super(repaint: chart);
 
   @override

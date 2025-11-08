@@ -4,7 +4,9 @@ import 'package:vector_math/vector_math.dart';
 import 'line.dart';
 import 'extensions.dart';
 
+/// Utility functions for rectangle geometry calculations.
 class RectUtil {
+  /// Gets the left, top, right, and bottom coordinates from two points.
   static (double left, double top, double right, double bottm) getLTRB(
     double x1,
     double y1,
@@ -18,6 +20,7 @@ class RectUtil {
     return (left, top, right, bottom);
   }
 
+  /// Finds the nearest point on a rectangle to a given point.
   static Vector2 nearestPointOnRect(
     double x1,
     double y1,

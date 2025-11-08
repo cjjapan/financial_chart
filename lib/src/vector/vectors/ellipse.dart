@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 import 'extensions.dart';
 
+/// Utility functions for ellipse geometry calculations.
 class EllipseUtil {
+  /// Calculates a point on an ellipse at parameter t.
   static Vector2 pointOnEllipse(
     double cx,
     double cy,
@@ -16,6 +18,7 @@ class EllipseUtil {
     return Vector2(x, y);
   }
 
+  /// Calculates a point on a rotated ellipse at parameter t.
   static Vector2 pointOnEllipseRotated(
     double cx,
     double cy,

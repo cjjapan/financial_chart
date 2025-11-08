@@ -9,69 +9,79 @@ import '../marker/overlay_marker.dart';
 import 'axis_render.dart';
 import '../ticker.dart';
 
-const defaultHAxisSize = 30.0; // in pixel
-const defaultVAxisSize = 60.0; // in pixel
+/// Default horizontal axis size in pixels.
+const defaultHAxisSize = 30.0;
 
-/// The position of the axis relative to the graph area.
+/// Default vertical axis size in pixels.
+const defaultVAxisSize = 60.0;
+
+/// Position of an axis relative to the graph area.
 enum GAxisPosition {
-  /// the axis is placed besides the graph area at the start (left or top) position.
+  /// Axis is placed outside the graph area at the start (left or top).
   start,
 
-  /// the axis is placed besides the graph area at the end (right or bottom) position.
+  /// Axis is placed outside the graph area at the end (right or bottom).
   end,
 
-  /// the axis is placed inside the graph area at the start (left or top) position
+  /// Axis is placed inside the graph area at the start (left or top).
   startInside,
 
-  /// the axis is placed inside the graph area at the end (right or bottom) position
+  /// Axis is placed inside the graph area at the end (right or bottom).
   endInside;
 
+  /// Returns true if this position is inside the graph area.
   bool get isInside =>
       this == GAxisPosition.startInside || this == GAxisPosition.endInside;
 }
 
-/// The scale mode when drags of the axis interactively.
+/// Scale mode for interactive axis dragging.
 enum GAxisScaleMode {
-  /// no scale
+  /// No scaling allowed.
   none,
 
-  /// drag to zoom in/out
+  /// Drag to zoom in or out.
   zoom,
 
-  /// drag to move the axis
+  /// Drag to pan the axis.
   move,
 
-  /// drag and select a portion to zoom in
+  /// Drag to select a portion to zoom in.
   select,
 }
 
-/// The base class of the axis component.
+/// Base class for axis components.
 abstract class GAxis extends GComponent {
-  /// The position of the axis relative to the graph area.
-  ///
-  /// see [GAxisPosition] for more details.
   final GValue<GAxisPosition> _position;
+
+  /// Gets the position of this axis relative to the graph area.
   GAxisPosition get position => _position.value;
+
+  /// Sets the position of this axis relative to the graph area.
   set position(GAxisPosition value) => _position.value = value;
 
-  /// The size of the axis in pixels.
   final GValue<double> _size;
+
+  /// Gets the size of this axis in pixels.
   double get size => _size.value;
+
+  /// Sets the size of this axis in pixels.
   set size(double value) => _size.value = value;
 
-  /// The scale mode when drags the axis interactively.
-  ///
-  /// see [GAxisScaleMode] for more details.
   final GValue<GAxisScaleMode> _scaleMode;
+
+  /// Gets the scale mode for interactive axis dragging.
   GAxisScaleMode get scaleMode => _scaleMode.value;
+
+  /// Sets the scale mode for interactive axis dragging.
   set scaleMode(GAxisScaleMode value) => _scaleMode.value = value;
 
-  /// Axis markers
+  /// Markers displayed on this axis.
   final List<GAxisMarker> axisMarkers = [];
 
-  /// Overlay markers on the axis.
+  /// Overlay markers displayed on this axis.
   final List<GOverlayMarker> overlayMarkers = [];
 
+  /// Creates an axis.
   GAxis({
     super.id,
     super.visible,
@@ -94,7 +104,7 @@ abstract class GAxis extends GComponent {
     }
   }
 
-  /// Place the [axes] to the given [area] and return the areas of the axes ([axesAreas]) and the area left ([areaLeft]) for graph.
+  /// Places multiple axes within a given area and returns their rectangles and remaining space.
   static (List<Rect> axesAreas, Rect areaLeft) placeAxes(
     Rect area,
     List<GAxis> axes,
@@ -143,6 +153,7 @@ abstract class GAxis extends GComponent {
     return (axesAreas, areaLeft);
   }
 
+  /// Places this axis within the given area and returns the axis rectangle and remaining space.
   (Rect used, Rect areaLeft) placeTo(Rect area);
 
   @override
@@ -154,17 +165,18 @@ abstract class GAxis extends GComponent {
   }
 }
 
-/// value axis for vertical direction.
+/// Value axis for displaying vertical numerical values.
 class GValueAxis extends GAxis {
-  /// The value view port id of the value axis.
+  /// The viewport ID this axis is associated with.
   final String viewPortId;
 
-  /// The strategy to calculate the value ticks.
+  /// Strategy for calculating value ticks.
   final GValueTickerStrategy valueTickerStrategy;
 
-  /// The formatter to format the value.
+  /// Formatter for displaying value labels.
   final String Function(double value, int precision)? valueFormatter;
 
+  /// Creates a value axis.
   GValueAxis({
     super.id,
     this.viewPortId = "", // empty means the default view port id
@@ -179,12 +191,14 @@ class GValueAxis extends GAxis {
     super.render = const GValueAxisRender(),
   }) : super(axisMarkers: axisMarkers);
 
+  /// Returns true if labels should align to the right.
   bool get isAlignRight =>
       position == GAxisPosition.start || position == GAxisPosition.endInside;
+
+  /// Returns true if labels should align to the left.
   bool get isAlignLeft =>
       position == GAxisPosition.end || position == GAxisPosition.startInside;
 
-  /// place the axis to the given [area] and return the areas of the axis ([areaAxis]) and the area left ([areaLeft]).
   @override
   (Rect areaAxis, Rect areaLeft) placeTo(Rect area) {
     if (position == GAxisPosition.start) {
@@ -224,13 +238,15 @@ class GValueAxis extends GAxis {
   }
 }
 
-/// point axis for horizontal direction.
+/// Point axis for displaying horizontal data point labels.
 class GPointAxis extends GAxis {
-  /// The strategy to calculate the point ticks.
+  /// Strategy for calculating point ticks.
   final GPointTickerStrategy pointTickerStrategy;
 
-  /// The formatter to format the point value.
+  /// Formatter for displaying point labels.
   final String Function(int, dynamic)? pointFormatter;
+
+  /// Creates a point axis.
   GPointAxis({
     super.id,
     super.position = GAxisPosition.end,
@@ -244,12 +260,14 @@ class GPointAxis extends GAxis {
     super.render = const GPointAxisRender(),
   }) : super(axisMarkers: axisMarkers);
 
+  /// Returns true if labels should align to the bottom.
   bool get isAlignBottom =>
       position == GAxisPosition.start || position == GAxisPosition.endInside;
+
+  /// Returns true if labels should align to the top.
   bool get isAlignTop =>
       position == GAxisPosition.end || position == GAxisPosition.startInside;
 
-  /// place the axis to the given [area] and return the areas of the axis ([areaAxis]) and the area left ([areaLeft]).
   @override
   (Rect areaAxis, Rect areaLeft) placeTo(Rect area) {
     if (position == GAxisPosition.start) {

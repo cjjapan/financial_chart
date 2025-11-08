@@ -1,14 +1,18 @@
 import 'package:financial_chart/financial_chart.dart';
 import 'package:flutter/painting.dart';
 
+/// Default hit test tolerance in pixels.
 const double kDefaultHitTestEpsilon = 5.0;
 
 /// Base class for component renderers.
 abstract class GRender<C extends GComponent, T extends GComponentTheme> {
+  /// Creates a renderer with optional hit test tolerance.
   const GRender({this.hitTestEpsilon = kDefaultHitTestEpsilon});
 
+  /// Hit test tolerance in pixels.
   final double hitTestEpsilon;
 
+  /// Renders the component on the canvas.
   void render({
     required Canvas canvas,
     required GChart chart,
@@ -34,6 +38,7 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     );
   }
 
+  /// Renders within a clipped rectangle.
   void renderClipped({
     required Canvas canvas,
     required Rect clipRect,
@@ -46,6 +51,7 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     );
   }
 
+  /// Renders with rotation around a center point.
   void renderRotated({
     required Canvas canvas,
     required Offset center,
@@ -60,6 +66,7 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     );
   }
 
+  /// Draws a path with the specified style.
   void drawPath({
     required Canvas canvas,
     required Path path,
@@ -78,6 +85,7 @@ abstract class GRender<C extends GComponent, T extends GComponentTheme> {
     );
   }
 
+  /// Draws text at the specified anchor point.
   Rect drawText({
     required Canvas canvas,
     required String text,

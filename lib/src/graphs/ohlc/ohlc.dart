@@ -4,21 +4,26 @@ import '../../components/components.dart';
 import '../../values/value.dart';
 import 'ohlc_render.dart';
 
-/// OHLC (and Candle) graph
+/// OHLC and candlestick graph for financial data.
 class GGraphOhlc<T extends GGraphTheme> extends GGraph<T> {
+  /// Type identifier for OHLC graphs.
   static const String typeName = "ohlc";
 
-  /// The four keys of the OHLC values in the data source.
+  /// The four series value keys for OHLC data.
   final List<String> ohlcValueKeys;
 
-  /// If true, will draw candlesticks instead of OHLC.
   final GValue<bool> _drawAsCandle;
+
+  /// Gets whether to draw as candlesticks instead of OHLC.
   bool get drawAsCandle => _drawAsCandle.value;
+
+  /// Sets whether to draw as candlesticks instead of OHLC.
   set drawAsCandle(bool value) => _drawAsCandle.value = value;
 
   @override
   String get type => typeName;
 
+  /// Creates an OHLC graph.
   GGraphOhlc({
     super.id,
     super.label,

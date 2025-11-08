@@ -3,39 +3,39 @@ import '../../style/paint_style.dart';
 import '../component_theme.dart';
 import 'tooltip.dart';
 
-/// Theme for [GTooltip] component.
+/// Theme for tooltip components.
 class GTooltipTheme extends GComponentTheme {
-  /// Style of the tooltip frame.
+  /// Style for the tooltip frame border and background.
   final PaintStyle frameStyle;
 
-  /// Radius of the tooltip frame corner.
+  /// Corner radius for the tooltip frame in pixels.
   final double frameCornerRadius;
 
-  /// Padding of the tooltip frame.
+  /// Padding inside the tooltip frame in pixels.
   final double framePadding;
 
-  /// Margin of the tooltip frame.
+  /// Margin around the tooltip frame in pixels.
   final double frameMargin;
 
-  /// Spacing between label and value.
+  /// Spacing between label and value in pixels.
   final double labelValueSpacing;
 
-  /// Spacing between label & value rows.
+  /// Spacing between rows in pixels.
   final double rowSpacing;
 
-  /// Style of the point value.
+  /// Style for point value text.
   final LabelStyle pointStyle;
 
-  /// Spacing between point row and the first value row.
+  /// Spacing between point row and value rows in pixels.
   final double pointRowSpacing;
 
-  /// Style of the value label.
+  /// Style for value label text.
   final LabelStyle labelStyle;
 
-  /// Style of the value.
+  /// Style for value text.
   final LabelStyle valueStyle;
 
-  /// Style of the highlighted point line/area.
+  /// Style for highlighted point line or area.
   final PaintStyle? pointHighlightStyle;
 
   /// Style of the highlighted value line.

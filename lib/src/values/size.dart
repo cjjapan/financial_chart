@@ -5,9 +5,7 @@ import '../components/viewport_h.dart';
 import '../components/viewport_v.dart';
 import 'value.dart';
 
-/// User defined function to convert a value to size in view [area] with [pointViewPort] and [valueViewPort].
-///
-/// see [GPointViewPort] and [GValueViewPort] for more details about viewports.
+/// Function to convert a value to size in the view area with viewports.
 typedef GViewSizeConvertor =
     double Function({
       required double sizeValue,
@@ -16,88 +14,90 @@ typedef GViewSizeConvertor =
       required GValueViewPort valueViewPort,
     });
 
-/// Type of size value
+/// Type of size value.
 enum GSizeValueType {
-  /// size is points in point viewport.
+  /// Size in point viewport units.
   pointSize,
 
-  /// size is value in value viewport.
+  /// Size in value viewport units.
   valueSize,
 
-  /// size is view size.
+  /// Absolute view size.
   viewSize,
 
-  /// size is ration of view height which is view height * ratio.
+  /// Ratio of view height.
   viewHeightRatio,
 
-  /// size is ration of view width which is view width * ratio.
+  /// Ratio of view width.
   viewWidthRatio,
 
-  /// size is ration of min of view width and height which is min(view width, view height) * ratio.
+  /// Ratio of minimum dimension.
   viewMinRatio,
 
-  /// size is ration of max of view width and height which is max(view width, view height) * ratio.
+  /// Ratio of maximum dimension.
   viewMaxRatio,
 
-  /// size is calculated by a user defined custom function.
-  ///
-  /// see [GViewSizeConvertor] for more details.
+  /// Custom size calculation.
   custom,
 }
 
-/// A value defines size in view area.
-///
-/// see different [sizeType] defined in [GSizeValueType].
+/// Defines size in the view area with various size types.
 class GSize extends GValue<double> {
-  /// defines the type of the value.
+  /// The type of size value.
   final GSizeValueType sizeType;
 
-  /// The converter function to convert a value to view size in view area.
+  /// Converter to transform value to view size.
   final GViewSizeConvertor? viewSizeConverter;
 
-  /// The converter function to convert view size back to specified size type value.
+  /// Reverse converter to transform view size back.
   final GViewSizeConvertor? viewSizeConverterReverse;
 
-  /// size value with meaning defined by [sizeType].
+  /// Gets the size value.
   double get sizeValue => value;
 
-  /// Create a size value with [size] as value in view area.
+  /// Creates a size in value viewport units.
   GSize.valueSize(super.size)
     : sizeType = GSizeValueType.valueSize,
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Create a size value with [size] as points in point viewport.
+  /// Creates a size in point viewport units.
   GSize.pointSize(super.size)
     : sizeType = GSizeValueType.pointSize,
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Create a size value with [size] as view size.
+  /// Creates an absolute view size.
   GSize.viewSize(super.size)
     : sizeType = GSizeValueType.viewSize,
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Create a size value with [ratio] as ratio of view height which is view height * ratio.
+  /// Creates a size as a ratio of view height.
   GSize.viewHeightRatio(super.ratio)
     : sizeType = GSizeValueType.viewHeightRatio,
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Create a size value with [ratio] as ratio of view width which is view width * ratio.
+  /// Creates a size as a ratio of view width.
   GSize.viewWidthRatio(super.ratio)
     : sizeType = GSizeValueType.viewWidthRatio,
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Create a size value with [ratio] as ratio of min of view width and height which is min(view width, view height) * ratio.
+  /// Creates a size as a ratio of minimum dimension.
   GSize.viewMinRatio(super.ratio)
     : sizeType = GSizeValueType.viewMinRatio,
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Create a size value with [ratio] as ratio of max of view width and height which is max(view width, view height) * ratio.
+  /// Creates a size as a ratio of maximum dimension.
+  GSize.viewMaxRatio(super.ratio)
+    : sizeType = GSizeValueType.viewMaxRatio,
+      viewSizeConverter = null,
+      viewSizeConverterReverse = null;
+
+  /// Creates a size with custom conversion logic.
   GSize.viewMaxRatio(super.ratio)
     : sizeType = GSizeValueType.viewMaxRatio,
       viewSizeConverter = null,

@@ -6,9 +6,11 @@ import '../render.dart';
 import 'background.dart';
 import 'background_theme.dart';
 
-/// The render for [GBackground].
+/// Renderer for background components.
 class GBackgroundRender extends GRender<GBackground, GBackgroundTheme> {
+  /// Creates a background renderer.
   const GBackgroundRender();
+
   @override
   void doRender({
     required Canvas canvas,

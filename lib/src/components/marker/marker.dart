@@ -2,8 +2,9 @@ import '../component.dart';
 import 'marker_render.dart';
 import 'marker_theme.dart';
 
-/// Base class for markers.
+/// Base class for all marker components.
 abstract class GMarker extends GComponent {
+  /// Creates a marker.
   GMarker({
     super.id,
     super.label,

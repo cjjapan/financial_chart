@@ -5,12 +5,15 @@ import '../../components/graph/graph.dart';
 import '../../components/graph/graph_theme.dart';
 import 'group_render.dart';
 
-/// A Group of graphs.
+/// Graph group for rendering multiple graphs as a single unit.
 class GGraphGroup extends GGraph<GGraphTheme> {
+  /// Type identifier for graph groups.
   static const String typeName = "group";
 
+  /// The list of graphs in this group.
   final List<GGraph> graphs;
 
+  /// Sets the highlighted state for this group and all contained graphs.
   @override
   set highlighted(bool value) {
     super.highlighted = value;
@@ -19,6 +22,7 @@ class GGraphGroup extends GGraph<GGraphTheme> {
     }
   }
 
+  /// Sets the selected state for this group and all contained graphs.
   @override
   set selected(bool value) {
     super.selected = value;
@@ -27,6 +31,7 @@ class GGraphGroup extends GGraph<GGraphTheme> {
     }
   }
 
+  /// Creates a graph group.
   GGraphGroup({
     super.id,
     super.label,
@@ -51,6 +56,7 @@ class GGraphGroup extends GGraph<GGraphTheme> {
     this.selected = selected;
   }
 
+  /// Finds a graph in this group by its ID.
   GGraph? findGraphById(String id) {
     for (final graph in graphs) {
       if (graph.id == id) {

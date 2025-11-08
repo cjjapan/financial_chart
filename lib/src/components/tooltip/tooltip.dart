@@ -4,28 +4,28 @@ import 'package:flutter/widgets.dart';
 import '../../values/value.dart';
 import '../components.dart';
 
-/// Position of the tooltip.
+/// Position options for tooltips.
 enum GTooltipPosition {
-  /// No tooltip
+  /// No tooltip displayed.
   none,
 
-  /// Tooltip will be displayed at the top left corner of the graph area.
+  /// Tooltip at the top left corner.
   topLeft,
 
-  /// Tooltip will be displayed at the bottom left corner of the graph area.
+  /// Tooltip at the bottom left corner.
   bottomLeft,
 
-  /// Tooltip will be displayed at the top right corner of the graph area.
+  /// Tooltip at the top right corner.
   topRight,
 
-  /// Tooltip will be displayed at the bottom right corner of the graph area.
+  /// Tooltip at the bottom right corner.
   bottomRight,
 
-  /// Tooltip will be displayed follow the position of the pointer.
+  /// Tooltip follows the pointer position.
   followPointer,
 }
 
-/// The builder function to create the tooltip widget.
+/// Builder function for creating custom tooltip widgets.
 typedef GToolTipWidgetBuilder =
     Widget Function(
       BuildContext context,
@@ -34,13 +34,24 @@ typedef GToolTipWidgetBuilder =
       int point,
     );
 
+/// Context information for tooltip widget rendering.
 class GToolTipWidgetContext extends Equatable {
+  /// The panel containing the tooltip.
   final GPanel panel;
+
+  /// The render area for the tooltip.
   final Rect area;
+
+  /// The tooltip component.
   final GTooltip tooltip;
+
+  /// The data point index.
   final int point;
+
+  /// The anchor position for the tooltip.
   final Offset anchorPosition;
 
+  /// Creates a tooltip widget context.
   const GToolTipWidgetContext({
     required this.panel,
     required this.area,
@@ -60,59 +71,76 @@ class GToolTipWidgetContext extends Equatable {
   ];
 }
 
-/// Tooltip component.
+/// Tooltip component for displaying data point information.
 class GTooltip extends GComponent {
-  /// Position of the tooltip. default is [GTooltipPosition.followPointer].
-  ///
-  /// See [GTooltipPosition] for more details.
   final GValue<GTooltipPosition> _position;
+
+  /// Gets the tooltip position.
   GTooltipPosition get position => _position.value;
+
+  /// Sets the tooltip position.
   set position(GTooltipPosition value) => _position.value = value;
 
-  /// the data keys which will be displayed in the tooltip.
+  /// Data keys to display in the tooltip.
   final List<String> dataKeys;
 
-  /// Whether to show the point value in the tooltip.
   final GValue<bool> _showPointValue;
+
+  /// Gets whether to show point values in the tooltip.
   bool get showPointValue => _showPointValue.value;
+
+  /// Sets whether to show point values in the tooltip.
   set showPointValue(bool value) => _showPointValue.value = value;
 
-  /// when [position] is [GTooltipPosition.followPointer], the tooltip will follow to the value position of this key.
-  /// [followValueViewPortId] must be set also
+  /// Value key to follow when position is followPointer.
   final GValue<String?> _followValueKey;
+
+  /// Gets the value key to follow for tooltip positioning.
   String? get followValueKey => _followValueKey.value;
+
+  /// Sets the value key to follow for tooltip positioning.
   set followValueKey(String? value) => _followValueKey.value = value;
 
-  /// when [position] is [GTooltipPosition.followPointer], the tooltip will follow to the value position of this viewPort.
-  /// [followValueKey] must be set also.
   final GValue<String?> _followValueViewPortId;
+
+  /// Gets the viewport ID to follow for tooltip positioning.
   String? get followValueViewPortId => _followValueViewPortId.value;
+
+  /// Sets the viewport ID to follow for tooltip positioning.
   set followValueViewPortId(String? value) =>
       _followValueViewPortId.value = value;
 
-  /// Whether to display the point line highlight.
   final GValue<bool> _pointLineHighlightVisible;
+
+  /// Gets whether the point line highlight is visible.
   bool get pointLineHighlightVisible => _pointLineHighlightVisible.value;
+
+  /// Sets whether the point line highlight is visible.
   set pointLineHighlightVisible(bool value) =>
       _pointLineHighlightVisible.value = value;
 
-  /// Whether to display the value line highlight.
-  ///
-  /// The value line highlight will be displayed when [followValueKey] and [followValueViewPortId] are set.
   final GValue<bool> _valueLineHighlightVisible;
+
+  /// Gets whether the value line highlight is visible.
   bool get valueLineHighlightVisible => _valueLineHighlightVisible.value;
+
+  /// Sets whether the value line highlight is visible.
   set valueLineHighlightVisible(bool value) =>
       _valueLineHighlightVisible.value = value;
 
-  /// The notifier to notify the tooltip widget to rebuild when the tooltip data changes.
   ValueNotifier<GToolTipWidgetContext?>? _tooltipNotifier;
+
+  /// Gets the notifier for tooltip widget updates.
   ValueNotifier<GToolTipWidgetContext?>? get tooltipNotifier =>
       _tooltipNotifier;
 
-  /// The builder function to create the tooltip widget.
   final GValue<GToolTipWidgetBuilder?> _tooltipWidgetBuilder;
+
+  /// Gets the custom tooltip widget builder.
   GToolTipWidgetBuilder? get tooltipWidgetBuilder =>
       _tooltipWidgetBuilder.value;
+
+  /// Sets the custom tooltip widget builder.
   set tooltipWidgetBuilder(GToolTipWidgetBuilder? value) {
     _tooltipWidgetBuilder.value = value;
     if (value != null) {
@@ -123,6 +151,7 @@ class GTooltip extends GComponent {
     }
   }
 
+  /// Creates a tooltip component.
   GTooltip({
     GTooltipPosition position = GTooltipPosition.followPointer,
     bool showPointValue = true,

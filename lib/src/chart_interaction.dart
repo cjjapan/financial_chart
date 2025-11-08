@@ -13,7 +13,7 @@ part 'chart_interaction_gesture_recognizers.dart';
 part 'chart_interaction_gesture_factory.dart';
 part 'chart_interaction_viewports.dart';
 
-/// [GChartInteractionHandler] for handling user interactions for the attached chart.
+/// Handles user interactions for the chart including gestures and viewport manipulation.
 // ignore: must_be_immutable
 class GChartInteractionHandler with Diagnosticable {
   late final GChart _chart;
@@ -21,23 +21,31 @@ class GChartInteractionHandler with Diagnosticable {
   final GValue<bool> _isTouchEvent = GValue(false);
   final GValue<bool> _isTouchCrossMode = GValue(false);
 
+  /// Helper for point viewport interactions.
   GPointViewPortInteractionHelper pointViewPortInteractionHelper =
       GPointViewPortInteractionHelper();
+
+  /// Helper for value viewport interactions.
   GValueViewPortInteractionHelper valueViewPortInteractionHelper =
       GValueViewPortInteractionHelper();
+
+  /// Gets whether any viewport is currently being scaled.
   bool get isScalingViewPort =>
       pointViewPortInteractionHelper.isScaling ||
       valueViewPortInteractionHelper.isScaling;
 
+  /// Creates a chart interaction handler.
   GChartInteractionHandler();
 
   GScaleUpdateCallback? _hookScaleUpdate;
   GScaleEndCallback? _hookScaleEnd;
 
+  /// Attaches this handler to a chart.
   void attach(GChart chart) {
     _chart = chart;
   }
 
+  /// Handles mouse enter event at the given position.
   void mouseEnter({required Offset position}) {
     _chart.crosshair.updateCrossPosition(
       chart: _chart,
@@ -48,6 +56,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles mouse exit event.
   void mouseExit() {
     _chart.crosshair.updateCrossPosition(
       chart: _chart,
@@ -106,6 +115,7 @@ class GChartInteractionHandler with Diagnosticable {
     return SystemMouseCursors.basic;
   }
 
+  /// Handles mouse hover event at the given position.
   void mouseHover({required Offset position}) {
     _chart.crosshair.updateCrossPosition(
       chart: _chart,
@@ -144,6 +154,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles pointer scroll event with the given delta.
   void pointerScroll({required Offset position, required Offset scrollDelta}) {
     if (_chart.dataSource.isLoading || _chart.dataSource.isEmpty) {
       return;
@@ -184,6 +195,7 @@ class GChartInteractionHandler with Diagnosticable {
     }
   }
 
+  /// Handles scale gesture start.
   void scaleStart({required Offset start, required int pointerCount}) {
     if (_chart.dataSource.isLoading || _chart.dataSource.isEmpty) {
       return;
@@ -236,6 +248,7 @@ class GChartInteractionHandler with Diagnosticable {
     }
   }
 
+  /// Handles scale gesture update.
   void scaleUpdate({
     required Offset position,
     required double scale,
@@ -257,6 +270,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles scale gesture end.
   void scaleEnd(int pointerCount, double scaleVelocity, Velocity velocity) {
     _chart.crosshair.updateCrossPosition(
       chart: _chart,
@@ -270,6 +284,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles long press start event.
   void longPressStart({required Offset position}) {
     if (_chart.dataSource.isLoading || _chart.dataSource.isEmpty) {
       return;
@@ -286,6 +301,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles long press move event.
   void longPressMove({required Offset position}) {
     _chart.crosshair.updateCrossPosition(
       chart: _chart,
@@ -296,6 +312,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles long press end event.
   void longPressEnd({required Offset position}) {
     if (_isTouchCrossMode.value) {
       _isTouchCrossMode.value = false;
@@ -310,6 +327,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles tap down event.
   void tapDown({required Offset position, required bool isTouch}) {
     if (_chart.dataSource.isLoading || _chart.dataSource.isEmpty) {
       return;
@@ -330,6 +348,7 @@ class GChartInteractionHandler with Diagnosticable {
     }
   }
 
+  /// Handles tap up event.
   void tapUp() {
     if (_isTouchCrossMode.value) {
       _isTouchCrossMode.value = false;
@@ -342,6 +361,7 @@ class GChartInteractionHandler with Diagnosticable {
     _notify();
   }
 
+  /// Handles double tap event.
   void doubleTap({required Offset position}) {
     if (_chart.dataSource.isLoading || _chart.dataSource.isEmpty) {
       return;

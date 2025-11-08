@@ -2,14 +2,24 @@ import '../../style/paint_style.dart';
 import '../component_theme.dart';
 import 'splitter.dart';
 
-/// Theme for [GSplitter]
+/// Theme for splitter components.
 class GSplitterTheme extends GComponentTheme {
+  /// Style for the splitter line.
   final PaintStyle lineStyle;
+
+  /// Style for the handle background.
   final PaintStyle handleStyle;
+
+  /// Style for the handle line decoration.
   final PaintStyle handleLineStyle;
+
+  /// Width of the handle in pixels.
   final double handleWidth;
+
+  /// Border radius of the handle in pixels.
   final double handleBorderRadius;
 
+  /// Creates a splitter theme.
   const GSplitterTheme({
     required this.lineStyle,
     required this.handleStyle,

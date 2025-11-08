@@ -29,8 +29,7 @@ import 'package:flutter/painting.dart' as painting;
 
 import 'dash_path.dart';
 
-/// Checks whether only one of the parameters is set. if [allowNone], none is set
-/// also returns true.
+/// Checks whether only one parameter is set.
 bool isSingle(List params, {allowNone = false}) {
   int count = 0;
   for (final param in params) {
@@ -41,6 +40,7 @@ bool isSingle(List params, {allowNone = false}) {
   return allowNone ? count <= 1 : count == 1;
 }
 
+/// Style for painting shapes with fill and stroke options.
 class PaintStyle extends Equatable {
   /// Creates a paint style.
   PaintStyle({

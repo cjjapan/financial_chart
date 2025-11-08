@@ -1,28 +1,26 @@
 import 'pair.dart';
 
-/// A double range with [begin] and [end] values.
-///
-/// [begin] must be less than or equal to [end].
+/// Double range where begin must be less than or equal to end.
 class GRange extends GDoublePair {
-  /// Construct a range with [begin] and [end] values.
+  /// Creates a range with specified begin and end values.
   GRange.range(double begin, double end) : super.pair(begin, end) {
     assert(begin <= end);
   }
 
-  /// Construct an empty range.
+  /// Creates an empty range.
   GRange.empty() : super.empty();
 
-  /// Update the range with [begin] and [end] values.
+  /// Updates the range with new begin and end values.
   @override
   void update(double begin, double end) {
     assert(begin <= end);
     super.update(begin, end);
   }
 
-  /// clone the range.
+  /// Creates a clone of the range.
   GRange clone() => isEmpty ? GRange.empty() : GRange.range(begin!, end!);
 
-  /// linear interpolation between two ranges.
+  /// Performs linear interpolation between two ranges.
   static GRange lerp(GRange a, GRange b, double t) {
     if (a.isEmpty || b.isEmpty) {
       return b;

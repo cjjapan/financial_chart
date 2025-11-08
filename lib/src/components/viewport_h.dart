@@ -9,35 +9,37 @@ import 'panel/panel.dart';
 import 'viewport_h_scaler.dart';
 import 'viewport_resize.dart';
 
-/// Viewport for point (horizontal) axis
+/// Viewport for the horizontal point axis.
 class GPointViewPort extends ChangeNotifier with Diagnosticable {
-  /// The minimum width of a point in pixel when scaling.
+  /// Minimum point width in pixels when scaling.
   final double minPointWidth;
 
-  /// The maximum width of a point in pixel when scaling.
+  /// Maximum point width in pixels when scaling.
   final double maxPointWidth;
 
-  /// The default width of a point in pixel.
-  ///
-  /// This value is mainly used for auto scaling. see [GPointViewPortAutoScaleStrategyLatest].
+  /// Default point width in pixels for auto scaling.
   final double defaultPointWidth;
 
-  /// Current point range (left and right) of the viewport.
   final GRange _pointRange = GRange.empty();
+
+  /// Returns true if the viewport has a valid range.
   bool get isValid => _pointRange.isNotEmpty;
 
-  /// The start(left) point of the viewport.
+  /// Gets the starting (left) point of the viewport.
   double get startPoint => _pointRange.begin!;
 
-  /// The end(right) point of the viewport.
+  /// Gets the ending (right) point of the viewport.
   double get endPoint => _pointRange.end!;
 
-  /// The center point of the viewport.
+  /// Gets the center point of the viewport.
   double get centerPoint => (startPoint + endPoint) / 2;
 
-  /// min left point of the viewport.
   final GValue<double> _startPointMin = GValue(double.negativeInfinity);
+
+  /// Gets the minimum allowed start point.
   double get startPointMin => _startPointMin.value;
+
+  /// Sets the minimum allowed start point.
   set startPointMin(double value) {
     assert(
       value < endPointMax,

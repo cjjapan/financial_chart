@@ -2,8 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'chart.dart';
 import 'components/render_util.dart';
 
+/// Renderer for chart components.
 class GChartRender {
+  /// Creates a chart renderer.
   const GChartRender();
+
+  /// Renders the chart on the given canvas.
   void render({required Canvas canvas, required GChart chart}) {
     GRenderUtil.renderClipped(
       canvas: canvas,
@@ -19,6 +23,7 @@ class GChartRender {
     );
   }
 
+  /// Renders the background component.
   void renderBackground({required Canvas canvas, required GChart chart}) {
     chart.background.getRender().render(
       canvas: canvas,
@@ -29,6 +34,7 @@ class GChartRender {
     );
   }
 
+  /// Renders all panel components.
   void renderPanels({required Canvas canvas, required GChart chart}) {
     for (int p = 0; p < chart.panels.length; p++) {
       final panel = chart.panels[p];
@@ -43,6 +49,7 @@ class GChartRender {
     }
   }
 
+  /// Renders the crosshair component.
   void renderCrosshair({required Canvas canvas, required GChart chart}) {
     chart.crosshair.getRender().render(
       canvas: canvas,
@@ -53,6 +60,7 @@ class GChartRender {
     );
   }
 
+  /// Renders all splitter components.
   void renderSplitters({required Canvas canvas, required GChart chart}) {
     chart.splitter.getRender().render(
       canvas: canvas,

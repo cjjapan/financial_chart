@@ -8,13 +8,17 @@ import 'axis_theme.dart';
 import 'axis.dart';
 import '../render.dart';
 
+/// Base renderer for axis components.
 abstract class GAxisRender<C extends GAxis> extends GRender<C, GAxisTheme> {
+  /// Creates an axis renderer.
   const GAxisRender();
 }
 
-/// render for value axis lay on vertical direction.
+/// Renderer for vertical value axes.
 class GValueAxisRender extends GAxisRender<GValueAxis> {
+  /// Creates a value axis renderer.
   const GValueAxisRender();
+
   @override
   void doRender({
     required Canvas canvas,
@@ -170,9 +174,11 @@ class GValueAxisRender extends GAxisRender<GValueAxis> {
   }
 }
 
-/// render for point axis lay on horizontal direction.
+/// Renderer for horizontal point axes.
 class GPointAxisRender extends GAxisRender<GPointAxis> {
+  /// Creates a point axis renderer.
   const GPointAxisRender();
+
   @override
   void doRender({
     required Canvas canvas,

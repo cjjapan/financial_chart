@@ -6,9 +6,11 @@ import '../render.dart';
 import 'crosshair.dart';
 import 'crosshair_theme.dart';
 
-/// The render for [GCrosshair].
+/// Renderer for crosshair components.
 class GCrosshairRender extends GRender<GCrosshair, GCrosshairTheme> {
+  /// Creates a crosshair renderer.
   const GCrosshairRender();
+
   @override
   void doRender({
     required Canvas canvas,

@@ -10,26 +10,23 @@ import '../component.dart';
 import '../panel/panel.dart';
 import '../viewport_v.dart';
 
-/// Base class for graph components.
-///
-/// This is not abstract so we can create a empty [GGraph] with only markers.
+/// Base class for all graph components.
 class GGraph<T extends GGraphTheme> extends GComponent {
+  /// Type identifier for graph components.
   static const String typeName = 'graph';
 
-  /// The value viewport id of the graph.
-  ///
-  /// see [GValueViewPort] for more details.
-  /// point viewport is shared for the whole panel. see [GPanel.pointViewPortId]
+  /// The viewport ID this graph is associated with.
   final String valueViewPortId;
 
-  /// The keys of the series value in the data source that
-  /// will be highlighted by drawing a circle on the graph.
+  /// Series value keys that trigger crosshair highlights.
   final List<String> crosshairHighlightValueKeys = [];
 
-  /// The graph markers of the graph.
-  List<GOverlayMarker> get overlayMarkers => List.unmodifiable(_overlayMarkers);
   final List<GOverlayMarker> _overlayMarkers = [];
 
+  /// Gets an unmodifiable list of overlay markers for this graph.
+  List<GOverlayMarker> get overlayMarkers => List.unmodifiable(_overlayMarkers);
+
+  /// Creates a graph.
   GGraph({
     super.id,
     super.label,
@@ -52,10 +49,12 @@ class GGraph<T extends GGraphTheme> extends GComponent {
     }
   }
 
+  /// Finds a marker by its ID.
   GOverlayMarker? findMarker(String id) {
     return _overlayMarkers.where((marker) => marker.id == id).firstOrNull;
   }
 
+  /// Removes a marker by its ID and returns it if found.
   GOverlayMarker? removeMarkerById(String id) {
     final marker = findMarker(id);
     if (marker != null) {
@@ -65,18 +64,22 @@ class GGraph<T extends GGraphTheme> extends GComponent {
     return null;
   }
 
+  /// Removes a specific marker from this graph.
   bool removeMarker(GOverlayMarker marker) {
     return _overlayMarkers.remove(marker);
   }
 
+  /// Adds a marker to this graph.
   void addMarker(GOverlayMarker marker) {
     _overlayMarkers.add(marker);
   }
 
+  /// Removes all markers from this graph.
   void clearMarkers() {
     _overlayMarkers.clear();
   }
 
+  /// Performs hit testing on overlay markers at the given position.
   GOverlayMarker? hitTestOverlayMarkers({required Offset position}) {
     for (final marker in _overlayMarkers) {
       if (marker.visible && marker.hitTest(position: position)) {

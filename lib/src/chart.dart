@@ -12,10 +12,16 @@ import 'data/data_source.dart';
 import 'theme/theme.dart';
 import 'values/value.dart';
 
+/// Helper class for debouncing actions.
 class DebounceHelper {
+  /// Delay in milliseconds before executing the action.
   final int milliseconds;
   Timer? _timer;
+
+  /// Creates a debounce helper with the specified delay.
   DebounceHelper({required this.milliseconds});
+
+  /// Runs the action after the debounce delay.
   void run(VoidCallback action) {
     if (_timer != null) {
       _timer!.cancel();
@@ -36,88 +42,84 @@ enum GPointerScrollMode {
   move,
 }
 
-/// Chart model.
+/// Chart model that manages data, components, and interactions.
 class GChart extends ChangeNotifier with Diagnosticable {
-  /// The data source.
+  /// The data source providing chart data.
   final GDataSource dataSource;
 
-  /// The only one point viewport of the panel which shared by all the components in the panel.
+  /// The shared point viewport for all components in the panel.
   final GPointViewPort pointViewPort;
 
-  /// The action mode for pointer scroll event.
   final GValue<GPointerScrollMode> _pointerScrollMode;
+
+  /// Sets the action mode for pointer scroll events.
   set pointerScrollMode(GPointerScrollMode value) {
     _pointerScrollMode.value = value;
     _notify();
   }
 
+  /// Gets the action mode for pointer scroll events.
   GPointerScrollMode get pointerScrollMode => _pointerScrollMode.value;
 
-  /// The background component.
+  /// The background component for the chart.
   final GBackground background;
 
-  /// The panel components.
-  ///
-  /// The panels are drawn in order which the first at top side and the last at bottom side.
+  /// The panel components drawn from top to bottom.
   final List<GPanel> panels;
 
-  /// The splitter component.
-  ///
-  /// Splitter is the resize handle between panels.
+  /// The splitter component for resizing between panels.
   final GSplitter splitter;
 
-  /// The crosshair component.
-  ///
-  /// Crosshair keeps latest mouse pointer position and draw crosshair lines over the chart.
+  /// The crosshair component displaying pointer position and lines.
   final GCrosshair crosshair;
 
-  /// The theme container for all chart components.
   final GValue<GTheme> _theme;
 
-  /// The current theme of the chart.
+  /// Gets the current theme of the chart.
   GTheme get theme => _theme.value;
+
+  /// Sets the theme for the chart.
   set theme(GTheme value) {
     _theme.value = value;
     _notify();
   }
 
-  /// The render for the chart.
+  /// The renderer for the chart.
   final GChartRender render;
 
-  /// The view area of the chart.
   final GValue<Rect> _area;
 
-  /// The current view area of the chart.
+  /// Gets the current view area of the chart.
   Rect get area => _area.value;
 
-  /// The current view size of the chart.
+  /// Gets the current view size of the chart.
   Size get size => area.size;
 
-  /// Painting counter. for debug purpose.
+  /// Painting counter for debugging purposes.
   final GValue<int> _paintCount = GValue(0);
 
-  /// The minimum view size of the chart.
+  /// The minimum allowed view size of the chart.
   final Size minSize;
 
-  /// The pre-render callback which is called right before rendering.
-  ///
-  /// It is able to update something to the chart here before rendering.
-  /// Do not make any update that would cause the chart to re-paint in this callback.
+  /// Callback invoked before rendering to allow chart updates.
+  /// Avoid updates that trigger repaints.
   final void Function(GChart chart, Canvas canvas, Rect area)? preRender;
 
-  /// The post-render callback which is called right after rendering finished.
-  ///
-  /// It is able to draw something additional on the canvas here.
-  /// Do not make any update that would cause the chart to re-paint in this callback.
+  /// Callback invoked after rendering to allow additional drawing.
+  /// Avoid updates that trigger repaints.
   final void Function(GChart chart, Canvas canvas, Rect area)? postRender;
 
-  /// current mouse cursor
+  /// The current mouse cursor style.
   final GValue<MouseCursor> mouseCursor = GValue<MouseCursor>(
     SystemMouseCursors.basic,
   );
 
   final GValue<bool> _hitTestEnable;
+
+  /// Gets whether hit testing is enabled.
   bool get hitTestEnable => _hitTestEnable.value;
+
+  /// Sets whether hit testing is enabled.
   set hitTestEnable(bool value) {
     _hitTestEnable.value = value;
     _notify();
@@ -126,15 +128,20 @@ class GChart extends ChangeNotifier with Diagnosticable {
   final _debounceHelper = DebounceHelper(milliseconds: 500);
 
   bool _initialized = false;
+
+  /// Gets whether the chart has been initialized.
   bool get initialized => _initialized;
   TickerProvider? _tickerProvider;
 
   GChartInteractionHandler? _interactionHandler;
 
+  /// Gets whether the viewport is currently being scaled.
   bool get isScaling => _interactionHandler?.isScalingViewPort == true;
 
+  /// Whether to print debug paint count information.
   final bool printDebugPaintCount;
 
+  /// Creates a chart with the specified configuration.
   GChart({
     required this.dataSource,
     required this.panels,
@@ -164,7 +171,8 @@ class GChart extends ChangeNotifier with Diagnosticable {
        _area = GValue(area),
        _hitTestEnable = GValue(hitTestEnable);
 
-  /// Initialization of the chart. (should be called only once internally by [GChartWidget])
+  /// Initializes the chart internals.
+  /// Should be called only once by [GChartWidget].
   void internalInitialize({
     TickerProvider? vsync,
     required GChartInteractionHandler interactionHandler,
@@ -190,7 +198,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     }
   }
 
-  /// Add a new panel to the chart.
+  /// Adds a new panel to the chart.
   void addPanel(GPanel panel) {
     panels.add(panel);
     for (final valueViewPort in panel.valueViewPorts) {
@@ -205,15 +213,14 @@ class GChart extends ChangeNotifier with Diagnosticable {
     autoScaleViewports();
   }
 
-  /// Remove a panel from the chart.
+  /// Removes a panel from the chart.
   void removePanel(GPanel panel) {
     panels.remove(panel);
     resize(newArea: area, force: true);
   }
 
-  /// Load initial data when there is no data in [dataSource].
-  ///
-  /// Should called only once right after the chart widget is initialized.
+  /// Loads initial data when the data source is empty.
+  /// Should be called only once after chart widget initialization.
   void ensureInitialData() {
     assert(!dataSource.isLoading);
     layout(area);
@@ -251,7 +258,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     });
   }
 
-  /// Paint the chart on the canvas.
+  /// Paints the chart on the given canvas.
   void paint(Canvas canvas, Size size) {
     if (kDebugMode && printDebugPaintCount) {
       _paintCount.value += 1;
@@ -265,7 +272,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     postRender?.call(this, canvas, area);
   }
 
-  /// Save current chart as an image.
+  /// Saves the current chart as an image.
   Future<Image> saveAsImage() async {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder, area);
@@ -274,7 +281,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     return picture.toImage(size.width.floor(), size.height.floor());
   }
 
-  /// Resize the chart view area.
+  /// Resizes the chart to the specified view area.
   void resize({required Rect newArea, bool force = false}) {
     if (newArea == _area.value && !force) {
       return;
@@ -363,11 +370,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     }
   }
 
-  /// Recalculate layout of the chart components.
-  ///
-  /// - Decide the size of each panel in [panels] based on the height weight of each panel.
-  /// - Decide the axis areas of each panel based on the position of the axes.
-  /// - Decide the graph areas of each panel from panel area and axis areas.
+  /// Recalculates the layout of chart components based on panel weights and axis positions.
   void layout([Rect? toArea]) {
     final area = toArea ?? _area.value;
     double totalHeightWeight = panels.fold(
@@ -392,7 +395,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     }
   }
 
-  /// Auto scale all viewports that have a autoScaleStrategy.
+  /// Auto-scales all viewports with an auto-scale strategy.
   void autoScaleViewports({
     bool resetPointViewPort = true,
     bool resetValueViewPort = true,
@@ -429,6 +432,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     }
   }
 
+  /// Performs hit testing on panel graphs at the given position.
   (GPanel, GGraph, GOverlayMarker?)? hitTestPanelGraphs({
     required Offset position,
   }) {
@@ -445,6 +449,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     return null;
   }
 
+  /// Gets the next visible panel starting from the given index.
   GPanel? nextVisiblePanel({int startIndex = 0}) {
     for (int p = startIndex; p < panels.length; p++) {
       GPanel panel = panels[p];
@@ -485,13 +490,14 @@ class GChart extends ChangeNotifier with Diagnosticable {
     _notify();
   }
 
-  /// Notify the listeners.
+  /// Notifies all registered listeners of changes.
   void _notify() {
     if (hasListeners) {
       notifyListeners();
     }
   }
 
+  /// Triggers a repaint of the chart.
   void repaint({bool layout = true}) {
     if (layout) {
       this.layout(area);
@@ -499,7 +505,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     _notify();
   }
 
-  /// dispose the chart.
+  /// Disposes of the chart and releases resources.
   @override
   void dispose() {
     pointViewPort.dispose();

@@ -7,28 +7,48 @@ import '../../values/value.dart';
 import '../../values/pair.dart';
 import '../components.dart';
 
-/// The crosshair trigger events.
-///
-/// Not every event can be triggered on all area of the chart.
-/// For example, long press events are only triggered on the graph area.
+/// Trigger events for the crosshair.
 enum GCrosshairTrigger {
+  /// Mouse enters the chart area.
   mouseEnter,
+
+  /// Mouse moves over the chart area.
   mouseHover,
+
+  /// Mouse exits the chart area.
   mouseExit,
+
+  /// Chart is resized.
   resized,
+
+  /// Tap down event.
   tapDown,
+
+  /// Tap up event.
   tapUp,
+
+  /// Long press starts.
   longPressStart,
+
+  /// Long press moves.
   longPressMove,
+
+  /// Long press ends.
   longPressEnd,
+
+  /// Scale gesture starts.
   scaleStart,
+
+  /// Scale gesture updates.
   scaleUpdate,
+
+  /// Scale gesture ends.
   scaleEnd,
 }
 
-/// The crosshair position update strategy.
+/// Strategy for updating crosshair position and visibility.
 abstract class GCrosshairUpdateStrategy {
-  /// show / hide /update position of the crosshair in this method.
+  /// Updates the crosshair based on the trigger event and position.
   void update({
     required GChart chart,
     required GCrosshairTrigger trigger,
@@ -37,15 +57,15 @@ abstract class GCrosshairUpdateStrategy {
   });
 }
 
-/// The crosshair update strategy which
-/// update the crosshair position based on the provided on/off triggers.
+/// Crosshair update strategy based on trigger events.
 class GCrosshairUpdateStrategyByTriggers implements GCrosshairUpdateStrategy {
-  /// The triggers that will show the crosshair.
+  /// Triggers that show the crosshair.
   final Set<GCrosshairTrigger> onTriggers;
 
-  /// The triggers that will hide the crosshair.
+  /// Triggers that hide the crosshair.
   final Set<GCrosshairTrigger> offTriggers;
 
+  /// Creates a trigger-based crosshair update strategy.
   GCrosshairUpdateStrategyByTriggers({
     required this.onTriggers,
     required this.offTriggers,
@@ -73,10 +93,10 @@ class GCrosshairUpdateStrategyByTriggers implements GCrosshairUpdateStrategy {
   }
 }
 
-/// The default crosshair update strategy which
-/// shows the crosshair when the pointer is over, tapped or long pressed
+/// Default crosshair update strategy.
 class GCrosshairUpdateStrategyDefault
     extends GCrosshairUpdateStrategyByTriggers {
+  /// Creates a default crosshair update strategy.
   GCrosshairUpdateStrategyDefault({
     bool withTap = false,
     bool withMouseHover = true,
@@ -102,7 +122,7 @@ class GCrosshairUpdateStrategyDefault
        );
 }
 
-/// The crosshair update strategy which always hide.
+/// Crosshair update strategy that always hides the crosshair.
 class GCrosshairUpdateStrategyNone implements GCrosshairUpdateStrategy {
   @override
   void update({
@@ -115,45 +135,64 @@ class GCrosshairUpdateStrategyNone implements GCrosshairUpdateStrategy {
   }
 }
 
-/// Crosshair with vertical and horizontal lines over the chart when pointer is moving over it.
+/// Crosshair component displaying vertical and horizontal lines at the pointer position.
 class GCrosshair extends GComponent {
-  /// the pointer position.
+  /// Current crosshair position.
   final GDoublePair crossPosition = GDoublePair.empty();
 
-  /// Whether the crosshair should snap to the nearest point.
   final GValue<bool> _snapToPoint;
+
+  /// Gets whether the crosshair snaps to the nearest point.
   bool get snapToPoint => _snapToPoint.value;
+
+  /// Sets whether the crosshair snaps to the nearest point.
   set snapToPoint(bool value) => _snapToPoint.value = value;
 
-  /// Whether the point lines are visible.
   final GValue<bool> _pointLinesVisible;
+
+  /// Gets whether vertical lines are visible.
   bool get pointLinesVisible => _pointLinesVisible.value;
+
+  /// Sets whether vertical lines are visible.
   set pointLinesVisible(bool value) => _pointLinesVisible.value = value;
 
-  /// Whether the value lines are visible.
   final GValue<bool> _valueLinesVisible;
+
+  /// Gets whether horizontal lines are visible.
   bool get valueLinesVisible => _valueLinesVisible.value;
+
+  /// Sets whether horizontal lines are visible.
   set valueLinesVisible(bool value) => _valueLinesVisible.value = value;
 
-  /// Whether the point labels are visible.
   final GValue<bool> _pointAxisLabelsVisible;
+
+  /// Gets whether point axis labels are visible.
   bool get pointAxisLabelsVisible => _pointAxisLabelsVisible.value;
+
+  /// Sets whether point axis labels are visible.
   set pointAxisLabelsVisible(bool value) =>
       _pointAxisLabelsVisible.value = value;
 
-  /// Whether the value labels are visible.
   final GValue<bool> _valueAxisLabelsVisible;
+
+  /// Gets whether value axis labels are visible.
   bool get valueAxisLabelsVisible => _valueAxisLabelsVisible.value;
+
+  /// Sets whether value axis labels are visible.
   set valueAxisLabelsVisible(bool value) =>
       _valueAxisLabelsVisible.value = value;
 
-  /// The crosshair update strategy.
   final GValue<GCrosshairUpdateStrategy> _updateStrategy =
       GValue<GCrosshairUpdateStrategy>(GCrosshairUpdateStrategyDefault());
+
+  /// Gets the crosshair update strategy.
   GCrosshairUpdateStrategy get updateStrategy => _updateStrategy.value;
+
+  /// Sets the crosshair update strategy.
   set updateStrategy(GCrosshairUpdateStrategy value) =>
       _updateStrategy.value = value;
 
+  /// Creates a crosshair component.
   GCrosshair({
     super.id,
     super.visible,
@@ -176,7 +215,7 @@ class GCrosshair extends GComponent {
     }
   }
 
-  /// update the crosshair position by provided [updateStrategy]
+  /// Updates the crosshair position using the configured update strategy.
   void updateCrossPosition({
     required GChart chart,
     required GCrosshairTrigger trigger,

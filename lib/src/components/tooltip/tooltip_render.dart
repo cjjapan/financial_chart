@@ -3,9 +3,11 @@ import 'package:flutter/widgets.dart';
 import '../../chart.dart';
 import '../components.dart';
 
-/// [GTooltip] renderer
+/// Renderer for tooltip components.
 class GTooltipRender extends GRender<GTooltip, GTooltipTheme> {
+  /// Creates a tooltip renderer.
   const GTooltipRender();
+
   @override
   void doRender({
     required Canvas canvas,

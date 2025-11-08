@@ -9,14 +9,13 @@ import 'marker_theme.dart';
 import '../viewport_v.dart';
 import '../viewport_h.dart';
 
-/// Base class for rendering a [GMarker].
-///
-/// [GMarkerRender] has different implementations from super [GRender] for it needs some extra parameters for rendering.
-/// use [GMarkerRender.renderMarker] instead of super [GRender.render] to render a [GMarker].
+/// Base renderer for marker components.
 abstract class GMarkerRender<M extends GMarker, T extends GMarkerTheme>
     extends GRender<M, T> {
+  /// Creates a marker renderer.
   const GMarkerRender();
 
+  /// Renders a marker with additional context parameters.
   void renderMarker({
     required Canvas canvas,
     required GChart chart,

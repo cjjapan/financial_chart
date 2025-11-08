@@ -4,7 +4,9 @@ import 'dart:ui';
 import 'package:vector_math/vector_math.dart';
 import 'extensions.dart';
 
+/// Utility functions for line geometry calculations.
 class LineUtil {
+  /// Finds the nearest point on a line segment to a given point.
   static Vector2 nearestPointOn({
     required double x1,
     required double y1,
@@ -37,6 +39,7 @@ class LineUtil {
     return (P - A).projection(B - A, clamp: true) + A;
   }
 
+  /// Calculates the distance from a point to a line segment.
   static double distanceTo({
     required double x1,
     required double y1,

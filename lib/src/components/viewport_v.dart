@@ -10,69 +10,88 @@ import 'panel/panel.dart';
 import 'viewport_resize.dart';
 import 'viewport_v_scaler.dart';
 
-/// The value scale type of value viewport.
-enum GValueViewPortScaleType { linear, logarithmic }
+/// Scale type for value viewports.
+enum GValueViewPortScaleType {
+  /// Linear scale.
+  linear,
 
-/// Viewport for value (vertical) axis
+  /// Logarithmic scale.
+  logarithmic
+}
+
+/// Viewport for the vertical value axis.
 class GValueViewPort extends ChangeNotifier with Diagnosticable {
-  /// Identifier of the viewport which being referenced by components.
+  /// Unique identifier for this viewport.
   final String id;
 
-  /// The decimal precision of the value.
+  /// Decimal precision for displayed values.
   final int valuePrecision;
 
-  /// Current value range (top and bottom) of the viewport.
   final GRange _range = GRange.empty();
+
+  /// Gets the current value range.
   GRange get range => _range;
+
+  /// Returns true if the viewport has a valid range.
   bool get isValid => _range.isNotEmpty;
 
-  /// The end (top) value of the viewport.
+  /// Gets the ending (top) value of the viewport.
   double get endValue => _range.last!;
 
-  /// The start (bottom) value of the viewport.
+  /// Gets the starting (bottom) value of the viewport.
   double get startValue => _range.first!;
 
-  /// The center value of the viewport.
+  /// Gets the center value of the viewport.
   double get centerValue => (endValue + startValue) / 2;
 
-  /// The value range of the viewport ([endValue]-[startValue]).
+  /// Gets the size of the value range.
   double get rangeSize => endValue - startValue;
 
-  /// The range when selecting. will be cleared when selection finished.
-  GRange get selectedRange => _selectedRange;
   final GRange _selectedRange = GRange.empty();
 
-  /// Whether the viewport is auto scaling mode.
-  bool get autoScaleFlg => _autoScale.value;
-  set autoScaleFlg(bool value) => _autoScale.value = value;
+  /// Gets the selected range during range selection.
+  GRange get selectedRange => _selectedRange;
+
   final GValue<bool> _autoScale = GValue<bool>(true);
 
-  /// The auto scale strategy to calculate the range when auto scale enabled.
+  /// Gets whether auto-scaling is enabled.
+  bool get autoScaleFlg => _autoScale.value;
+
+  /// Sets whether auto-scaling is enabled.
+  set autoScaleFlg(bool value) => _autoScale.value = value;
+
+  /// Strategy for calculating range when auto-scaling.
   final GValueViewPortAutoScaleStrategy? autoScaleStrategy;
 
-  /// Defines the behavior of how to update the viewport range when view size changed.
   final GValue<GViewPortResizeMode> _resizeMode = GValue<GViewPortResizeMode>(
     GViewPortResizeMode.keepRange,
   );
+
+  /// Gets the resize mode for the viewport.
   GViewPortResizeMode get resizeMode => _resizeMode.value;
+
+  /// Sets the resize mode for the viewport.
   set resizeMode(GViewPortResizeMode value) => _resizeMode.value = value;
 
-  /// The minimum value range when scaling.
+  /// Minimum allowed value range size.
   final double? minRangeSize;
 
-  /// The maximum value range when scaling.
+  /// Maximum allowed value range size.
   final double? maxRangeSize;
 
-  /// The scale type of the viewport. see [GValueViewPortScaleType].
-  /// default to [GValueViewPortScaleType.linear].
   final GValue<GValueViewPortScaleType> _scaleType =
       GValue<GValueViewPortScaleType>(GValueViewPortScaleType.linear);
+
+  /// Gets the scale type (linear or logarithmic).
   GValueViewPortScaleType get scaleType => _scaleType.value;
+
+  /// Sets the scale type (linear or logarithmic).
   set scaleType(GValueViewPortScaleType value) => _scaleType.value = value;
 
-  final double logBase = 2.302585092994046; // =log(10);
+  /// Base for logarithmic calculations.
+  final double logBase = 2.302585092994046;
 
-  /// Callback when range updated.
+  /// Callback invoked when the range is updated.
   final GRange Function({required GRange updatedRange, required bool finished})?
   onRangeUpdate;
 

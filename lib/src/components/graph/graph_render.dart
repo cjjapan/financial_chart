@@ -10,10 +10,12 @@ import 'graph_theme.dart';
 import 'graph.dart';
 import '../render.dart';
 
-/// Base class for [GGraph] renderers.
+/// Base renderer for graph components.
 class GGraphRender<C extends GGraph, T extends GGraphTheme>
     extends GRender<C, T> {
+  /// Creates a graph renderer.
   const GGraphRender();
+
   @override
   void render({
     required Canvas canvas,

@@ -6,30 +6,42 @@ import 'package:flutter/foundation.dart';
 
 import '../values/value.dart';
 
-/// class for a single data point.
-///
-/// [P] is the type of the point value. usually it is int type with time in seconds since epoch as value.
-/// [seriesValues] is a list of double values for each series.
+/// Represents a single data point with point value and series values.
 class GData<P> extends Equatable {
+  /// The point value, typically a timestamp.
   final P pointValue;
+
+  /// List of series values for this data point.
   final List<double> seriesValues;
 
+  /// Creates a data point.
   const GData({required this.pointValue, required this.seriesValues});
 
+  /// Gets a series value by index.
   double operator [](int index) => seriesValues[index];
+
+  /// Sets a series value by index.
   void operator []=(int index, double value) => seriesValues[index] = value;
 
   @override
   List<Object?> get props => [pointValue, seriesValues];
 }
 
-/// Property of a series.
+/// Properties and metadata for a data series.
 class GDataSeriesProperty {
+  /// Unique key for the series.
   final String key;
+
+  /// Display label for the series.
   final String label;
+
+  /// Decimal precision for formatting.
   final int precision;
+
+  /// Custom formatter for series values.
   final String Function(double seriesValue)? valueFormater;
 
+  /// Creates series properties.
   const GDataSeriesProperty({
     required this.key,
     required this.label,
@@ -38,7 +50,7 @@ class GDataSeriesProperty {
   });
 }
 
-/// Default formatter for point value which format it as yyyy-MM-dd assumes the value is milliseconds since epoch.
+/// Default formatter for point values as yyyy-MM-dd dates.
 String defaultPointValueFormater(int point, dynamic pointValue) {
   if (pointValue is int) {
     // assume the point value is milliseconds since epoch
@@ -49,7 +61,7 @@ String defaultPointValueFormater(int point, dynamic pointValue) {
   return pointValue.toString();
 }
 
-/// Default formatter for series value.
+/// Default formatter for series values with K/M/B suffixes.
 String defaultSeriesValueFormater(double seriesValue, int precision) {
   if (seriesValue.abs() >= 100000) {
     if (seriesValue.abs() >= 1000000000) {
@@ -63,40 +75,41 @@ String defaultSeriesValueFormater(double seriesValue, int precision) {
   return seriesValue.toStringAsFixed(precision);
 }
 
-/// Data container for the chart.
+/// Container for chart data with dynamic loading capabilities.
 /// ignore: must_be_immutable
 class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     with Diagnosticable {
-  /// Current start point of the data (point value of the first data in [dataList]).
-  ///
-  /// Use point instead of index to access data so we can append data to both ends dynamically without breaking data access.
   final GValue<int> _basePoint = GValue<int>(0);
+
+  /// Gets the starting point of the data.
   int get basePoint => _basePoint.value;
 
   final GValue<int> _minPoint = GValue<int>(-100000000);
   final GValue<int> _maxPoint = GValue<int>(100000000);
 
-  /// load more data than necessary to avoid loading too frequently.
+  /// Extra data points to load beyond visible range.
   final int dataLoadMargin;
 
   final GValue<bool> _isLoading = GValue<bool>(false);
+
+  /// Gets whether data is currently loading.
   bool get isLoading => _isLoading.value;
 
-  /// The data list.
+  /// The list of data points.
   final List<D> dataList;
 
-  /// The series properties.
+  /// Properties for each data series.
   final List<GDataSeriesProperty> seriesProperties;
 
-  /// Map of series key to index.
   final Map<String, int> _seriesKeyIndexMap;
 
-  /// Default formatter for point value.
+  /// Formatter for point values.
   final String Function(int point, P pointValue) pointValueFormater;
 
-  /// Default formatter for series value.
+  /// Formatter for series values.
   final String Function(double seriesValue, int precision) seriesValueFormater;
 
+  /// Creates a data source.
   GDataSource({
     required this.dataList,
     required this.seriesProperties,
@@ -112,33 +125,42 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
          List.generate(seriesProperties.length, (i) => i),
        );
 
+  /// Gets whether the data list is empty.
   bool get isEmpty => dataList.isEmpty;
+
+  /// Gets whether the data list is not empty.
   bool get isNotEmpty => dataList.isNotEmpty;
+
+  /// Gets the first point value.
   int get firstPoint => indexToPoint(0);
+
+  /// Gets the last point value.
   int get lastPoint => indexToPoint(dataList.length - 1);
+
+  /// Gets the number of data points.
   int get length => dataList.length;
 
-  /// Convert point to index in data list.
+  /// Converts a point value to an index in the data list.
   int pointToIndex(int point) {
     return point - basePoint;
   }
 
-  /// Convert index in data list to point.
+  /// Converts an index in the data list to a point value.
   int indexToPoint(int index) {
     return index + basePoint;
   }
 
-  /// Convert series key to value index in [GData].seriesValues
+  /// Converts a series key to its index in series values.
   int seriesKeyToIndex(String key) {
     return _seriesKeyIndexMap[key]!;
   }
 
-  /// Convert series value index to series key.
+  /// Converts a series index to its key.
   String seriesIndexToKey(int index) {
     return seriesProperties[index].key;
   }
 
-  /// Get the data at the given point.
+  /// Gets the data at the specified point.
   GData<P>? getData(int point) {
     final index = pointToIndex(point);
     if (index < 0 || index >= dataList.length) {
@@ -147,7 +169,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     return dataList[index];
   }
 
-  /// add a new series to the data source.
+  /// Adds a new series to the data source.
   void addSeries(GDataSeriesProperty property, List<double> values) {
     assert(
       !_seriesKeyIndexMap.containsKey(property.key),
@@ -165,9 +187,8 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     _notify();
   }
 
-  /// remove a series from the data source.
-  ///
-  /// make sure it is not being used by any component of the chart before removing.
+  /// Removes a series from the data source.
+  /// Ensure the series is not in use before removing.
   void removeSeries(String key) {
     assert(_seriesKeyIndexMap.containsKey(key), 'Series key not found: $key');
     final index = _seriesKeyIndexMap[key]!;
@@ -182,7 +203,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     _notify();
   }
 
-  /// Get the data at the given point.
+  /// Gets the point value at the specified point.
   P? getPointValue(int point) {
     final index = pointToIndex(point);
     if (index < 0 || index >= dataList.length) {
@@ -191,7 +212,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     return dataList[index].pointValue;
   }
 
-  /// Get the data at the given point range.
+  /// Gets point values within the specified range.
   List<P> getPointValues({required int fromPoint, required int toPoint}) {
     return dataList
         .sublist(pointToIndex(fromPoint), pointToIndex(toPoint))
@@ -199,7 +220,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
         .toList();
   }
 
-  /// Get the series value by key at the given point.
+  /// Gets a series value by key at the specified point.
   double? getSeriesValue({required int point, required String key}) {
     final index = pointToIndex(point);
     if (index < 0 ||
@@ -210,7 +231,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
     return dataList[index].seriesValues[_seriesKeyIndexMap[key]!];
   }
 
-  /// Get the series values by key at the given point range.
+  /// Gets series values by key within the specified range.
   List<double> getSeriesValues({
     required int fromPoint,
     required int toPoint,
@@ -226,14 +247,12 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
         .toList();
   }
 
-  /// Get the series property by key.
+  /// Gets the series property by key.
   GDataSeriesProperty getSeriesProperty(String key) {
     return seriesProperties[_seriesKeyIndexMap[key]!];
   }
 
-  /// Get the series value as map by keys at the given point.
-  ///
-  /// return value is a map with series key as key and series value as value.
+  /// Gets series values as a map at the specified point.
   Map<String, double> getSeriesValueAsMap({
     required int point,
     required List<String> keys,
@@ -417,6 +436,7 @@ class GDataSource<P, D extends GData<P>> extends ChangeNotifier
   })?
   afterDataLoader;
 
+  /// Callback invoked after data is loaded.
   final Future<void> Function(GDataSource<P, D> dataSource)? dataLoaded;
 
   @override

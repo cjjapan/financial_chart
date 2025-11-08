@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 
+/// Utility functions for arc geometry calculations.
 class ArcUtil {
   static double _normalizeStartTheta(double startTheta, double endTheta) {
     double theta = startTheta;

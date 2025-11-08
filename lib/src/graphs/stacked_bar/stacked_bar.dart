@@ -4,28 +4,28 @@ import '../../components/components.dart';
 import '../../values/value.dart';
 import 'stacked_bar_render.dart';
 
-/// Stacked bar graph.
+/// Stacked bar graph for displaying multiple data series as segmented bars.
 class GGraphStackedBar<T extends GGraphTheme> extends GGraph<T> {
+  /// Type identifier for stacked bar graphs.
   static const String typeName = "stacked_bar";
 
-  /// The keys of the series values in the data source.
-  /// For example with keys ["A", "B"], will draw a bar segment from baseValue
-  /// to value of "A" and also another bar segment from value of "A" to value of "B".
+  /// Series value keys in the data source for each bar segment.
   final List<String> valueKeys;
 
-  /// The base value in the data source.
-  ///
-  /// If this value is not null, the bar will start from this value.
-  /// Otherwise, the bar will start from the position defined by basePosition.
   final GValue<double?> _baseValue = GValue(null);
+
+  /// Gets the base value for the first bar segment.
   double? get baseValue => _baseValue.value;
+
+  /// Sets the base value for the first bar segment.
   set baseValue(double? value) => _baseValue.value = value;
 
-  /// A value from 0 to 1 which defines start position of the first bar.
-  /// Only used when baseValue is null.
-  /// when null the first bar segment will be value of first valueKey to value of second valueKey.
   final GValue<double?> _basePosition = GValue(1.0);
+
+  /// Gets the base position (0 to 1) for the first bar segment when baseValue is null.
   double? get basePosition => _basePosition.value;
+
+  /// Sets the base position (0 to 1) for the first bar segment when baseValue is null.
   set basePosition(double? value) {
     assert(
       value == null || (value >= 0 && value <= 1),
@@ -34,6 +34,7 @@ class GGraphStackedBar<T extends GGraphTheme> extends GGraph<T> {
     _basePosition.value = value;
   }
 
+  /// Creates a stacked bar graph.
   GGraphStackedBar({
     super.id,
     super.label,

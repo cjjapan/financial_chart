@@ -5,9 +5,11 @@ import '../render.dart';
 import 'panel.dart';
 import 'panel_theme.dart';
 
-/// The render for [GPanel].
+/// Renderer for panel components.
 class GPanelRender extends GRender<GPanel, GPanelTheme> {
+  /// Creates a panel renderer.
   const GPanelRender();
+
   @override
   void doRender({
     required Canvas canvas,

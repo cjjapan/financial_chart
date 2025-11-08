@@ -3,17 +3,18 @@ import '../component_theme.dart';
 import '../axis/axis_theme.dart';
 import 'crosshair.dart';
 
-/// Theme for the [GCrosshair] component.
+/// Theme for crosshair components.
 class GCrosshairTheme extends GComponentTheme {
-  /// Style of the lines.
+  /// Style for crosshair lines.
   final PaintStyle lineStyle;
 
-  /// Theme for the value labels.
+  /// Theme for value axis labels.
   final GAxisLabelTheme valueLabelTheme;
 
-  /// Theme for the point labels.
+  /// Theme for point axis labels.
   final GAxisLabelTheme pointLabelTheme;
 
+  /// Creates a crosshair theme.
   const GCrosshairTheme({
     required this.lineStyle,
     required this.valueLabelTheme,
