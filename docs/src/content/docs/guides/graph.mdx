@@ -1,0 +1,98 @@
+---
+title: Adding a graph
+sidebar:
+    order: 20
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Add graph data
+
+Add `volume` data to `seriesValues` and `seriesProperties` of chart dataSource.
+
+```dart
+final dataSource = GDataSource<int, GData<int>>(
+    dataList: response.candlesData.map((candle) {
+        return GData<int>(
+            pointValue: candle.date.millisecondsSinceEpoch,
+            seriesValues: [
+                // ...
+                candle.volume, // volume data values
+            ],
+        );
+    }).toList(),
+    seriesProperties: const [
+        // ...
+        GDataSeriesProperty(key: 'volume', label: 'Volume', precision: 0), // volume data property
+    ],
+);
+
+```
+
+## Add graph and axis
+
+Add value viewpport, value axis and the graph.
+
+```dart
+final chart = GChart(
+    dataSource: dataSource,
+    theme: GThemeDark(),
+    panels: [
+      GPanel(
+        valueViewPorts: [
+          GValueViewPort(
+            valuePrecision: 2,
+            autoScaleStrategy: GValueViewPortAutoScaleStrategyMinMax(
+              dataKeys: ["high", "low"],
+              // Add a margin to the bottom of the candlestick graph to avoid overlapping with the volume graph.
+              marginStart: GSize.viewHeightRatio(0.3),
+            ),
+          ),
+          // Add a value viewport for volume graph and axis
+          GValueViewPort(
+            id: "volumeViewPort",
+            valuePrecision: 0,
+            autoScaleStrategy: GValueViewPortAutoScaleStrategyMinMax(
+              dataKeys: ["volume"],
+              // Add a margin to the top to avoid overlapping with the candlestick graph.
+              marginEnd: GSize.viewHeightRatio(0.7),
+            ),
+          ),
+        ],
+        // Y Axes
+        valueAxes: [
+          GValueAxis(),
+          // Add a value axis for volume
+          GValueAxis(
+            // set a id other than using the default one.
+            id: "volume",
+            // set the viewport id which should match the one defined in valueViewPorts.
+            viewPortId: "volumeViewPort",
+            // set the position of the axis to start (left side pf the graph).
+            position: GAxisPosition.start,
+            // disable scaling by dragging.
+            scaleMode: GAxisScaleMode.none
+          ),
+        ],
+        // X Axes
+        pointAxes: [GPointAxis()],
+        graphs: [
+          GGraphGrids(),
+          GGraphOhlc(ohlcValueKeys: const ["open", "high", "low", "close"]),
+          // Add a volume graph with correct valueViewPortId and valueKey.
+          GGraphBar(valueKey: "volume", valueViewPortId: "volumeViewPort"),
+        ],
+      ),
+    ],
+);
+
+```
+
+## The result
+<EmbedChart name="guide_graph"/>
+
+On the chart you can zoom the price value viewport by dragging the right side Y axis,   
+but the X axis on the left side for volume value viewport is not draggble because `scaleMode` is set to `GAxisScaleMode.none`.
+
+
+See `Graphs` section for more graphs you can add to the chart.

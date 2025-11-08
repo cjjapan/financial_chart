@@ -1,0 +1,9 @@
+node_modules
+.astro
+dist
+__**
+.DS_Store
+
+# Built Flutter apps for GitHub Pages
+public/demo/
+public/examples/

@@ -1,0 +1,37 @@
+---
+title: GGraphOhlc
+sidebar:
+    order: 20
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Properties
+
+### `ohlcValueKeys`
+
+**type:** `List<String>`  
+**required:** `true`
+
+The value keys in the data source to use for the OHLC graph.  
+This should contain exactly 4 keys with order `open`, `high`, `low`, and `close`.
+
+<h6>Example</h6>
+
+<EmbedChart name="graph_ohlc1"/>
+
+### `drawAsCandle`
+**type:** `bool`  
+**required:** `false`   
+**default:** `true`
+
+Whether to draw the OHLC graph as a candlestick chart.
+If `false`, it will be drawn as a ohlc lines
+
+<h6>Example when `drawAsCandle` set to `false`</h6>
+
+<EmbedChart name="graph_ohlc2"/>
+
+## Inherited properties 
+
+See [GGraph](../graph/) for inherited properties.

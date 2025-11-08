@@ -1,0 +1,191 @@
+---
+title: GChart
+sidebar: 
+    order: 20
+---
+import { Aside } from '@astrojs/starlight/components';
+
+## Properties
+
+### `dataSource`
+
+**type:** [`GDataSource`](../datasource/)  
+**required:** `true`  
+
+The data source for the chart. This is where the chart gets its data from.  
+
+<Aside type="note">
+Although you can update the data in the `dataSource` after chart being created, this property does not have a setter.
+If you want to change to another instance, you need to recreate the chart object.
+</Aside>
+
+### `panels`
+
+**type:** [`List<GPanel>`](../panel/)   
+**required:** `true`
+
+The list of panels in the chart. each panel has its own graphs and axes.
+
+### `pointViewPort`  
+
+**type:** [`GPointViewPort`](../point_viewport/)  
+**required:** `false`  
+**default:** `GPointViewPort(autoScaleStrategy: const GPointViewPortAutoScaleStrategyLatest())`  
+
+The viewport which controls the visible points range along the x axis on the chart.  
+The visible range of all panels, x axes and graphs are synchronized so there is only one instance.  
+Set to your own instance to customize its behavior.
+
+### `background` 
+
+**type:** [`GBackground`](../background/)  
+**required:** `false`  
+**default:** `GBackground()`
+
+The background component which draws the background of the chart.  
+The default will draw a colored rectangle. extend the `GBackground` class to customize the background drawing.
+
+### `splitter`
+**type:** [`GSplitter`](../panel/)  
+**required:** `false`  
+**default:** `GSplitter()`
+
+The splitter component which being used to resize panels. all panels share the same splitter instance.  
+Set to your own instance to customize.
+
+### `crosshair`
+**type:** [`GCrosshair`](../crosshair/)  
+**required:** `false`  
+**default:** `GCrosshair()`
+
+The crosshair component which draws crosshair lines on the chart when mouse is hovered over the chart area.  
+Set to your own instance to customize.
+
+### `pointerScrollMode`  
+**type:** [`GPointerScrollMode`](#gpointerscrollmode)  
+**required:** `false`    
+**default:** `GPointerScrollMode.zoom`  
+
+Defines the behavior of the chart when mouse wheel is scrolled over the chart area.  
+See the enum values for more details.
+
+### `hitTestEnable`  
+**type:** `bool`  
+**required:** `false`    
+**default:** `true`  
+
+This is for disable hit test on all components in the chart globally.  
+When it is set to `true`, whether a component can be hit by mouse events is determined by the component's own `hitTestMode` property.  
+When it is set to `false`, the `hitTestMode` property of all components will be ignored.
+
+### `area`  
+**type:** `Rect`  
+**required:** `false`  
+**default:** `const Rect.fromLTWH(0, 0, 500, 500)`  
+
+This is for read only. the size of the chart area will be always calculated from size of parent [`GChartWidget`](../chart_widget/) widget.
+
+### `minSize`  
+**type:** `Size`  
+**required:** `false`  
+**default:** `const Size(200, 200)`  
+
+The minimum size of the chart area.
+<Aside type="note">
+The chart may draws outside of the widget area when parent [`GChartWidget`](../chart_widget/) size is smaller than the minimum size.
+use constraints to limit the size of the parent widget or clip the widget.
+</Aside>
+
+### `preRender`
+**type:** `void Function(GChart chart, Canvas canvas, Rect area)`  
+**required:** `false`  
+**default:** `null`  
+
+The pre-render callback which is called right before rendering.  
+
+<Aside type="note">
+Do not apply any update that would cause the chart to re-paint in this callback.
+</Aside>
+
+
+### `postRender`
+**type:** `void Function(GChart chart, Canvas canvas, Rect area)`  
+**required:** `false`  
+**default:** `null`  
+
+The post-render callback which is called right after rendering.  
+<Aside type="note">
+Do not apply any update that would cause the chart to re-paint in this callback.
+</Aside>
+
+
+## Enums
+
+### `GPointerScrollMode`
+**values:**  
+- `none`: No action when mouse wheel is scrolled over the chart area.  
+- `zoom`: Zoom in or out the chart over x axis by changing the `pointViewPort`'.  
+- `move`: Scroll the chart over x axis by changing the `pointViewPort`'.  
+
+## Methods
+
+### `addPanel`
+
+```dart
+void addPanel(GPanel panel)
+```
+
+Add a panel to the chart.  
+
+<Aside type="note">
+Do not call `chart.panels.add()` directly, use this method instead.
+</Aside>
+
+### `removePanel`
+```dart
+void removePanel(GPanel panel)
+```
+
+Remove a panel from the chart.
+
+<Aside type="note">
+Do not call `chart.panels.remove()` directly, use this method instead.
+</Aside>
+
+
+### `saveAsImage`
+```dart
+Future<Image> saveAsImage()
+```
+Export the chart as an image.
+
+### `autoScaleViewports`
+
+```dart
+void autoScaleViewports({
+    bool resetPointViewPort = true,
+    bool resetValueViewPort = true,
+    bool animation = true,
+})
+```
+Reset the scale of the viewports use their own auto scale strategy.
+
+### `hitTestPanelGraphs`
+
+```dart
+(GPanel, GGraph, GOverlayMarker?)? hitTestPanelGraphs({
+    required Offset position,
+})
+```
+
+Get hit test result of the panel graphs at the given position.  
+When it hits a graph, it will return the panel, graph with a null marker.  
+When it hits a marker, it will return the panel, graph and the marker.  
+
+### `repaint`
+
+```dart
+void repaint({bool layout = true}) 
+```
+
+Redraw the chart. call this method when you updated the chart data or properties that requires a re-paint.  

@@ -1,0 +1,35 @@
+---
+title: GGraphLine
+sidebar:
+    order: 30
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Properties
+
+### `valueKey`
+
+**type:** `String`  
+**required:** `true`
+
+The value key in the data source to use for the line.
+
+<h6>Example when `valueKey` set to `close`</h6>
+
+<EmbedChart name="graph_line1"/>
+
+### `smoothing`
+**type:** `bool`  
+**required:** `false`   
+**default:** `false`
+
+Whether to smooth the line or not.
+
+<h6>Example when `smoothing` set to `true`</h6>
+
+<EmbedChart name="graph_line2"/>
+
+## Inherited properties 
+
+See [GGraph](../graph/) for inherited properties.

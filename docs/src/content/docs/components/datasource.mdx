@@ -1,0 +1,89 @@
+---
+title: GDataSource
+sidebar: 
+    order: 30
+---
+
+## Properties
+
+### `dataList`
+
+**type:** [`List<GData>`](#gdata)  
+**required:** `true`
+
+The list of data to be displayed in the chart. this can be updated after the chart is created.
+
+
+### `seriesProperties`
+
+**type:** [`List<GDataSeriesProperty>`](#gdataseriesproperty)
+**required:** `true`  
+
+The list of series properties for the data source. this is used to define the properties of each series in the chart.
+
+### `pointValueFormater`
+
+**type:** `String Function(int point, int pointValue)`  
+**required:** `false`  
+**default:** `defaultPointValueFormater`  
+
+The default formater for the point value labels on X axis and tooltips.
+
+### `seriesValueFormater`
+**type:** `String Function(double seriesValue, int precision)`  
+**required:** `false`  
+**default:** `defaultSeriesValueFormater`  
+
+The default formater for the series value labels on Y axes and tooltips.
+
+## Methods
+
+
+
+## `GData`
+
+### `pointValue`  
+
+**type:** `int`  
+**required:** `true`
+
+The value of the point on X axis. usually it is milliseconds since epoch.
+
+
+### `seriesValues`  
+**type:** `List<double>`  
+**required:** `true`
+
+The list of values for each series in the data source.
+Thel length should match the length of `seriesProperties` in the data source.
+
+
+## `GDataSeriesProperty`
+
+### `key`
+**type:** `String`  
+**required:** `true`  
+
+The key of the data series property. data in dataList can be accessed by this key.
+
+### `label`
+**type:** `String`  
+**required:** `true`  
+
+The label of the data series property. this is mainly used to display the label on tooltips.
+
+### `precision`
+**type:** `int`  
+**required:** `false`  
+**default:** `2`  
+
+The decimal precision of the series value.
+
+### `valueFormater`  
+**type:** `String Function(double seriesValue)?`  
+**required:** `false`  
+**default:** `null`  
+
+The formater for the series value. if not provided, the default formater will be used.
+
+

@@ -1,0 +1,46 @@
+---
+title: Adding tooltip 
+sidebar:
+    order: 30
+---
+
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Add tooltip
+Add tooltip property to the panel.
+
+```dart
+final chart = GChart(
+    panels: [
+      GPanel(
+        valueViewPorts: ...
+        valueAxes: ...
+        pointAxes: ...
+        graphs: ...
+        // add the tooltip to the panel.
+        tooltip: GTooltip(
+          // set the tooltip x position to follow the mouse pointer.
+          position: GTooltipPosition.followPointer,
+          // set the tooltip y position to follow the value of the close price.
+          followValueKey: "close",
+          followValueViewPortId: "",
+          // set the values to be displayed in the tooltip.
+          dataKeys: [
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+          ],
+        ),
+      ),
+    ],
+);
+
+```
+
+## The result
+<EmbedChart name="guide_tooltip"/>
+
+On the chart you can mouse hover the graph area to see the tooltip.

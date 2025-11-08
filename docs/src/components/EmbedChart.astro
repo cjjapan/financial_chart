@@ -1,0 +1,39 @@
+---
+const { ticker, name } = Astro.props;
+---
+
+<style>
+    div.f-chart-wrapper {
+        width: 100%;
+        padding: 0;
+    }
+    div.f-chart {
+        resize: both;
+        width: 100%;
+        min-width: 200px;
+        max-width: 100%;
+        height: 400px;
+        min-height: 200px;
+        max-height: 800px;
+        margin: 0;
+        border-radius: 0px;
+        border: 1px solid #666666;
+        overflow: hidden;
+    }
+
+    html[data-theme='dark'] div.f-chart {
+        border: 1px solid #333333;
+    }
+    html[data-theme='light'] div.f-chart {
+        border: 1px solid #dddddd;
+    }
+</style>
+
+<script src="/financial_chart/demo/flutter_bootstrap.js" type="module" defer></script>
+
+<div class="f-chart-wrapper">
+    <div class="f-chart" data-chart-name={name} data-chart-ticker={ticker}>
+        chart view
+    </div>
+</div>
+

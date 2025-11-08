@@ -1,10 +1,20 @@
-name: "Deploy-Pages"
+name: "Deploy GitHub Pages"
 
 on:
   push:
-    branches: [ "dev", "main" ]
-#  pull_request:
-#    branches: [ "main" ]
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,20 +26,28 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version-file: example/pubspec.yaml # path to pubspec.yaml
+          flutter-version-file: example/pubspec.yaml
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: docs/package-lock.json
+      
       - name: Check Flutter Version
         run: flutter --version
-      - name: Build Web
+      
+      - name: Build all sites
         run: |
-          flutter pub get
-          cd example
-          flutter pub get
-          flutter build web --base-href "/financial_chart/"
+          chmod +x build-github-pages.sh
+          ./build-github-pages.sh
+      
       - name: Upload artifact
-        id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: example/build/web
+          path: docs/dist
+  
   deploy:
     permissions:
       id-token: write

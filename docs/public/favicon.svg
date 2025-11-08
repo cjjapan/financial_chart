@@ -1,0 +1,33 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Transparent background with gradient border -->
+  <rect x="3" y="3" width="58" height="58" rx="10" ry="10" fill="none" stroke="url(#grad1)" stroke-width="6"/>
+  
+  <!-- Gradient Border Definition -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8f5fff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00ffe0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Candlesticks -->
+  <!-- Green candlestick 1 -->
+  <line x1="15" y1="18" x2="15" y2="48" stroke="#22A094" stroke-width="1"/>
+  <rect x="12" y="23" width="6" height="20" fill="#22A094" />
+
+  <!-- Red candlestick 2 -->
+  <line x1="23" y1="20" x2="23" y2="40" stroke="#E22C25" stroke-width="1"/>
+  <rect x="20" y="24" width="6" height="10" fill="#E22C25" />
+
+  <!-- Red candlestick 3 -->
+  <line x1="31" y1="26" x2="31" y2="45" stroke="#E22C25" stroke-width="1"/>
+  <rect x="28" y="30" width="6" height="12" fill="#E22C25" />
+
+  <!-- Green candlestick 4 -->
+  <line x1="39" y1="14" x2="39" y2="42" stroke="#22A094" stroke-width="1"/>
+  <rect x="36" y="18" width="6" height="20" fill="#22A094" />
+
+  <!-- Green candlestick 5 -->
+  <line x1="47" y1="10" x2="47" y2="36" stroke="#22A094" stroke-width="1"/>
+  <rect x="44" y="16" width="6" height="15" fill="#22A094" />
+</svg>
