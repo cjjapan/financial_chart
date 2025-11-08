@@ -1,0 +1,61 @@
+---
+title: Adding a panel
+sidebar:
+    order: 50
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Add a panel
+Add a second panel to the chart which contains a line graph with `close` value.
+
+```dart
+final chart = GChart(
+    panels: [
+      GPanel(
+        valueViewPorts: ...
+        valueAxes: ...
+        pointAxes: ...
+        graphs: ...
+        tooltip: ...
+        // set the height weight of the panel to 0.7 (70% of the chart height).
+        heightWeight: 0.7,
+      ),
+      // the second panel with its own valueViewPorts, axes, graphs and tooltip.
+      GPanel(
+        valueViewPorts: [
+          GValueViewPort(
+            valuePrecision: 2,
+            autoScaleStrategy: GValueViewPortAutoScaleStrategyMinMax(
+              dataKeys: ["high", "low"],
+            ),
+          ),
+        ],
+        valueAxes: [
+          GValueAxis(),
+          GValueAxis(id: "price2", position: GAxisPosition.start),
+        ],
+        pointAxes: [GPointAxis()],
+        graphs: [
+          GGraphGrids(),
+          GGraphLine(valueKey: "close"),
+        ],
+        tooltip: GTooltip(
+          position: GTooltipPosition.followPointer,
+          followValueKey: "close",
+          followValueViewPortId: "",
+          dataKeys: ["close"],
+        ),
+        // set the height weight of the panel to 0.3 (30% of the chart height).
+        heightWeight: 0.3,
+      ),
+    ],
+);
+
+```
+
+## The result
+<EmbedChart name="guide_panel"/>
+
+On the chart all actions can be performed on both panels, such as zooming, panning, and hovering to see the tooltip.  
+Also you can drag the line between the two panels to resize them.

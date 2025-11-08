@@ -1,0 +1,38 @@
+---
+title: GGraphBar
+sidebar:
+    order: 50
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Properties
+
+### `valueKey`
+
+**type:** `String`  
+**required:** `true`
+
+The value key in the data source to use for the bar.
+if [`baseValue`](#basevalue) is not null, the bar will start at the value defined by `valueKey` and end with the value defined by [`baseValue`](#basevalue).
+or else the bar will be the space between the value and bottom of graph area.
+
+<h6>Example when `valueKey` set to `close` and `baseValue` is not set</h6>
+
+<EmbedChart name="graph_bar1"/>
+
+### `baseValue`
+**type:** `double?`  
+**required:** `false`  
+**default:** `null`
+
+Fixed base value for the bar.  
+if this is not null, the bar will start at the value defined by `valueKey` and end with this base value.
+
+<h6>Example when `valueKey` set to `close` and `baseValue` set to `200`</h6>
+
+<EmbedChart name="graph_bar2"/>
+
+## Inherited properties 
+
+See [GGraph](../graph/) for inherited properties.

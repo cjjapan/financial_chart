@@ -42,4 +42,12 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Temporary files
 _temp/
+
+# GitHub Pages build outputs
+docs/public/demo/
+docs/public/examples/
+docs/dist/
+docs/node_modules/
+docs/.astro/

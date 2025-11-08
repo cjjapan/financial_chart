@@ -1,0 +1,66 @@
+---
+title: Adding markers
+sidebar:
+    order: 40
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Add markers
+Add some markers to the candlestick graph.
+
+```dart
+final chart = GChart(
+    panels: [
+      GPanel(
+        valueViewPorts: ...
+        valueAxes: ...
+        pointAxes: ...
+        graphs: [
+          // ...
+          GGraphOhlc(
+            ohlcValueKeys: const ["open", "high", "low", "close"],
+            // overlay markers on the OHLC graph
+            overlayMarkers: [
+              // A label marker pinned at the left top corner of the graph area
+              GLabelMarker(
+                text: "Stock chart for AAPL",
+                anchorCoord: GPositionCoord.absolute(x: 10, y: 10),
+                alignment: Alignment.bottomRight,
+                hitTestMode: GHitTestMode.none,
+                theme: theme.overlayMarkerTheme.copyWith(
+                  labelStyle: theme.overlayMarkerTheme.labelStyle!.copyWith(
+                    textStyle: theme.overlayMarkerTheme.labelStyle!.textStyle!
+                        .copyWith(fontSize: 16),
+                  ),
+                ),
+              ),
+              // A star marker pinned at the last close data point of the graph
+              GShapeMarker(
+                anchorCoord: GViewPortCoord(
+                  point: dataSource.lastPoint.toDouble(),
+                  value: dataSource.getSeriesValue(
+                    point: dataSource.lastPoint,
+                    key: "close",
+                  )!,
+                ),
+                radiusSize: GSize.pointSize(5),
+                pathGenerator: (r) => GShapes.star(r, vertexCount: 5),
+                rotation: pi / 10, // Rotate the star marker
+              ),
+            ],
+          ),
+        ]
+        tooltip: ...
+      ),
+    ],
+);
+
+```
+
+## The result
+<EmbedChart name="guide_markers"/>
+
+On the chart when dragging the graph, the label marker stays at the top left corner of the graph area,   
+while the star marker moving along with the graph.  
+Also the size of the star marker is difined by 5 bars count, its size changes when zooming the graph point viewport on X axis.

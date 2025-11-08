@@ -1,0 +1,42 @@
+---
+title: GChartWidget
+sidebar: 
+    order: 10
+---
+
+## Properties
+
+### `chart`
+
+**type:** [`GChart`](../chart/)  
+**required:** `true`  
+
+The chart component (controller) which manages all components and controls the behavior of the chart.
+
+
+
+### `tickerProvider`
+
+**type:** `TickerProvider`  
+**required:** `true`  
+
+The ticker provider used for animations in the chart.  
+
+
+
+### `noDataWidgetBuilder` 
+
+**type:** `Widget Function(BuildContext context, GChart chart)`  
+**required:** `false`  
+
+A builder function that returns a widget when there is no data in the chart.  
+by default it will display a text "No data" in the chart area.
+
+
+### `loadingWidgetBuilder`
+
+**type:** `Widget Function(BuildContext context, GChart chart)`  
+**required:** `false`  
+
+A builder function that returns a widget when the chart is loading data.  
+by default it will display a `CircularProgressIndicator` widget over the chart.

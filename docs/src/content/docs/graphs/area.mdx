@@ -1,0 +1,50 @@
+---
+title: GGraphArea
+sidebar:
+    order: 40
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+## Properties
+
+### `valueKey`
+
+**type:** `String`  
+**required:** `true`
+
+The value key in the data source to use for the area.
+if [`baseValueKey`](#basevaluekey) or [`baseValue`](#basevalue) is not null, the area will be the space between the value defined by `valueKey` and the value defined by [`baseValueKey`](#basevaluekey) or [`baseValue`](#basevalue).
+or else the area will be the space between the value and bottom of graph area.
+
+<h6>Example when both `baseValueKey` and `baseValue` are not set</h6>
+
+<EmbedChart name="graph_area1"/>
+
+### `baseValue`
+**type:** `double?`  
+**required:** `false`  
+**default:** `null`
+
+Fixed base value for the area.  
+if this is not null, the area will be the space between the value defined by [`valueKey`](#valuekey) and this base value.
+
+<h6>Example when `valueKey` set to `high` and `baseValue` set to `200`</h6>
+
+<EmbedChart name="graph_area2"/>
+
+### `baseValueKey`
+**type:** `String?`   
+**required:** `false`   
+**default:** `null`  
+
+The value key in the data source to use as the base value for the area.  
+if this is not null, the area will be the space between the value defined by [`valueKey`](#valuekey) and the value defined by this key.
+
+<h6>Example when `valueKey` set to `high` and `baseValueKey` set to `low`</h6>
+
+<EmbedChart name="graph_area3"/>
+
+## Inherited properties 
+
+See [GGraph](../graph/) for inherited properties.

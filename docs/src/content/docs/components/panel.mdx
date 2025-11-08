@@ -1,0 +1,141 @@
+---
+title: GPanel
+sidebar: 
+    order: 100
+---
+
+
+## Properties
+
+### `id`
+**type:** `String`  
+**required:** `false`
+**default:** `null`
+
+
+### `pointAxes`
+
+**type:** [`List<GPointAxis>`](../point_axis/)
+**required:** `true`
+
+The list of point (x) axes in the panel. 
+
+
+### `valueAxes`
+
+**type:** [`List<GValueAxis>`](../value_axis/)
+**required:** `true`
+
+The list of value (y) axes in the panel. 
+
+### `valueViewPorts`
+**type:** [`List<GValueViewPort>`](../value_viewport/)  
+**required:** `true`
+The list of value viewports in the panel. each viewport controls the visible range of values on the y axes.
+
+
+### `graphs`
+**type:** [`List<GGraph>`](../graph/)  
+**required:** `true`
+
+The list of graphs in the panel.
+
+
+### `tooltip`
+
+**type:** [`GTooltip`](../tooltip/)
+**required:** `false`
+The tooltip component which displays the values of the hovered point on the graph area.
+
+### `splitterHeight`
+**type:** `double`  
+**required:** `false`
+**default:** `16.0`
+
+The height of the splitter area which is used to resize the two adjoining panels.
+
+
+### `heightWeight`
+**type:** `double`  
+**required:** `false`
+**default:** `1.0`
+The height weight of the panel. this is used to calculate the height of the panel relative to other panels in the chart.
+
+
+### `resizable`
+**type:** `bool`  
+**required:** `false`
+**default:** `true`
+
+Whether the panel is resizable by dragging the splitter area.
+Only when two adjoining panels both have `resizable` set to `true`, the splitter area will be shown and the panels can be resized by dragging the splitter area.
+
+
+### `graphPanMode`
+**type:** [`GGraphPanMode`](#graphpanmode)
+**required:** `false`
+**default:** `GGraphPanMode.auto`
+
+The pan mode of the graphs in the panel. 
+
+
+### `momentumScrollSpeed`
+**type:** `double`  
+**required:** `false`
+**default:** `0.5`
+
+The speed of the momentum scroll when the user scrolls the graph area with mouse wheel or touchpad.
+The value should be between `0.0` and `1.0`, where `0.0` means no momentum scroll and `1.0` means the maximum speed.
+
+
+### `onTapGraphArea`
+**type:** `Function(Offset)?`  
+**required:** `false`  
+
+A callback function that is called when the user taps on the graph area.  
+
+### `onDoubleTapGraphArea`  
+**type:** `Function(Offset)?`    
+**required:** `false`   
+
+A callback function that is called when the user double taps on the graph area.  
+
+### `onSecondaryTapGraphArea`
+**type:** `Function(Offset)?`      
+**required:** `false`    
+
+A callback function that is called when the user taps with secondary button (right click) on the graph area.  
+
+### `onLongPressDownGraphArea`
+**type:** `Function(Offset)?`  
+**required:** `false`  
+
+A callback function that is called when the user long presses down on the graph area.
+
+### `onLongPressUpGraphArea`
+**type:** `Function(Offset)?`  
+**required:** `false`  
+
+A callback function that is called when the user long presses up on the graph area.
+
+### `onLongPressMoveGraphArea`
+**type:** `Function(Offset)?`  
+**required:** `false`  
+
+A callback function that is called when the user moves the finger while long pressing on the graph area
+
+### `theme`  
+**type:** [`GPanelTheme`](../theme/)  
+**required:** `false`  
+
+The theme of the panel. set it to your own instance to customize the appearance of the panel.
+
+### `render`
+**type:** [`GPanelRender`](../render/)
+**required:** `false`  
+**default:** `GPanelRender()`  
+
+The render component which is used to customize the rendering of the panel.
+Set it to your own instance to customize the rendering of the panel.
+
+

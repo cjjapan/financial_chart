@@ -1,0 +1,68 @@
+---
+title: GGraph
+sidebar:
+    order: 90
+---
+Base class for all graphs.  
+
+## Properties
+
+### `layer`
+**type:** `int`  
+**required:** `false`  
+**default:** `0`  
+
+The layer of the graph. higher layers are drawn on top of lower layers.
+
+### `visible`  
+**type:** `bool`  
+**required:** `false`  
+**default:** `true`  
+
+Whether the graph is visible or not. If false, the graph will not be drawn. 
+
+### `highlighted`  
+**type:** `bool`  
+**required:** `false`  
+**default:** `false`  
+
+
+### `selected`
+**type:** `bool`  
+**required:** `false`  
+**default:** `false`  
+
+
+### `valueViewPortId`
+**type:** `String?`  
+**required:** `false`   
+**default:** `""`  
+
+
+### `hitTestMode`  
+**type:** `GHitTestMode`  
+**required:** `false`  
+**default:** `GHitTestMode.auto`  
+
+
+### `crosshairHighlightValueKeys`  
+**type:** `List<String>`  
+**required:** `false`  
+**default:** `[]`  
+
+
+### `overlayMarkers`  
+**type:** `List<GMarker>`  
+**required:** `false`  
+**default:** `[]`  
+
+
+### `theme` 
+**type:** `GGraphAreaTheme`  
+**required:** `false`  
+**default:** `GGraphAreaTheme()`  
+
+### `render`
+**type:** `GGraphAreaRender?`  
+**required:** `false`  
+**default:** `GGraphAreaRender()`

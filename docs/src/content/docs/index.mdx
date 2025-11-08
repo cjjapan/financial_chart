@@ -1,0 +1,51 @@
+---
+title: financial_chart
+description: Documentation for Flutter financial_chart, a interactive chart library which supports OHLC, candlestick, line, area, bar graphs and markers over graphs. easy to extend and customize.
+template: splash
+hero:
+  tagline: A interactive chart library for Flutter.
+  image:
+    file: ../../assets/logo.png
+  actions:
+    - text: Getting started
+      link: /financial_chart/guides/start/
+      icon: right-arrow
+ #   - text: Repository
+ #     link: https://github.com/cjjapan/financial_chart
+ #     icon: github
+ #     variant: minimal
+ #   - text: Package
+ #     link: https://pub.dev/packages/financial_chart
+ #     icon: seti:dart
+ #     variant: minimal
+    - text: Live demo
+      link: /financial_chart/examples/
+      icon: rocket
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+import EmbedChart from '../../components/EmbedChart.astro';
+
+
+## Features
+
+<ul>
+  <li>Supports OHLC, candlestick, line, area, bar graphs.</li>
+  <li>Supports markers over graphs and axes, including labels, lines, arrows, callouts, shapes, etc.</li>
+  <li>Easy to extend to add custom graph types and markers.</li>
+  <li>Resizable multiple panels and multiple graphs and axes in single panel.</li>
+  <li>Show tooltips and crosshair lines for data points.</li>
+  <li>Zoom and pan of axes and graph. double tap axes to reset zoom.</li>
+  <li>Supports momentum scrolling.</li>
+  <li>Show animation when zooming.</li>
+  <li>Dynamic data loading with loading indicator.</li>
+  <li>Live update of data and graphs.</li>
+  <li>Customizable theme support with dark and light presets.</li>
+</ul>
+
+
+## Demo
+
+<EmbedChart name="guide_panel"/>

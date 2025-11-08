@@ -1,0 +1,69 @@
+---
+title: GArcMarker
+---
+
+An arc marker is a graphical representation of a circular arc, defined by its radius, center, and angles.  
+An arc can be defined by either a center coordinate, radius size, start and end angles,  
+or by a center coordinate, another coordinate on the border of the circle (whose distance to the center is the radius), start and end angles.
+
+## Properties
+
+### `radiusSize`
+**type:** `GSize?`  
+**required:** `false`  
+**default:** `null`
+
+The radius size of the arc.
+Either this or `borderCoord` must be set to define the radius of the arc.
+
+### `centerCoord`
+**type:** `GCoordinate?`  
+**required:** `false`  
+**default:** `null`
+
+The center coordinate of the arc.
+
+### `borderCoord`
+**type:** `GCoordinate?`   
+**required:** `false`   
+**default:** `null`  
+
+The coordinate on the border of the circle, whose distance to the center is the radius.
+Either this or `radiusSize` must be set to define the radius of the arc.
+
+### `alignment`
+**type:** `Alignment`  
+**required:** `false`  
+**default:** `Alignment.center`  
+
+The alignment of the anchor point.
+
+### `startTheta`
+**type:** `double`    
+**required:** `true`   
+**default:** `0.0`  
+
+The starting angle of the arc in radians.
+
+### `endTheta`
+**type:** `double`  
+**required:** `true`  
+**default:** `0.0`  
+
+The ending angle of the arc in radians.
+
+### `closeType`
+**type:** [`GArcCloseType`](#garcclosetype)    
+**required:** `false`  
+**default:** `GArcCloseType.none`
+
+The type of closure for the arc.
+
+
+## Enums
+### `GArcCloseType`
+
+Defines how the arc is closed.
+- `none`: The arc is not closed.
+- `center`: The arc is closed by two lines connecting the start and end to the center.
+- `direct`: The arc is closed by single line connecting the start to end.
