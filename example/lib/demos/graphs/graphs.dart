@@ -119,6 +119,68 @@ class DemoGraphBarPageState extends DemoGraphBasePageState {
   ];
 }
 
+class DemoGraphStackedBarPage extends DemoGraphBasePage {
+  const DemoGraphStackedBarPage({super.key})
+    : super(title: 'Stacked Bar Graph');
+  @override
+  DemoGraphStackedBarPageState createState() => DemoGraphStackedBarPageState();
+}
+
+class DemoGraphStackedBarPageState extends DemoGraphBasePageState {
+  final GGraphStackedBar graph = GGraphStackedBar(
+    id: "stacked_bar",
+    valueViewPortId: "price",
+    valueKeys: [keyHigh, keyLow],
+    basePosition: 0.0,
+  );
+  @override
+  GGraph getGraph() => graph;
+  @override
+  GGraphTheme getGraphTheme() {
+    final t =
+        chart!.theme.graphThemes[GGraphStackedBar.typeName]!
+            as GGraphStackedBarTheme;
+    return t.copyWith(
+      barWidthRatio: 0.6,
+      barStyles: [
+        PaintStyle(
+          fillColor: Colors.blue.withAlpha(180),
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1,
+        ),
+        PaintStyle(
+          fillColor: Colors.orange.withAlpha(180),
+          strokeColor: Colors.orangeAccent,
+          strokeWidth: 1,
+        ),
+      ],
+    );
+  }
+
+  @override
+  List<String> tooltipDataKeys() => graph.valueKeys;
+  @override
+  String tooltipFollowValueViewPortId() => graph.valueViewPortId;
+  @override
+  List<Widget> buildControlActions(BuildContext context) => [
+    AppLabelWidget(
+      label: "GGraphStackedBar.basePosition",
+      description:
+          "Change the basePosition of the stacked bar (0 to 1)."
+          "\nbasePosition decides start position where the first bar segment draws from (0=top, 1=bottom).",
+      child: AppPopupMenu<double>(
+        items: const [0.0, 0.5, 1.0],
+        onSelected: (double selected) {
+          graph.basePosition = selected;
+          repaintChart();
+        },
+        selected: graph.basePosition,
+        labelResolver: (item) => item.toString(),
+      ),
+    ),
+  ];
+}
+
 class DemoGraphLinePage extends DemoGraphBasePage {
   const DemoGraphLinePage({super.key}) : super(title: 'Line Graph');
   @override

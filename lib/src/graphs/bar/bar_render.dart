@@ -18,13 +18,21 @@ class GGraphBarRender extends GGraphRender<GGraphBar, GGraphBarTheme> {
   }) {
     final dataSource = chart.dataSource;
     final barWidth = pointViewPort.pointSize(area.width) * theme.barWidthRatio;
-    final baseValue = min(
-      max(
-        graph.baseValue ?? valueViewPort.startValue,
-        valueViewPort.startValue,
-      ),
-      valueViewPort.endValue,
-    );
+
+    // Calculate base value
+    double baseValue;
+    if (graph.baseValue != null) {
+      baseValue = min(
+        max(graph.baseValue!, valueViewPort.startValue),
+        valueViewPort.endValue,
+      );
+    } else {
+      // Use basePosition to calculate the base value
+      final valueRange = valueViewPort.endValue - valueViewPort.startValue;
+      baseValue =
+          valueViewPort.startValue + (valueRange * (1.0 - graph.basePosition));
+    }
+
     double barBottom = valueViewPort.valueToPosition(area, baseValue);
     _hitTestRectangles.clear();
     final List<Vector2> highlightMarks = <Vector2>[];

@@ -1,3 +1,10 @@
+## 0.4.0
+2025-11-08
+- Add `GGraphBar`.`basePosition` property to allow customize base position of bar graph.
+- Add new graph type `GGraphStackedBar` for stacked bar graph.
+- Update workshop demo.
+- Minor bug fix.
+
 ## 0.3.8
 2025-10-25
 - Add `**Notifier` getters to properties of `GComponent` to allow listen updates.

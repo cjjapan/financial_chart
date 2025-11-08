@@ -112,6 +112,12 @@ class WorkshopState extends ChangeNotifier {
             valueKey: keyVolume,
             baseValue: 0,
           ),
+          GGraphStackedBar(
+            id: "g-stacked-bar",
+            visible: false,
+            valueViewPortId: kVpPrice,
+            valueKeys: const [keyHigh, keyOpen, keyLow],
+          ),
           GGraphOhlc(
             id: "g-ohlc",
             visible: true,

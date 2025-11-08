@@ -65,6 +65,20 @@ class _GraphsControlViewState extends State<GraphsControlView> {
           body: bar(context, state),
         ),
         ExpansionPanelRadio(
+          value: "stacked_bar",
+          canTapOnHeader: true,
+          headerBuilder: (context, isExpanded) {
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Stacked Bar"),
+              ),
+            );
+          },
+          body: stackedBar(context, state),
+        ),
+        ExpansionPanelRadio(
           value: "line",
           canTapOnHeader: true,
           headerBuilder: (context, isExpanded) {
@@ -242,18 +256,45 @@ class _GraphsControlViewState extends State<GraphsControlView> {
         const ControlLabel(
           label: "baseValue",
           description:
-              "'baseValue' decides start position where each bar draw from, 'valueKey' decides the end position of the bar.",
+              "'baseValue' decides start position where first bar segment draw from",
+        ),
+        AppToggleButtonsBoolean(
+          selected: graph.baseValue != null,
+          onSelected: (b) {
+            graph.baseValue = b ? 0 : null;
+            state.notify();
+          },
         ),
         Slider(
           value: ((graph.baseValue ?? 0) / 1_000_000).round().toDouble(),
-          onChanged: (value) {
-            graph.baseValue = value.round().toDouble() * 1_000_000;
-            state.notify();
-          },
+          onChanged: (graph.baseValue == null)
+              ? null
+              : (value) {
+                  graph.baseValue = value.round().toDouble() * 1_000_000;
+                  state.notify();
+                },
           min: 0,
           max: 200,
           divisions: 10,
           label: "${((graph.baseValue ?? 0) / 1_000_000).round().toDouble()}M",
+        ),
+        const ControlLabel(
+          label: "basePosition",
+          description:
+              "'basePosition' decides start position where the first bar segment draws from (0=top, 0.5=middle, 1=bottom).",
+        ),
+        Slider(
+          value: graph.basePosition,
+          onChanged: (graph.baseValue != null)
+              ? null
+              : (value) {
+                  graph.basePosition = value;
+                  state.notify();
+                },
+          min: 0,
+          max: 1,
+          divisions: 10,
+          label: graph.basePosition.toStringAsFixed(1),
         ),
         const ControlLabel(label: "theme", description: "use custom theme"),
         AppToggleButtonsBoolean(
@@ -276,6 +317,113 @@ class _GraphsControlViewState extends State<GraphsControlView> {
                   strokeColor: Colors.blueGrey,
                   strokeWidth: 0.5,
                 ),
+              );
+            } else {
+              graph.theme = null;
+            }
+            state.notify();
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget stackedBar(BuildContext context, WorkshopState state) {
+    final panel = state.chart!.panels[0];
+    final graph = panel.findGraphById("g-stacked-bar")! as GGraphStackedBar;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 8,
+      children: [
+        const ControlLabel(
+          label: "visible",
+          description: "show/hide the graph",
+        ),
+        AppToggleButtonsBoolean(
+          selected: graph.visible,
+          onSelected: (b) {
+            graph.visible = b;
+            state.notify();
+          },
+        ),
+        const ControlLabel(
+          label: "baseValue",
+          description:
+              "'baseValue' decides start position where first bar segment draw from",
+        ),
+        AppToggleButtonsBoolean(
+          selected: graph.baseValue != null,
+          onSelected: (b) {
+            graph.baseValue = b ? 0 : null;
+            state.notify();
+          },
+        ),
+        Slider(
+          value: (graph.baseValue ?? 0),
+          onChanged: (graph.baseValue == null)
+              ? null
+              : (value) {
+                  graph.baseValue = value;
+                  state.notify();
+                },
+          min: 0,
+          max: 500,
+          divisions: 10,
+          label: "${(graph.baseValue ?? 0)}",
+        ),
+        const ControlLabel(
+          label: "basePosition",
+          description:
+              "'basePosition' decides start position where the first bar segment draws from (0=top, 0.5=middle, 1=bottom).",
+        ),
+        AppToggleButtonsBoolean(
+          selected: graph.basePosition != null,
+          onSelected: (b) {
+            graph.basePosition = b ? 0 : null;
+            state.notify();
+          },
+        ),
+        Slider(
+          value: graph.basePosition ?? 0,
+          onChanged: (graph.basePosition == null)
+              ? null
+              : (value) {
+                  graph.basePosition = value;
+                  state.notify();
+                },
+          min: 0,
+          max: 1,
+          divisions: 10,
+          label: graph.basePosition?.toStringAsFixed(1),
+        ),
+        const ControlLabel(label: "theme", description: "use custom theme"),
+        AppToggleButtonsBoolean(
+          selected: graph.theme != null,
+          labelResolver: (b) => b ? "Custom" : "Default",
+          onSelected: (b) {
+            if (b) {
+              final t =
+                  state.chart!.theme.graphThemes[GGraphStackedBar.typeName]!
+                      as GGraphStackedBarTheme;
+              graph.theme = t.copyWith(
+                barWidthRatio: 0.6,
+                barStyles: [
+                  PaintStyle(
+                    fillColor: Colors.blue.withAlpha(200),
+                    strokeColor: Colors.blueAccent,
+                    strokeWidth: 1,
+                  ),
+                  PaintStyle(
+                    fillColor: Colors.orange.withAlpha(200),
+                    strokeColor: Colors.orangeAccent,
+                    strokeWidth: 1,
+                  ),
+                  PaintStyle(
+                    fillColor: Colors.purple.withAlpha(200),
+                    strokeColor: Colors.purpleAccent,
+                    strokeWidth: 1,
+                  ),
+                ],
               );
             } else {
               graph.theme = null;

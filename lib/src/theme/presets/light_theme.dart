@@ -8,6 +8,8 @@ import '../../style/paint_style.dart';
 
 import '../../graphs/bar/bar.dart';
 import '../../graphs/bar/bar_theme.dart';
+import '../../graphs/stacked_bar/stacked_bar.dart';
+import '../../graphs/stacked_bar/stacked_bar_theme.dart';
 import '../../graphs/grids/grids.dart';
 import '../../graphs/grids/grids_theme.dart';
 import '../../graphs/line/line.dart';
@@ -39,6 +41,7 @@ class GThemeLight extends GTheme {
           GGraphOhlc.typeName: ohlcGraphTheme,
           GGraphLine.typeName: lineGraphTheme,
           GGraphBar.typeName: barGraphTheme,
+          GGraphStackedBar.typeName: stackedBarGraphTheme,
           GGraphArea.typeName: areaGraphTheme,
         },
         axisMarkerTheme: axisMarkerThemeDefault,
@@ -213,6 +216,20 @@ class GThemeLight extends GTheme {
     overlayMarkerTheme: overlayMarkerThemeDefault,
     highlightMarkerTheme: graphHighlightMarkThemeDefault,
   );
+
+  static final GGraphStackedBarTheme stackedBarGraphTheme =
+      GGraphStackedBarTheme(
+        barStyles: [
+          PaintStyle(fillColor: Colors.blue.withAlpha(180)),
+          PaintStyle(fillColor: Colors.green.withAlpha(180)),
+          PaintStyle(fillColor: Colors.orange.withAlpha(180)),
+          PaintStyle(fillColor: Colors.purple.withAlpha(180)),
+          PaintStyle(fillColor: Colors.teal.withAlpha(180)),
+        ],
+        axisMarkerTheme: axisMarkerThemeDefault,
+        overlayMarkerTheme: overlayMarkerThemeDefault,
+        highlightMarkerTheme: graphHighlightMarkThemeDefault,
+      );
 
   static final GGraphAreaTheme areaGraphTheme = GGraphAreaTheme(
     styleAboveBase: PaintStyle(

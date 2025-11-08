@@ -399,6 +399,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     bool animation = true,
   }) {
     if (resetPointViewPort &&
+        pointViewPort.isValid &&
         pointViewPort.autoScaleStrategy != null &&
         pointViewPort.autoScaleFlg) {
       pointViewPort.autoScaleReset(
@@ -415,6 +416,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
       }
       for (final valueViewPort in panel.valueViewPorts) {
         if (resetValueViewPort &&
+            valueViewPort.isValid &&
             valueViewPort.autoScaleFlg &&
             valueViewPort.autoScaleStrategy != null) {
           valueViewPort.autoScaleReset(

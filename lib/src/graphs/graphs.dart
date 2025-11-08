@@ -14,6 +14,10 @@ export 'bar/bar.dart';
 export 'bar/bar_theme.dart';
 export 'bar/bar_render.dart';
 
+export 'stacked_bar/stacked_bar.dart';
+export 'stacked_bar/stacked_bar_theme.dart';
+export 'stacked_bar/stacked_bar_render.dart';
+
 export 'area/area.dart';
 export 'area/area_theme.dart';
 export 'area/area_render.dart';

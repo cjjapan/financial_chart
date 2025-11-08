@@ -11,19 +11,29 @@ class GGraphBar<T extends GGraphTheme> extends GGraph<T> {
   /// The key of the series value in the data source.
   final String valueKey;
 
-  /// The key of the base value in the data source.
+  /// The base value in the data source.
   ///
-  /// If this value is not null, the bar will be the space between the value and the base value.
-  /// else the bar will be the space between the value and the bottom of the viewport.
+  /// If this value is not null, the bar will be the space between the value of valueKey and the base value.
+  /// else the bar will be the space between the value and basePosition.
   final GValue<double?> _baseValue = GValue(null);
   double? get baseValue => _baseValue.value;
   set baseValue(double? value) => _baseValue.value = value;
+
+  /// A value from 0 to 1 which defines start position of the first bar.
+  /// Only used when baseValue is null.
+  final GValue<double> _basePosition = GValue(1.0);
+  double get basePosition => _basePosition.value;
+  set basePosition(double value) {
+    assert(value >= 0 && value <= 1, 'basePosition must be between 0 and 1');
+    _basePosition.value = value;
+  }
 
   GGraphBar({
     super.id,
     super.label,
     required this.valueKey,
     double? baseValue,
+    double basePosition = 1.0,
     super.layer,
     super.visible,
     super.highlighted,
@@ -36,6 +46,7 @@ class GGraphBar<T extends GGraphTheme> extends GGraph<T> {
     super.render,
   }) {
     _baseValue.value = baseValue;
+    _basePosition.value = basePosition;
     super.theme = theme;
     super.render = super.render ?? GGraphBarRender();
   }
