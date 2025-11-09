@@ -12,6 +12,7 @@ part 'graphs/area.dart';
 part 'graphs/line.dart';
 part 'graphs/bar.dart';
 part 'graphs/ohlc.dart';
+part 'graphs/stacked_bar.dart';
 
 GChart buildChart(String name, GDataSource dataSource, String theme) {
   switch (name) {
@@ -45,6 +46,12 @@ GChart buildChart(String name, GDataSource dataSource, String theme) {
       return chartOhlcGraph(dataSource, theme, "1");
     case "graph_ohlc2":
       return chartOhlcGraph(dataSource, theme, "2");
+    case "graph_stacked_bar1":
+      return chartStackedBarGraph(dataSource, theme, "1");
+    case "graph_stacked_bar2":
+      return chartStackedBarGraph(dataSource, theme, "2");
+    case "graph_stacked_bar3":
+      return chartStackedBarGraph(dataSource, theme, "3");
     default:
       throw Exception("Chart '$name' is not implemented.");
   }

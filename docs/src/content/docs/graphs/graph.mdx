@@ -3,7 +3,8 @@ title: GGraph
 sidebar:
     order: 90
 ---
-Base class for all graphs.  
+
+Base class for all graphs. This page documents properties that are inherited by all graph types including area, bar, line, OHLC, stacked bar, and grids.  
 
 ## Properties
 
@@ -12,57 +13,65 @@ Base class for all graphs.
 **required:** `false`  
 **default:** `0`  
 
-The layer of the graph. higher layers are drawn on top of lower layers.
+The drawing layer for this graph. Graphs with higher layer values are drawn on top of graphs with lower values. Use this to control the z-order when multiple graphs overlap.
 
 ### `visible`  
 **type:** `bool`  
 **required:** `false`  
 **default:** `true`  
 
-Whether the graph is visible or not. If false, the graph will not be drawn. 
+Controls whether the graph is rendered. When `false`, the graph is completely hidden and does not participate in hit testing or rendering.
 
 ### `highlighted`  
 **type:** `bool`  
 **required:** `false`  
 **default:** `false`  
 
+Whether the graph is in a highlighted state. This can be used to emphasize a graph visually, typically through theme styling.
 
 ### `selected`
 **type:** `bool`  
 **required:** `false`  
 **default:** `false`  
 
+Whether the graph is selected. This state can be used for interactive features where users select specific graphs.
 
 ### `valueViewPortId`
 **type:** `String?`  
 **required:** `false`   
 **default:** `""`  
 
+The ID of the value viewport this graph uses for scaling. Multiple graphs can share a viewport, or use separate viewports for independent scaling.
 
 ### `hitTestMode`  
 **type:** `GHitTestMode`  
 **required:** `false`  
 **default:** `GHitTestMode.auto`  
 
+Determines how the graph responds to hit testing for user interactions. Options include `auto` (default behavior), `none` (no interaction), and custom modes.
 
 ### `crosshairHighlightValueKeys`  
 **type:** `List<String>`  
 **required:** `false`  
 **default:** `[]`  
 
+List of data keys to highlight when the crosshair is active on this graph. These keys are used to display values in tooltips or other UI elements.
 
 ### `overlayMarkers`  
 **type:** `List<GMarker>`  
 **required:** `false`  
 **default:** `[]`  
 
+Additional markers to draw on top of the graph. These can be used for annotations, highlights, or custom visual elements.
 
 ### `theme` 
-**type:** `GGraphAreaTheme`  
+**type:** `GGraphTheme` (varies by graph type)  
 **required:** `false`  
-**default:** `GGraphAreaTheme()`  
+
+Theme object that controls the visual styling of the graph. Each graph type has its own specific theme class (e.g., `GGraphAreaTheme`, `GGraphBarTheme`).
 
 ### `render`
-**type:** `GGraphAreaRender?`  
+**type:** `GGraphRender?` (varies by graph type)  
 **required:** `false`  
-**default:** `GGraphAreaRender()`
+
+Custom render object for the graph. Advanced users can provide custom rendering logic by implementing the appropriate render class for the graph type.

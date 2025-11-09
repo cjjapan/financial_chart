@@ -1,0 +1,68 @@
+---
+title: GGraphGrids
+sidebar:
+    order: 10
+---
+
+Grid lines graph for displaying horizontal and vertical reference lines across the chart panel. Grid lines help users read values more accurately and provide visual structure to the chart.
+
+## Properties
+
+### `valueTickerStrategy`
+
+**type:** `GValueTickerStrategy`  
+**required:** `false`  
+**default:** `GValueTickerStrategyDefault()`
+
+Strategy for generating horizontal grid lines along the value axis. This determines where grid lines are positioned based on the value scale.
+
+### `pointTickerStrategy`
+
+**type:** `GPointTickerStrategy`  
+**required:** `false`  
+**default:** `GPointTickerStrategyDefault()`
+
+Strategy for generating vertical grid lines along the point axis. This determines where grid lines are positioned across data points.
+
+### `hitTestMode`
+
+**type:** `GHitTestMode`  
+**required:** `false`  
+**default:** `GHitTestMode.none`
+
+Hit test mode for the grid lines. Typically set to `none` since grid lines are usually non-interactive background elements.
+
+## Theme Properties
+
+The `GGraphGridsTheme` provides styling options for the grid lines.
+
+### `lineStyle`
+**type:** `PaintStyle`  
+**required:** `true`
+
+The paint style for grid lines, defining their color, stroke width, and other visual properties.
+
+### `selectionStyle`
+**type:** `PaintStyle?`  
+**required:** `false`  
+**default:** `null`
+
+Optional paint style for grid lines when selected. If null, grid lines won't change appearance when selected.
+
+## Usage
+
+Grid lines are typically added as the first graph in a panel so they appear behind other graphs:
+
+```dart
+GPanel(
+  graphs: [
+    GGraphGrids(), // Add grids first
+    GGraphOhlc(...),
+    GGraphLine(...),
+  ],
+)
+```
+
+## Inherited properties 
+
+See [GGraph](../graph/) for inherited properties.

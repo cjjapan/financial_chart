@@ -6,6 +6,8 @@ sidebar:
 
 import EmbedChart from '../../../components/EmbedChart.astro';
 
+OHLC graph for displaying financial data with open, high, low, and close values. This graph type can render as traditional candlestick charts or OHLC bars, making it ideal for stock price visualization and other financial time series data.
+
 ## Properties
 
 ### `ohlcValueKeys`
@@ -13,8 +15,7 @@ import EmbedChart from '../../../components/EmbedChart.astro';
 **type:** `List<String>`  
 **required:** `true`
 
-The value keys in the data source to use for the OHLC graph.  
-This should contain exactly 4 keys with order `open`, `high`, `low`, and `close`.
+The value keys in the data source to use for the OHLC graph. Must contain exactly 4 keys in the order: `[open, high, low, close]`. These keys define which data fields represent the opening price, highest price, lowest price, and closing price for each data point.
 
 <h6>Example</h6>
 
@@ -25,8 +26,7 @@ This should contain exactly 4 keys with order `open`, `high`, `low`, and `close`
 **required:** `false`   
 **default:** `true`
 
-Whether to draw the OHLC graph as a candlestick chart.
-If `false`, it will be drawn as a ohlc lines
+Whether to draw the OHLC graph as candlestick bars or traditional OHLC lines. When `true`, displays filled/hollow rectangles (candlesticks) that show the open-to-close range. When `false`, displays as OHLC bars with horizontal ticks marking the open and close prices.
 
 <h6>Example when `drawAsCandle` set to `false`</h6>
 

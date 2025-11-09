@@ -6,6 +6,8 @@ sidebar:
 
 import EmbedChart from '../../../components/EmbedChart.astro';
 
+Area graph for displaying data as filled regions. Area graphs are useful for showing magnitude over time and can visualize the space between two values or between a value and a baseline.
+
 ## Properties
 
 ### `valueKey`
@@ -13,9 +15,9 @@ import EmbedChart from '../../../components/EmbedChart.astro';
 **type:** `String`  
 **required:** `true`
 
-The value key in the data source to use for the area.
-if [`baseValueKey`](#basevaluekey) or [`baseValue`](#basevalue) is not null, the area will be the space between the value defined by `valueKey` and the value defined by [`baseValueKey`](#basevaluekey) or [`baseValue`](#basevalue).
-or else the area will be the space between the value and bottom of graph area.
+The value key in the data source to use for the area's top boundary.
+
+When both [`baseValueKey`](#basevaluekey) and [`baseValue`](#basevalue) are null, the area fills from the value down to the bottom of the graph area. When either is specified, the area fills between the value and the base value.
 
 <h6>Example when both `baseValueKey` and `baseValue` are not set</h6>
 
@@ -26,8 +28,7 @@ or else the area will be the space between the value and bottom of graph area.
 **required:** `false`  
 **default:** `null`
 
-Fixed base value for the area.  
-if this is not null, the area will be the space between the value defined by [`valueKey`](#valuekey) and this base value.
+Fixed base value for the area's bottom boundary. When set, the area fills between the value defined by [`valueKey`](#valuekey) and this fixed value. This is useful for highlighting deviations from a specific threshold.
 
 <h6>Example when `valueKey` set to `high` and `baseValue` set to `200`</h6>
 
@@ -38,8 +39,7 @@ if this is not null, the area will be the space between the value defined by [`v
 **required:** `false`   
 **default:** `null`  
 
-The value key in the data source to use as the base value for the area.  
-if this is not null, the area will be the space between the value defined by [`valueKey`](#valuekey) and the value defined by this key.
+The value key in the data source to use as the area's bottom boundary. When set, the area fills between the values defined by [`valueKey`](#valuekey) (top) and this key (bottom). This is useful for visualizing ranges or bands between two data series.
 
 <h6>Example when `valueKey` set to `high` and `baseValueKey` set to `low`</h6>
 

@@ -6,6 +6,8 @@ sidebar:
 
 import EmbedChart from '../../../components/EmbedChart.astro';
 
+Line graph for displaying data as a continuous line connecting data points. Line graphs are excellent for showing trends, patterns, and changes over time.
+
 ## Properties
 
 ### `valueKey`
@@ -24,7 +26,7 @@ The value key in the data source to use for the line.
 **required:** `false`   
 **default:** `false`
 
-Whether to smooth the line or not.
+Whether to apply curve smoothing to the line. When enabled, the line uses smooth curves instead of straight segments between data points, creating a more fluid appearance. This is particularly useful for visualizing data with natural continuity.
 
 <h6>Example when `smoothing` set to `true`</h6>
 

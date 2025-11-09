@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:charts/charts/charts.dart';
 import 'package:charts/yahoo_finance_candle_data.dart';
@@ -56,6 +57,9 @@ class _ChartViewState extends State<ChartView> with TickerProviderStateMixin {
             final response = data.data!;
             final dataSource = GDataSource<int, GData<int>>(
               dataList: response.candlesData.map((candle) {
+                final baseVolume = candle.volume.toDouble();
+                final randomRatio1 = 0.2 + math.Random().nextDouble() * 0.3;
+                final randomRatio2 = randomRatio1 + math.Random().nextDouble() * 0.4;
                 return GData<int>(
                   pointValue: candle.date.millisecondsSinceEpoch,
                   seriesValues: [
@@ -64,6 +68,9 @@ class _ChartViewState extends State<ChartView> with TickerProviderStateMixin {
                     candle.low,
                     candle.close,
                     candle.volume.toDouble(),
+                    (baseVolume * randomRatio1).toDouble(),
+                    (baseVolume * randomRatio2).toDouble(),
+                    baseVolume.toDouble(),
                   ],
                 );
               }).toList(),
@@ -73,6 +80,9 @@ class _ChartViewState extends State<ChartView> with TickerProviderStateMixin {
                 GDataSeriesProperty(key: "low", label: "Low", precision: 2),
                 GDataSeriesProperty(key: "close", label: "Close", precision: 2),
                 GDataSeriesProperty(key: "volume", label: "Volume", precision: 0),
+                GDataSeriesProperty(key: "buyVolume", label: "buyVolume", precision: 0),
+                GDataSeriesProperty(key: "sellVolume", label: "sellVolume", precision: 0),
+                GDataSeriesProperty(key: "neutralVolume", label: "neutralVolume", precision: 0),
               ],
             );
             try {

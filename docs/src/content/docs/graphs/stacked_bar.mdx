@@ -1,0 +1,70 @@
+---
+title: GGraphStackedBar
+sidebar:
+    order: 60
+---
+
+import EmbedChart from '../../../components/EmbedChart.astro';
+
+Stacked bar graph for displaying multiple data series as vertically stacked segments within a single bar. Each segment represents a different data series, allowing you to visualize the composition and total of multiple values at each data point.
+
+## Properties
+
+### `valueKeys`
+
+**type:** `List<String>`  
+**required:** `true`
+
+The list of value keys in the data source to use for each bar segment. Each key represents a different data series that will be stacked vertically. The order of keys determines the stacking order from bottom to top.
+
+<h6>Example with volume data stacked by three values</h6>
+
+<EmbedChart name="graph_stacked_bar1"/>
+
+### `baseValue`
+**type:** `double?`  
+**required:** `false`  
+**default:** `null`
+
+Fixed base value for the first bar segment. If set, the first segment will start at this value instead of the bottom of the graph area or the position defined by `basePosition`.
+
+<h6>Example when `baseValue` set to `100M`</h6>
+
+<EmbedChart name="graph_stacked_bar2"/>
+
+### `basePosition`
+**type:** `double?`  
+**required:** `false`  
+**default:** `1.0`
+
+Base position (0 to 1) for the first bar segment when `baseValue` is null. 
+- `0.0` means bottom of the graph area
+- `1.0` means top of the graph area
+- `0.5` means middle of the graph area
+
+This allows you to position stacked bars relative to the graph visible area rather than using an absolute value.
+
+<h6>Example when `basePosition` set to `0` (top)</h6>
+
+<EmbedChart name="graph_stacked_bar3"/>
+
+## Theme Properties
+
+The `GGraphStackedBarTheme` provides styling options for the stacked bar graph.
+
+### `barStyles`
+**type:** `List<PaintStyle>`  
+**required:** `true`
+
+A list of paint styles for each bar segment. The list should have the same length as `valueKeys` and is mapped by index. Each `PaintStyle` defines the color, stroke, and fill properties for its corresponding segment.
+
+### `barWidthRatio`
+**type:** `double`  
+**required:** `false`  
+**default:** `0.8`
+
+The width ratio of the bar relative to the available space (0 to 1). A value of `1.0` means bars will touch each other with no gap, while smaller values create gaps between bars.
+
+## Inherited properties 
+
+See [GGraph](../graph/) for inherited properties.

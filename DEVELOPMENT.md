@@ -281,6 +281,16 @@ You can also manually trigger the deployment:
 2. Select "Deploy GitHub Pages" workflow
 3. Click "Run workflow"
 
+
+## Publishing to pub.dev
+
+1. Update version in `pubspec.yaml` and update CHANGELOG.md
+2. Run tests and ensure everything passes
+3. Publish the package:
+   ```bash
+   dart pub publish
+   ```
+
 ## Resources
 
 - **Library Documentation**: https://cjjapan.github.io/financial_chart/

@@ -6,6 +6,8 @@ sidebar:
 
 import EmbedChart from '../../../components/EmbedChart.astro';
 
+Bar graph for displaying data as vertical bars. Bar graphs are ideal for comparing discrete values across different data points and showing magnitude with clear visual separation.
+
 ## Properties
 
 ### `valueKey`
@@ -13,9 +15,9 @@ import EmbedChart from '../../../components/EmbedChart.astro';
 **type:** `String`  
 **required:** `true`
 
-The value key in the data source to use for the bar.
-if [`baseValue`](#basevalue) is not null, the bar will start at the value defined by `valueKey` and end with the value defined by [`baseValue`](#basevalue).
-or else the bar will be the space between the value and bottom of graph area.
+The value key in the data source to use for the bar's height.
+
+When [`baseValue`](#basevalue) is null, the bar extends from the bottom of the graph area to the value. When [`baseValue`](#basevalue) is set, the bar extends from the base value to the value, which is useful for showing deviations from a baseline.
 
 <h6>Example when `valueKey` set to `close` and `baseValue` is not set</h6>
 
@@ -26,8 +28,7 @@ or else the bar will be the space between the value and bottom of graph area.
 **required:** `false`  
 **default:** `null`
 
-Fixed base value for the bar.  
-if this is not null, the bar will start at the value defined by `valueKey` and end with this base value.
+Fixed base value for the bar's starting position. When set, bars extend from this base value to the value defined by [`valueKey`](#valuekey). This allows you to visualize differences from a specific threshold or zero line.
 
 <h6>Example when `valueKey` set to `close` and `baseValue` set to `200`</h6>
 

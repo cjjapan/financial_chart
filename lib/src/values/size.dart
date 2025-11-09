@@ -97,12 +97,6 @@ class GSize extends GValue<double> {
       viewSizeConverter = null,
       viewSizeConverterReverse = null;
 
-  /// Creates a size with custom conversion logic.
-  GSize.viewMaxRatio(super.ratio)
-    : sizeType = GSizeValueType.viewMaxRatio,
-      viewSizeConverter = null,
-      viewSizeConverterReverse = null;
-
   /// Create a size value with [sizeValue] calculated by a user defined custom function.
   GSize.custom(
     super.sizeValue,
