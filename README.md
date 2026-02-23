@@ -1,4 +1,4 @@
-## Financial chart
+## financial_chart
 
 A interactive chart library for Flutter, supports various types of charts commonly used in financial apps, 
 high performance and easy to customize and extend.

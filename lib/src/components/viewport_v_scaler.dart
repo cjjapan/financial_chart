@@ -72,6 +72,18 @@ class GValueViewPortAutoScaleStrategyMinMax
     if (fixedEndValue != null) {
       maxValue = fixedEndValue!;
     }
+
+    //add a small padding when minValue == maxValue.
+    if (minValue == maxValue) {
+      double padding = minValue == 0 ? 1.0 : minValue.abs() * 0.1;
+      if (fixedStartValue == null) {
+        minValue -= padding;
+      }
+      if (fixedEndValue == null) {
+        maxValue += padding;
+      }
+    }
+
     double marginStartSize = marginStart.toViewSize(
       area: panel.graphArea(),
       pointViewPort: chart.pointViewPort,

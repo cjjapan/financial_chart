@@ -1,3 +1,11 @@
+## 0.4.1
+2026-02-23  
+- fix hitTestMode property issue [#69](https://github.com/cjjapan/financial_chart/issues/69).
+- fix chart layout initialization issue [#70](https://github.com/cjjapan/financial_chart/issues/70).
+- fix GPointViewPort issue [#71](https://github.com/cjjapan/financial_chart/issues/71).
+- fix GValueViewPortAutoScaleStrategyMinMax issue [#72](https://github.com/cjjapan/financial_chart/issues/72).
+- SDK version up.
+
 ## 0.4.0
 2025-11-08
 - Add `GGraphBar`.`basePosition` property to allow customize base position of bar graph.
@@ -30,7 +38,7 @@
 
 ## 0.3.5
 2025-09-18
-- sdk version up.
+- SDK version up.
 - add `GValueViewPort`.`scaleType` to support logarithmic price scale.
 - add `GSvgMarker` overlay marker.
 - add screenshot.

@@ -53,9 +53,7 @@ abstract class GComponent<T extends GComponentTheme> with Diagnosticable {
   /// The hit test mode of the component.
   ///
   /// see [GHitTestMode] for more details.
-  final GValue<GHitTestMode> _hitTestMode = GValue<GHitTestMode>(
-    GHitTestMode.border,
-  );
+  final GValue<GHitTestMode> _hitTestMode;
   GHitTestMode get hitTestMode => _hitTestMode.value;
   set hitTestMode(GHitTestMode value) => _hitTestMode.value = value;
   GValue<GHitTestMode> get hitTestModeNotifier => _hitTestMode;
@@ -92,6 +90,7 @@ abstract class GComponent<T extends GComponentTheme> with Diagnosticable {
        _highlighted = GValue<bool>(highlighted),
        _selected = GValue<bool>(selected),
        _locked = GValue<bool>(locked),
+       _hitTestMode = GValue<GHitTestMode>(hitTestMode),
        _layer = GValue<int>(layer);
 
   @override

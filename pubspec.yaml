@@ -17,10 +17,10 @@ topics:
 
 # publish_to: "none"
 
-version: 0.4.0
+version: 0.4.1
 
 environment:
-  sdk: ^3.9.2
+  sdk: ^3.11.0
 
 dependencies:
   flutter:

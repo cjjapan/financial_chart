@@ -173,6 +173,7 @@ class GChart extends ChangeNotifier with Diagnosticable {
     _tickerProvider = vsync;
     _initialized = true;
     _interactionHandler = interactionHandler;
+    layout(_area.value);
     dataSource.addListener(_notify);
     if (vsync != null) {
       pointViewPort.initializeAnimation(vsync);

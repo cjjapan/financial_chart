@@ -280,17 +280,36 @@ class GPointViewPort extends ChangeNotifier with Diagnosticable {
     double? endMax,
   }) {
     assert(startPoint < endPoint);
+
+    final sMin = startMin ?? startPointMin;
+    final eMax = endMax ?? endPointMax;
+    final points = endPoint - startPoint;
+
     double clampedStartPoint = startPoint;
     double clampedEndPoint = endPoint;
-    if (startPoint < (startMin ?? startPointMin)) {
-      final points = endPoint - startPoint;
-      clampedStartPoint = (startMin ?? startPointMin);
-      clampedEndPoint = clampedStartPoint + points;
-    } else if (endPoint > (endMax ?? endPointMax)) {
-      final points = endPoint - startPoint;
-      clampedEndPoint = (endMax ?? endPointMax);
-      clampedStartPoint = clampedEndPoint - points;
+
+    if (points > eMax - sMin) {
+      // Viewport is larger than the data range.
+      // Keep the data inside the viewport.
+      if (startPoint > sMin) {
+        clampedStartPoint = sMin;
+        clampedEndPoint = clampedStartPoint + points;
+      } else if (endPoint < eMax) {
+        clampedEndPoint = eMax;
+        clampedStartPoint = clampedEndPoint - points;
+      }
+    } else {
+      // Viewport is smaller than or equal to the data range.
+      // Keep the viewport inside the data range.
+      if (endPoint > eMax) {
+        clampedEndPoint = eMax;
+        clampedStartPoint = clampedEndPoint - points;
+      } else if (startPoint < sMin) {
+        clampedStartPoint = sMin;
+        clampedEndPoint = clampedStartPoint + points;
+      }
     }
+
     return GRange.range(clampedStartPoint, clampedEndPoint);
   }
 
